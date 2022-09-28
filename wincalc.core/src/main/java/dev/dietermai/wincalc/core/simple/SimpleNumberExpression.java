@@ -7,6 +7,11 @@ public record SimpleNumberExpression(BigDecimal value) implements SimpleExpressi
 	public static SimpleNumberExpression of(BigDecimal value) {
 		return new SimpleNumberExpression(value);
 	}
+	
+	public static SimpleNumberExpression of(String value) {
+		var bd = new BigDecimal(value);
+		return of(bd);
+	}
 
 	@Override
 	public SimpleEquation resolve() {

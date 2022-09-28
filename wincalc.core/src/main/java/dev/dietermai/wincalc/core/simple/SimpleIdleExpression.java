@@ -10,11 +10,6 @@ public final class SimpleIdleExpression implements SimpleExpression {
 	}
 	
 	@Override
-	public BigDecimal value() {
-		return BigDecimal.ZERO;
-	}
-
-	@Override
 	public SimpleEquation resolve() {
 		return SimpleEquation.of(SimpleNumberExpression.of(BigDecimal.ZERO), BigDecimal.ZERO);
 	}

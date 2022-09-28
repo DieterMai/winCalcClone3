@@ -1,5 +1,7 @@
 package dev.dietermai.wincalc.core.simple;
 
+import java.math.BigDecimal;
+
 public class SimpleCalculator {
 
 	private static final SimpleExpression INITIAL_EXPRESSION = SimpleIdleExpression.of();
@@ -18,5 +20,13 @@ public class SimpleCalculator {
 	public void resolve() {
 		previousEquation = currentExpression.resolve();
 		currentExpression = INITIAL_EXPRESSION;
+	}
+
+	public void number(String number) {
+		currentExpression = SimpleNumberExpression.of(number);
+	}
+
+	public void plus() {
+		currentExpression = PlusExpression.of(BigDecimal.ZERO);
 	}
 }
