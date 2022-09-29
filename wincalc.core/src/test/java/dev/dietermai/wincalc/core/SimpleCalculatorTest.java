@@ -8,11 +8,11 @@ import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import dev.dietermai.wincalc.core.simple.PlusExpression;
 import dev.dietermai.wincalc.core.simple.SimpleCalculator;
-import dev.dietermai.wincalc.core.simple.SimpleEquation;
-import dev.dietermai.wincalc.core.simple.SimpleIdleExpression;
-import dev.dietermai.wincalc.core.simple.SimpleNumberExpression;
+import dev.dietermai.wincalc.core.simple.Equation;
+import dev.dietermai.wincalc.core.simple.expr.PlusExpression;
+import dev.dietermai.wincalc.core.simple.expr.IdleExpression;
+import dev.dietermai.wincalc.core.simple.expr.NumberExpression;
 
 class SimpleCalculatorTest {
 
@@ -182,11 +182,11 @@ class SimpleCalculatorTest {
 	
 	private void verifyIdleExpression() {
 		var expression = calculator.getExpression();
-		assertEquals(SimpleIdleExpression.of(), expression);
+		assertEquals(IdleExpression.of(), expression);
 	}
 	
 	private void verifyNumberExpression(String number) {
-		assertEquals(SimpleNumberExpression.of(number), calculator.getExpression());
+		assertEquals(NumberExpression.of(number), calculator.getExpression());
 	}
 	
 	private void verifyPlusExpression(String left) {
@@ -202,10 +202,10 @@ class SimpleCalculatorTest {
 	}
 	
 	private void verifyIdentityEquation(String number) {
-		assertEquals(SimpleEquation.of(SimpleNumberExpression.of(bd(number)), bd(number)), calculator.getPreviousEquation());
+		assertEquals(Equation.of(NumberExpression.of(bd(number)), bd(number)), calculator.getPreviousEquation());
 	}
 	
 	private void verifyPlusEquation(String left, String right, String result) {
-		assertEquals(SimpleEquation.of(PlusExpression.of(bd(left), bd(right)), bd(result)), calculator.getPreviousEquation());
+		assertEquals(Equation.of(PlusExpression.of(bd(left), bd(right)), bd(result)), calculator.getPreviousEquation());
 	}
 }

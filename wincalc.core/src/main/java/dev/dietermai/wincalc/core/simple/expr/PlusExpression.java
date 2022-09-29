@@ -1,8 +1,10 @@
-package dev.dietermai.wincalc.core.simple;
+package dev.dietermai.wincalc.core.simple.expr;
 
 import java.math.BigDecimal;
 
-public record PlusExpression(BigDecimal left, BigDecimal right) implements SimpleExpression{
+import dev.dietermai.wincalc.core.simple.Equation;
+
+public record PlusExpression(BigDecimal left, BigDecimal right) implements Expression{
 	public static PlusExpression of(BigDecimal left, BigDecimal right) {
 		return new PlusExpression(left, right);
 	}
@@ -13,10 +15,10 @@ public record PlusExpression(BigDecimal left, BigDecimal right) implements Simpl
 
 
 	@Override
-	public SimpleEquation resolve() {
+	public Equation resolve() {
 		if(right == null) {
 			return of(left, left).resolve();
 		}
-		return SimpleEquation.of(this, left.add(right));
+		return Equation.of(this, left.add(right));
 	}
 }
