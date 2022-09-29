@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 
 import dev.dietermai.wincalc.core.simple.Equation;
 import dev.dietermai.wincalc.core.simple.SimpleCalculator;
-import dev.dietermai.wincalc.core.simple.expr.BiOperator;
 import dev.dietermai.wincalc.core.simple.expr.IdleExpression;
 import dev.dietermai.wincalc.core.simple.expr.NumberExpression;
+import dev.dietermai.wincalc.core.simple.expr.binary.BiOperator;
 
 class SimpleCalculatorTest {
 

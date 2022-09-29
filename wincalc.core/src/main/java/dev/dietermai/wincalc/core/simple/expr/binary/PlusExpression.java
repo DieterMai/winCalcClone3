@@ -1,4 +1,4 @@
-package dev.dietermai.wincalc.core.simple.expr;
+package dev.dietermai.wincalc.core.simple.expr.binary;
 
 import java.math.BigDecimal;
 

@@ -2,11 +2,11 @@ package dev.dietermai.wincalc.core.simple;
 
 import java.math.BigDecimal;
 
-import dev.dietermai.wincalc.core.simple.expr.BiOperator;
-import dev.dietermai.wincalc.core.simple.expr.BinaryExpression;
 import dev.dietermai.wincalc.core.simple.expr.Expression;
 import dev.dietermai.wincalc.core.simple.expr.IdleExpression;
 import dev.dietermai.wincalc.core.simple.expr.NumberExpression;
+import dev.dietermai.wincalc.core.simple.expr.binary.BiOperator;
+import dev.dietermai.wincalc.core.simple.expr.binary.BinaryExpression;
 
 public class SimpleCalculator {
 
