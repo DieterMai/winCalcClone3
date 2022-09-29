@@ -13,7 +13,12 @@ public record PlusExpression(BigDecimal left, BigDecimal right) implements Binar
 		return new PlusExpression(left, null);
 	}
 
-
+	@Override
+	public BinaryExpression withRight(BigDecimal localRight) {
+		return of(left, localRight);
+	}
+	
+	
 	@Override
 	public Equation resolve() {
 		if(right == null) {
@@ -21,4 +26,8 @@ public record PlusExpression(BigDecimal left, BigDecimal right) implements Binar
 		}
 		return Equation.of(this, left.add(right));
 	}
+
+
+
+
 }

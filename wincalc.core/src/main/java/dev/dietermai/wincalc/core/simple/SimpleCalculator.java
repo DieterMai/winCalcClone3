@@ -2,7 +2,8 @@ package dev.dietermai.wincalc.core.simple;
 
 import java.math.BigDecimal;
 
-import dev.dietermai.wincalc.core.simple.expr.PlusExpression;
+import dev.dietermai.wincalc.core.simple.expr.BiOperator;
+import dev.dietermai.wincalc.core.simple.expr.BinaryExpression;
 import dev.dietermai.wincalc.core.simple.expr.Expression;
 import dev.dietermai.wincalc.core.simple.expr.IdleExpression;
 import dev.dietermai.wincalc.core.simple.expr.NumberExpression;
@@ -28,16 +29,16 @@ public class SimpleCalculator {
 	}
 
 	public void number(String number) {
-		if (currentExpression instanceof PlusExpression plus) {
-			currentExpression = PlusExpression.of(plus.left(), new BigDecimal(number));
+		if (currentExpression instanceof BinaryExpression binaryExpression) {
+			currentExpression = binaryExpression.withRight(new BigDecimal(number));
 			resolve();
 		} else {
 			currentExpression = NumberExpression.of(number);
 		}
 	}
 
-	public void plus() {
-		currentExpression = PlusExpression.of(getInitialValueForBinaryOperation());
+	public void binary(BiOperator operator) {
+		currentExpression = operator.of(getInitialValueForBinaryOperation());
 	}
 
 	private BigDecimal getInitialValueForBinaryOperation() {
@@ -47,7 +48,7 @@ public class SimpleCalculator {
 			return getPreviousResult();
 		}
 	}
-	
+
 	private BigDecimal getPreviousResult() {
 		if (previousEquation != null) {
 			return previousEquation.value();
