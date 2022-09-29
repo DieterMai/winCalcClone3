@@ -5,14 +5,14 @@ import java.math.BigDecimal;
 public class SimpleCalculator {
 
 	private static final SimpleExpression INITIAL_EXPRESSION = SimpleIdleExpression.of();
-	
+
 	private SimpleExpression currentExpression = INITIAL_EXPRESSION;
 	private SimpleEquation previousEquation;
-	
+
 	public SimpleExpression getExpression() {
 		return currentExpression;
 	}
-	
+
 	public SimpleEquation getPreviousEquation() {
 		return previousEquation;
 	}
@@ -23,10 +23,31 @@ public class SimpleCalculator {
 	}
 
 	public void number(String number) {
-		currentExpression = SimpleNumberExpression.of(number);
+		if (currentExpression instanceof PlusExpression plus) {
+			currentExpression = PlusExpression.of(plus.left(), new BigDecimal(number));
+			resolve();
+		} else {
+			currentExpression = SimpleNumberExpression.of(number);
+		}
 	}
 
 	public void plus() {
-		currentExpression = PlusExpression.of(BigDecimal.ZERO);
+		currentExpression = PlusExpression.of(getInitialValueForBinaryOperation());
+	}
+
+	private BigDecimal getInitialValueForBinaryOperation() {
+		if (currentExpression instanceof SimpleNumberExpression numberExpression) {
+			return numberExpression.value();
+		} else {
+			return getPreviousResult();
+		}
+	}
+	
+	private BigDecimal getPreviousResult() {
+		if (previousEquation != null) {
+			return previousEquation.value();
+		} else {
+			return BigDecimal.ZERO;
+		}
 	}
 }

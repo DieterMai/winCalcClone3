@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import dev.dietermai.wincalc.core.simple.PlusExpression;
 import dev.dietermai.wincalc.core.simple.SimpleCalculator;
 import dev.dietermai.wincalc.core.simple.SimpleEquation;
-import dev.dietermai.wincalc.core.simple.SimpleExpression;
 import dev.dietermai.wincalc.core.simple.SimpleIdleExpression;
 import dev.dietermai.wincalc.core.simple.SimpleNumberExpression;
 
@@ -75,7 +74,7 @@ class SimpleCalculatorTest {
 	}
 	
 	@Test
-	void testResolveOfInitialPlus() {
+	void testPlusResolveAfterInit() {
 		// Arrange
 		calculator.plus();
 		
@@ -85,6 +84,55 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyIdleExpression();
 		verifyPlusEquation("0", "0", "0");
+	}
+	
+	@Test
+	void testPlusAfterNumber() {
+		// Arrange
+		String number = "123";
+		calculator.number(number);
+		calculator.plus();
+		
+		// Act
+		calculator.resolve();
+		
+		// Assert
+		verifyIdleExpression();
+		verifyPlusEquation(number, number, "246");
+	}
+	
+	@Test
+	void testPlusOfTwoNumber() {
+		// Arrange
+		String number1 = "123";
+		String number2 = "456";
+		calculator.number(number1);
+		calculator.plus();
+		
+		// Act
+		calculator.number(number2);
+		
+		// Assert
+		verifyIdleExpression();
+		verifyPlusEquation(number1, number2, "579");
+	}
+	
+	@Test
+	void testPlusUsesResultOfPreviousEquation() {
+		// Arrange
+		String number1 = "123";
+		String number2 = "456";
+		String result = "579";
+		calculator.number(number1);
+		calculator.plus();
+		calculator.number(number2);
+		
+		// Act
+		calculator.plus();
+		
+		// Assert
+		verifyPlusExpression(result);
+		verifyPlusEquation(number1, number2, result);
 	}
 	
 	
@@ -98,7 +146,6 @@ class SimpleCalculatorTest {
 		
 		// Act
 		calculator.number(number2);
-		
 		
 		// Assert
 		verifyNumberExpression(number2);

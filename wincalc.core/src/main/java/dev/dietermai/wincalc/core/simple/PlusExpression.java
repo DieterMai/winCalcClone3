@@ -8,13 +8,15 @@ public record PlusExpression(BigDecimal left, BigDecimal right) implements Simpl
 	}
 	
 	public static PlusExpression of(BigDecimal left) {
-		return new PlusExpression(left, BigDecimal.ZERO);
+		return new PlusExpression(left, null);
 	}
 
 
 	@Override
 	public SimpleEquation resolve() {
-		// TODO Auto-generated method stub
-		return null;
+		if(right == null) {
+			return of(left, left).resolve();
+		}
+		return SimpleEquation.of(this, left.add(right));
 	}
 }
