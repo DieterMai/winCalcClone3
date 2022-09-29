@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import dev.dietermai.wincalc.core.simple.Equation;
 
-public record PlusExpression(BigDecimal left, BigDecimal right) implements Expression{
+public record PlusExpression(BigDecimal left, BigDecimal right) implements BinaryExpression{
 	public static PlusExpression of(BigDecimal left, BigDecimal right) {
 		return new PlusExpression(left, right);
 	}
