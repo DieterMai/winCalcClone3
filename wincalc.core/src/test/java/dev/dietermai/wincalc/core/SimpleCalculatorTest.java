@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dev.dietermai.wincalc.core.simple.Equation;
+import dev.dietermai.wincalc.core.simple.ResolveType;
 import dev.dietermai.wincalc.core.simple.SimpleCalculator;
 import dev.dietermai.wincalc.core.simple.expr.IdleExpression;
 import dev.dietermai.wincalc.core.simple.expr.NumberExpression;
@@ -321,8 +322,83 @@ class SimpleCalculatorTest {
 		verifyEquation(BiOperator.plus, number1, number2, result);
 	}
 	
+	/* ************************/
+	/* Divide related methods */
+	/* ************************/
+	@Test
+	void testDivideAfterInit() {
+		// Act
+		calculator.binary(BiOperator.divide);
+
+		// Assert
+		verifyExpression(BiOperator.divide, "0");
+		verifyNoEquation();
+	}
+
+	@Test
+	void testResolveOfDivideAfterInit() {
+		// Arrange
+		calculator.binary(BiOperator.divide);
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyIdleExpression();
+		verifyEquation(BiOperator.divide, "0", ResolveType.UNDEFINED);
+	}
+
+	@Test
+	void testResloveOfDivideAfterNumberInput() {
+		// Arrange
+		String number = "123";
+		calculator.number(number);
+		calculator.binary(BiOperator.divide);
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyIdleExpression();
+		verifyEquation(BiOperator.divide, number, number, "1");
+	}
+
+	@Test
+	void testResolveOfDivideDueToNumberInput() {
+		// Arrange
+		String number1 = "123";
+		String number2 = "456";
+		calculator.number(number1);
+		calculator.binary(BiOperator.divide);
+
+		// Act
+		calculator.number(number2);
+
+		// Assert
+		verifyIdleExpression();
+		verifyEquation(BiOperator.divide, number1, number2, "0.2697368421052632");
+	}
+
+	@Test
+	void testDivideUsesResultOfPreviousEquation() {
+		// Arrange
+		String number1 = "123";
+		String number2 = "456";
+		String result = "579";
+		calculator.number(number1);
+		calculator.binary(BiOperator.plus);
+		calculator.number(number2);
+
+		// Act
+		calculator.binary(BiOperator.divide);
+
+		// Assert
+		verifyExpression(BiOperator.divide, result);
+		verifyEquation(BiOperator.plus, number1, number2, result);
+	}
+	
 	private BigDecimal bd(String s) {
-		return BigDecimal.valueOf(Long.parseLong(s));
+		return new BigDecimal(s);
 	}
 
 	private void verifyIdleExpression() {
@@ -348,5 +424,9 @@ class SimpleCalculatorTest {
 
 	private void verifyEquation(BiOperator operator, String left, String right, String result) {
 		assertEquals(Equation.of(operator.of(bd(left), bd(right)), bd(result)), calculator.getPreviousEquation());
+	}
+	
+	private void verifyEquation(BiOperator operator, String left, ResolveType type) {
+		assertEquals(Equation.of(operator.of(bd(left)), type), calculator.getPreviousEquation());
 	}
 }
