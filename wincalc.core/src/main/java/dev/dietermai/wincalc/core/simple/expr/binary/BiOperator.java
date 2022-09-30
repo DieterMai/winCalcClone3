@@ -3,7 +3,7 @@ package dev.dietermai.wincalc.core.simple.expr.binary;
 import java.math.BigDecimal;
 
 public enum BiOperator {
-	plus, minus;
+	plus, minus, multiply;
 
 	private BiOperator() {
 	}
@@ -12,6 +12,7 @@ public enum BiOperator {
 		return switch (this) {
 		case plus -> PlusExpression.of(left);
 		case minus -> MinusExpression.of(left);
+		case multiply -> MultiplyExpression.of(left);
 		};
 	}
 
@@ -19,6 +20,7 @@ public enum BiOperator {
 		return switch (this) {
 		case plus -> PlusExpression.of(left, right);
 		case minus -> MinusExpression.of(left, right);
+		case multiply -> MultiplyExpression.of(left,right);
 		};
 	}
 }

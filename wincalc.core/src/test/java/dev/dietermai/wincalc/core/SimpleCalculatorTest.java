@@ -245,6 +245,82 @@ class SimpleCalculatorTest {
 		verifyEquation(BiOperator.plus, number1, number2, result);
 	}
 
+	
+	/* ***********************/
+	/* Multiply related methods */
+	/* ***********************/
+	@Test
+	void testMultiplyAfterInit() {
+		// Act
+		calculator.binary(BiOperator.multiply);
+
+		// Assert
+		verifyExpression(BiOperator.multiply, "0");
+		verifyNoEquation();
+	}
+
+	@Test
+	void testResolveOfMultiplyAfterInit() {
+		// Arrange
+		calculator.binary(BiOperator.multiply);
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyIdleExpression();
+		verifyEquation(BiOperator.multiply, "0", "0", "0");
+	}
+
+	@Test
+	void testResloveOfMultiplyAfterNumberInput() {
+		// Arrange
+		String number = "123";
+		calculator.number(number);
+		calculator.binary(BiOperator.multiply);
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyIdleExpression();
+		verifyEquation(BiOperator.multiply, number, number, "15129");
+	}
+
+	@Test
+	void testResolveOfMultiplyDueToNumberInput() {
+		// Arrange
+		String number1 = "123";
+		String number2 = "456";
+		calculator.number(number1);
+		calculator.binary(BiOperator.multiply);
+
+		// Act
+		calculator.number(number2);
+
+		// Assert
+		verifyIdleExpression();
+		verifyEquation(BiOperator.multiply, number1, number2, "56088");
+	}
+
+	@Test
+	void testMultiplyUsesResultOfPreviousEquation() {
+		// Arrange
+		String number1 = "123";
+		String number2 = "456";
+		String result = "579";
+		calculator.number(number1);
+		calculator.binary(BiOperator.plus);
+		calculator.number(number2);
+
+		// Act
+		calculator.binary(BiOperator.multiply);
+
+		// Assert
+		verifyExpression(BiOperator.multiply, result);
+		verifyEquation(BiOperator.plus, number1, number2, result);
+	}
+	
 	private BigDecimal bd(String s) {
 		return BigDecimal.valueOf(Long.parseLong(s));
 	}
