@@ -1,6 +1,8 @@
 package dev.dietermai.wincalc.core.simple;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Objects;
 
 import dev.dietermai.wincalc.core.simple.expr.Expression;
 import dev.dietermai.wincalc.core.simple.expr.IdleExpression;
@@ -24,7 +26,13 @@ public class SimpleCalculator {
 	}
 
 	public void resolve() {
-		previousEquation = currentExpression.resolve();
+		switch(currentExpression) {
+		case null -> throw new NullPointerException();
+		case IdleExpression i -> previousEquation = Equation.of(NumberExpression.of(BigDecimal.ZERO), BigDecimal.ZERO);
+		case NumberExpression ne -> previousEquation = Equation.of(ne, ne.value());
+		case BinaryExpression binary -> previousEquation = resolveBinaryExpression(binary);
+		}
+		
 		currentExpression = INITIAL_EXPRESSION;
 	}
 
@@ -38,7 +46,10 @@ public class SimpleCalculator {
 	}
 
 	public void binary(BiOperator operator) {
-		currentExpression = operator.of(getInitialValueForBinaryOperation());
+		// TODO handle case when there is already a incomplete binary expression
+		BigDecimal initalValue = getInitialValueForBinaryOperation();
+		currentExpression = BinaryExpression.of(initalValue, operator);
+//		currentExpression = operator.of(getInitialValueForBinaryOperation());
 	}
 
 	private BigDecimal getInitialValueForBinaryOperation() {
@@ -54,6 +65,54 @@ public class SimpleCalculator {
 			return previousEquation.value();
 		} else {
 			return BigDecimal.ZERO;
+		}
+	}
+
+	private Equation resolveBinaryExpression(BinaryExpression expression) {
+		BiOperator operator = expression.operator();
+		BigDecimal left = expression.left();
+		BigDecimal right = Objects.requireNonNullElse(expression.right(), left);
+		return switch (operator) {
+		case plus -> resolvePlusExpression(left, right);
+		case minus -> resolveMinusExpression(left, right);
+		case multiply -> resolveMultiplyExpression(left, right);
+		case divide -> resolveDivideExpression(left, right);
+		};
+	}
+
+	public Equation resolvePlusExpression(BigDecimal left, BigDecimal right) {
+		BigDecimal result = left.add(right);
+		Expression expression = BinaryExpression.of(BiOperator.plus, left, right);
+		Equation equation = Equation.of(expression, result);
+		return equation;
+	}
+
+	public Equation resolveMinusExpression(BigDecimal left, BigDecimal right) {
+		BigDecimal result = left.subtract(right);
+		Expression expression = BinaryExpression.of(BiOperator.minus, left, right);
+		Equation equation = Equation.of(expression, result);
+		return equation;
+	}
+
+	public Equation resolveMultiplyExpression(BigDecimal left, BigDecimal right) {
+		BigDecimal result = left.multiply(right);
+		Expression expression = BinaryExpression.of(BiOperator.multiply, left, right);
+		Equation equation = Equation.of(expression, result);
+		return equation;
+	}
+
+	public Equation resolveDivideExpression(BigDecimal left, BigDecimal right) {
+		Expression expression = BinaryExpression.of(BiOperator.divide, left, right);
+		if (right.equals(BigDecimal.ZERO)) {
+			if (left.equals(BigDecimal.ZERO)) {
+				return Equation.of(expression, ResolveType.UNDEFINED);
+			} else {
+				return Equation.of(expression, ResolveType.DIVIDE_BY_ZERO);
+			}
+		} else {
+			BigDecimal result = left.divide(right, 16, RoundingMode.HALF_UP).stripTrailingZeros();
+			Equation equation = Equation.of(expression, result);
+			return equation;
 		}
 	}
 }

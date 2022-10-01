@@ -14,7 +14,10 @@ import dev.dietermai.wincalc.core.simple.SimpleCalculator;
 import dev.dietermai.wincalc.core.simple.expr.IdleExpression;
 import dev.dietermai.wincalc.core.simple.expr.NumberExpression;
 import dev.dietermai.wincalc.core.simple.expr.binary.BiOperator;
+import dev.dietermai.wincalc.core.simple.expr.binary.BinaryExpression;
 
+// TODO add tests for multiple operations
+// TODO add tests for multiple of the same operation
 class SimpleCalculatorTest {
 
 	private SimpleCalculator calculator;
@@ -29,7 +32,8 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		assertNull(calculator.getPreviousEquation());
 	}
-
+	
+	
 	@Test
 	void testResolveOfInitialEquation() {
 		calculator.resolve();
@@ -345,7 +349,7 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verifyIdleExpression();
-		verifyEquation(BiOperator.divide, "0", ResolveType.UNDEFINED);
+		verifyEquation(BiOperator.divide, "0", "0", ResolveType.UNDEFINED);
 	}
 
 	@Test
@@ -378,6 +382,22 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation(BiOperator.divide, number1, number2, "0.2697368421052632");
 	}
+	
+//	@Test
+//	void testResolveOfDivideByZero() {
+//		// Arrange
+//		String number1 = "123";
+//		String number2 = "0";
+//		calculator.number(number1);
+//		calculator.binary(BiOperator.divide);
+//
+//		// Act
+//		calculator.number(number2);
+//		
+//		// Assert
+//		verifyIdleExpression();
+//		verifyEquation(BiOperator.divide, number1, ResolveType.DIVIDE_BY_ZERO);
+//	}
 
 	@Test
 	void testDivideUsesResultOfPreviousEquation() {
@@ -411,7 +431,7 @@ class SimpleCalculatorTest {
 	}
 
 	private void verifyExpression(BiOperator operator, String left) {
-		assertEquals(operator.of(bd(left)), calculator.getExpression());
+		assertEquals(BinaryExpression.of(bd(left), operator), calculator.getExpression());
 	}
 
 	private void verifyNoEquation() {
@@ -423,10 +443,10 @@ class SimpleCalculatorTest {
 	}
 
 	private void verifyEquation(BiOperator operator, String left, String right, String result) {
-		assertEquals(Equation.of(operator.of(bd(left), bd(right)), bd(result)), calculator.getPreviousEquation());
+		assertEquals(Equation.of(BinaryExpression.of(operator, bd(left), bd(right)), bd(result)), calculator.getPreviousEquation());
 	}
 	
-	private void verifyEquation(BiOperator operator, String left, ResolveType type) {
-		assertEquals(Equation.of(operator.of(bd(left)), type), calculator.getPreviousEquation());
+	private void verifyEquation(BiOperator operator, String left, String right, ResolveType type) {
+		assertEquals(Equation.of(BinaryExpression.of(operator, bd(left), bd(right)), type), calculator.getPreviousEquation());
 	}
 }
