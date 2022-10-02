@@ -22,7 +22,9 @@ import dev.dietermai.wincalc.core.simple.expr.binary.BinaryExpression;
 class SimpleCalculatorTest {
 
 	private SimpleCalculator calculator;
-
+	private SimpleCalculatorRecord record = SimpleCalculatorRecord.initial();;
+	
+	
 	@BeforeEach
 	public void beforeEach() {
 		this.calculator = new SimpleCalculator();
@@ -30,7 +32,7 @@ class SimpleCalculatorTest {
 
 	@Test
 	void testResolveOfInitialEquation() {
-		var record = calculator.resolve();
+		var record = calculator.resolve(this.record);
 
 		assertIdleExpression(record);
 		assertEquation(record, "0", "0");
@@ -50,10 +52,10 @@ class SimpleCalculatorTest {
 	void testResolveOfInitialNumber() {
 		// Arrange
 		String number = "123";
-		calculator.number(number);
+		record = calculator.number(number);
 
 		// Act
-		var record = calculator.resolve();
+		var record = calculator.resolve(this.record);
 
 		// Assert
 		assertIdleExpression(record);
@@ -65,8 +67,8 @@ class SimpleCalculatorTest {
 		// Arrange
 		String number1 = "123";
 		String number2 = "456";
-		calculator.number(number1);
-		calculator.resolve();
+		record = calculator.number(number1);
+		record = calculator.resolve(record);
 
 		// Act
 		var record = calculator.number(number2);
@@ -81,12 +83,12 @@ class SimpleCalculatorTest {
 		// Arrange
 		String number1 = "123";
 		String number2 = "456";
-		calculator.number(number1);
-		calculator.resolve();
-		calculator.number(number2);
+		record = calculator.number(number1);
+		record = calculator.resolve(record);
+		record = calculator.number(number2);
 
 		// Act
-		var record = calculator.resolve();
+		var record = calculator.resolve(this.record);
 
 		// Assert
 		assertIdleExpression(record);
@@ -110,10 +112,10 @@ class SimpleCalculatorTest {
 	@Test
 	void testResolveOfPlusAfterInit() {
 		// Arrange
-		calculator.binary(BiOperator.plus);
+		record = calculator.binary(BiOperator.plus);
 
 		// Act
-		var record = calculator.resolve();
+		var record = calculator.resolve(this.record);
 
 		// Assert
 		assertIdleExpression(record);
@@ -124,12 +126,11 @@ class SimpleCalculatorTest {
 	void testResloveOfPlusAfterNumberInput() {
 		// Arrange
 		String number = "123";
-		calculator.number(number);
-		calculator.binary(BiOperator.plus);
-		;
+		record = calculator.number(number);
+		record = calculator.binary(BiOperator.plus);
 
 		// Act
-		var record = calculator.resolve();
+		var record = calculator.resolve(this.record);
 
 		// Assert
 		assertIdleExpression(record);
@@ -141,8 +142,8 @@ class SimpleCalculatorTest {
 		// Arrange
 		String number1 = "123";
 		String number2 = "456";
-		calculator.number(number1);
-		calculator.binary(BiOperator.plus);
+		record = calculator.number(number1);
+		record = calculator.binary(BiOperator.plus);
 
 		// Act
 		var record = calculator.number(number2);
@@ -158,9 +159,9 @@ class SimpleCalculatorTest {
 		String number1 = "123";
 		String number2 = "456";
 		String result = "579";
-		calculator.number(number1);
-		calculator.binary(BiOperator.plus);
-		calculator.number(number2);
+		record = calculator.number(number1);
+		record = calculator.binary(BiOperator.plus);
+		record = calculator.number(number2);
 
 		// Act
 		var record = calculator.binary(BiOperator.plus);
@@ -186,10 +187,10 @@ class SimpleCalculatorTest {
 	@Test
 	void testResolveOfMinusAfterInit() {
 		// Arrange
-		calculator.binary(BiOperator.minus);
+		record = calculator.binary(BiOperator.minus);
 
 		// Act
-		var record = calculator.resolve();
+		var record = calculator.resolve(this.record);
 
 		// Assert
 		assertIdleExpression(record);
@@ -200,11 +201,11 @@ class SimpleCalculatorTest {
 	void testResloveOfMinusAfterNumberInput() {
 		// Arrange
 		String number = "123";
-		calculator.number(number);
-		calculator.binary(BiOperator.minus);
+		record = calculator.number(number);
+		record = calculator.binary(BiOperator.minus);
 
 		// Act
-		var record = calculator.resolve();
+		var record = calculator.resolve(this.record);
 
 		// Assert
 		assertIdleExpression(record);
@@ -216,8 +217,8 @@ class SimpleCalculatorTest {
 		// Arrange
 		String number1 = "123";
 		String number2 = "456";
-		calculator.number(number1);
-		calculator.binary(BiOperator.minus);
+		record = calculator.number(number1);
+		record = calculator.binary(BiOperator.minus);
 
 		// Act
 		var record = calculator.number(number2);
@@ -233,9 +234,9 @@ class SimpleCalculatorTest {
 		String number1 = "123";
 		String number2 = "456";
 		String result = "579";
-		calculator.number(number1);
-		calculator.binary(BiOperator.plus);
-		calculator.number(number2);
+		record = calculator.number(number1);
+		record = calculator.binary(BiOperator.plus);
+		record = calculator.number(number2);
 
 		// Act
 		var record = calculator.binary(BiOperator.minus);
@@ -261,10 +262,10 @@ class SimpleCalculatorTest {
 	@Test
 	void testResolveOfMultiplyAfterInit() {
 		// Arrange
-		calculator.binary(BiOperator.multiply);
+		record = calculator.binary(BiOperator.multiply);
 
 		// Act
-		var record = calculator.resolve();
+		var record = calculator.resolve(this.record);
 
 		// Assert
 		assertIdleExpression(record);
@@ -275,11 +276,11 @@ class SimpleCalculatorTest {
 	void testResloveOfMultiplyAfterNumberInput() {
 		// Arrange
 		String number = "123";
-		calculator.number(number);
-		calculator.binary(BiOperator.multiply);
+		record = calculator.number(number);
+		record = calculator.binary(BiOperator.multiply);
 
 		// Act
-		var record = calculator.resolve();
+		var record = calculator.resolve(this.record);
 
 		// Assert
 		assertIdleExpression(record);
@@ -291,8 +292,8 @@ class SimpleCalculatorTest {
 		// Arrange
 		String number1 = "123";
 		String number2 = "456";
-		calculator.number(number1);
-		calculator.binary(BiOperator.multiply);
+		record = calculator.number(number1);
+		record = calculator.binary(BiOperator.multiply);
 
 		// Act
 		var record = calculator.number(number2);
@@ -308,9 +309,9 @@ class SimpleCalculatorTest {
 		String number1 = "123";
 		String number2 = "456";
 		String result = "579";
-		calculator.number(number1);
-		calculator.binary(BiOperator.plus);
-		calculator.number(number2);
+		record = calculator.number(number1);
+		record = calculator.binary(BiOperator.plus);
+		record = calculator.number(number2);
 
 		// Act
 		var record = calculator.binary(BiOperator.multiply);
@@ -336,10 +337,10 @@ class SimpleCalculatorTest {
 	@Test
 	void testResolveOfDivideAfterInit() {
 		// Arrange
-		calculator.binary(BiOperator.divide);
+		record = calculator.binary(BiOperator.divide);
 
 		// Act
-		var record = calculator.resolve();
+		var record = calculator.resolve(this.record);
 
 		// Assert
 		assertIdleExpression(record);
@@ -350,11 +351,11 @@ class SimpleCalculatorTest {
 	void testResloveOfDivideAfterNumberInput() {
 		// Arrange
 		String number = "123";
-		calculator.number(number);
-		calculator.binary(BiOperator.divide);
+		record = calculator.number(number);
+		record = calculator.binary(BiOperator.divide);
 
 		// Act
-		var record = calculator.resolve();
+		var record = calculator.resolve(this.record);
 
 		// Assert
 		assertIdleExpression(record);
@@ -366,8 +367,8 @@ class SimpleCalculatorTest {
 		// Arrange
 		String number1 = "123";
 		String number2 = "456";
-		calculator.number(number1);
-		calculator.binary(BiOperator.divide);
+		record = calculator.number(number1);
+		record = calculator.binary(BiOperator.divide);
 
 		// Act
 		var record = calculator.number(number2);
@@ -382,8 +383,8 @@ class SimpleCalculatorTest {
 		// Arrange
 		String number1 = "123";
 		String number2 = "0";
-		calculator.number(number1);
-		calculator.binary(BiOperator.divide);
+		record = calculator.number(number1);
+		record = calculator.binary(BiOperator.divide);
 
 		// Act
 		var record = calculator.number(number2);
@@ -399,9 +400,9 @@ class SimpleCalculatorTest {
 		String number1 = "123";
 		String number2 = "456";
 		String result = "579";
-		calculator.number(number1);
-		calculator.binary(BiOperator.plus);
-		calculator.number(number2);
+		record = calculator.number(number1);
+		record = calculator.binary(BiOperator.plus);
+		record = calculator.number(number2);
 
 		// Act
 		var record = calculator.binary(BiOperator.divide);
