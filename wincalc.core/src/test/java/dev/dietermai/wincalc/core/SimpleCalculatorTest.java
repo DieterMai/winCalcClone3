@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import dev.dietermai.wincalc.core.simple.Equation;
 import dev.dietermai.wincalc.core.simple.ResolveType;
 import dev.dietermai.wincalc.core.simple.SimpleCalculator;
+import dev.dietermai.wincalc.core.simple.SimpleCalculatorRecord;
+import dev.dietermai.wincalc.core.simple.expr.Expression;
 import dev.dietermai.wincalc.core.simple.expr.IdleExpression;
 import dev.dietermai.wincalc.core.simple.expr.NumberExpression;
 import dev.dietermai.wincalc.core.simple.expr.binary.BiOperator;
@@ -19,7 +21,7 @@ import dev.dietermai.wincalc.core.simple.expr.binary.BinaryExpression;
 // TODO add tests for multiple operations
 // TODO add tests for multiple of the same operation
 class SimpleCalculatorTest {
-
+	
 	private SimpleCalculator calculator;
 
 	@BeforeEach
@@ -27,29 +29,23 @@ class SimpleCalculatorTest {
 		this.calculator = new SimpleCalculator();
 	}
 
-	@Test
-	void testInitialState() {
-		verifyIdleExpression();
-		assertNull(calculator.getPreviousEquation());
-	}
-	
 	
 	@Test
 	void testResolveOfInitialEquation() {
-		calculator.resolve();
+		var record = calculator.resolve();
 
-		verifyIdleExpression();
-		verifyIdentityEquation("0");
+		assertIdleExpression(record);
+		assertEquation(record, "0", "0");
 	}
 
 	@Test
 	void testInitialNumberInput() {
 		String number = "123";
 
-		calculator.number(number);
+		var record = calculator.number(number);
 
-		verifyNumberExpression(number);
-		assertNull(calculator.getPreviousEquation());
+		assertExpression(record, number);
+		assertNull(record.equation());
 	}
 
 	@Test
@@ -59,11 +55,11 @@ class SimpleCalculatorTest {
 		calculator.number(number);
 
 		// Act
-		calculator.resolve();
+		var record = calculator.resolve();
 
 		// Assert
-		verifyIdleExpression();
-		verifyIdentityEquation(number);
+		assertIdleExpression(record);
+		assertEquation(record, number, number);
 	}
 
 	@Test
@@ -75,11 +71,11 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 
 		// Act
-		calculator.number(number2);
+		var record = calculator.number(number2);
 
 		// Assert
-		verifyNumberExpression(number2);
-		verifyIdentityEquation(number1);
+		assertEquation(record, number1, number1);
+		assertExpression(record, number2);
 	}
 
 	@Test
@@ -92,11 +88,12 @@ class SimpleCalculatorTest {
 		calculator.number(number2);
 
 		// Act
-		calculator.resolve();
+		var record = calculator.resolve();
 
 		// Assert
-		verifyIdleExpression();
-		verifyIdentityEquation(number2);
+		assertIdleExpression(record);
+		assertIdleExpression(record);
+		assertEquation(record, number2, number2);
 	}
 
 	/* ******************** */
@@ -105,11 +102,11 @@ class SimpleCalculatorTest {
 	@Test
 	void testPlusAfterInit() {
 		// Act
-		calculator.binary(BiOperator.plus);
+		var record = calculator.binary(BiOperator.plus);
 
 		// Assert
-		verifyExpression(BiOperator.plus, "0");
-		verifyNoEquation();
+		assertExpression(record, "0", BiOperator.plus);
+		verifyNoEquation(record);
 	}
 
 	@Test
@@ -118,11 +115,11 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.plus);
 
 		// Act
-		calculator.resolve();
+		var record = calculator.resolve();
 
 		// Assert
-		verifyIdleExpression();
-		verifyEquation(BiOperator.plus, "0", "0", "0");
+		assertIdleExpression(record);
+		verifyEquation(record, "0", BiOperator.plus, "0", "0");
 	}
 
 	@Test
@@ -134,11 +131,11 @@ class SimpleCalculatorTest {
 		;
 
 		// Act
-		calculator.resolve();
+		var record = calculator.resolve();
 
 		// Assert
-		verifyIdleExpression();
-		verifyEquation(BiOperator.plus, number, number, "246");
+		assertIdleExpression(record);
+		verifyEquation(record, number, BiOperator.plus, number, "246");
 	}
 
 	@Test
@@ -150,11 +147,11 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.plus);
 
 		// Act
-		calculator.number(number2);
+		var record = calculator.number(number2);
 
 		// Assert
-		verifyIdleExpression();
-		verifyEquation(BiOperator.plus, number1, number2, "579");
+		assertIdleExpression(record);
+		verifyEquation(record, number1, BiOperator.plus, number2, "579");
 	}
 
 	@Test
@@ -168,11 +165,11 @@ class SimpleCalculatorTest {
 		calculator.number(number2);
 
 		// Act
-		calculator.binary(BiOperator.plus);
+		var record = calculator.binary(BiOperator.plus);
 
 		// Assert
-		verifyExpression(BiOperator.plus, result);
-		verifyEquation(BiOperator.plus, number1, number2, result);
+		assertExpression(record, result, BiOperator.plus);
+		verifyEquation(record, number1, BiOperator.plus, number2, result);
 	}
 
 	/* ***********************/
@@ -181,11 +178,11 @@ class SimpleCalculatorTest {
 	@Test
 	void testMinusAfterInit() {
 		// Act
-		calculator.binary(BiOperator.minus);
+		var record = calculator.binary(BiOperator.minus);
 
 		// Assert
-		verifyExpression(BiOperator.minus, "0");
-		verifyNoEquation();
+		assertExpression(record, "0", BiOperator.minus);
+		verifyNoEquation(record);
 	}
 
 	@Test
@@ -194,11 +191,11 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.minus);
 
 		// Act
-		calculator.resolve();
+		var record = calculator.resolve();
 
 		// Assert
-		verifyIdleExpression();
-		verifyEquation(BiOperator.minus, "0", "0", "0");
+		assertIdleExpression(record);
+		verifyEquation(record, "0", BiOperator.minus, "0", "0");
 	}
 
 	@Test
@@ -209,11 +206,11 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.minus);
 
 		// Act
-		calculator.resolve();
+		var record = calculator.resolve();
 
 		// Assert
-		verifyIdleExpression();
-		verifyEquation(BiOperator.minus, number, number, "0");
+		assertIdleExpression(record);
+		verifyEquation(record, number, BiOperator.minus, number, "0");
 	}
 
 	@Test
@@ -225,11 +222,11 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.minus);
 
 		// Act
-		calculator.number(number2);
+		var record = calculator.number(number2);
 
 		// Assert
-		verifyIdleExpression();
-		verifyEquation(BiOperator.minus, number1, number2, "-333");
+		assertIdleExpression(record);
+		verifyEquation(record, number1, BiOperator.minus, number2, "-333");
 	}
 
 	@Test
@@ -243,11 +240,11 @@ class SimpleCalculatorTest {
 		calculator.number(number2);
 
 		// Act
-		calculator.binary(BiOperator.minus);
+		var record = calculator.binary(BiOperator.minus);
 
 		// Assert
-		verifyExpression(BiOperator.minus, result);
-		verifyEquation(BiOperator.plus, number1, number2, result);
+		assertExpression(record, result, BiOperator.minus);
+		verifyEquation(record, number1, BiOperator.plus, number2, result);
 	}
 
 	
@@ -257,11 +254,11 @@ class SimpleCalculatorTest {
 	@Test
 	void testMultiplyAfterInit() {
 		// Act
-		calculator.binary(BiOperator.multiply);
+		var record = calculator.binary(BiOperator.multiply);
 
 		// Assert
-		verifyExpression(BiOperator.multiply, "0");
-		verifyNoEquation();
+		assertExpression(record, "0", BiOperator.multiply);
+		verifyNoEquation(record);
 	}
 
 	@Test
@@ -270,11 +267,11 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.multiply);
 
 		// Act
-		calculator.resolve();
+		var record = calculator.resolve();
 
 		// Assert
-		verifyIdleExpression();
-		verifyEquation(BiOperator.multiply, "0", "0", "0");
+		assertIdleExpression(record);
+		verifyEquation(record, "0", BiOperator.multiply, "0", "0");
 	}
 
 	@Test
@@ -285,11 +282,11 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.multiply);
 
 		// Act
-		calculator.resolve();
+		var record = calculator.resolve();
 
 		// Assert
-		verifyIdleExpression();
-		verifyEquation(BiOperator.multiply, number, number, "15129");
+		assertIdleExpression(record);
+		verifyEquation(record, number, BiOperator.multiply, number, "15129");
 	}
 
 	@Test
@@ -301,11 +298,11 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.multiply);
 
 		// Act
-		calculator.number(number2);
+		var record = calculator.number(number2);
 
 		// Assert
-		verifyIdleExpression();
-		verifyEquation(BiOperator.multiply, number1, number2, "56088");
+		assertIdleExpression(record);
+		verifyEquation(record, number1, BiOperator.multiply, number2, "56088");
 	}
 
 	@Test
@@ -319,11 +316,11 @@ class SimpleCalculatorTest {
 		calculator.number(number2);
 
 		// Act
-		calculator.binary(BiOperator.multiply);
+		var record = calculator.binary(BiOperator.multiply);
 
 		// Assert
-		verifyExpression(BiOperator.multiply, result);
-		verifyEquation(BiOperator.plus, number1, number2, result);
+		assertExpression(record, result, BiOperator.multiply);
+		verifyEquation(record, number1, BiOperator.plus, number2, result);
 	}
 	
 	/* ************************/
@@ -332,11 +329,11 @@ class SimpleCalculatorTest {
 	@Test
 	void testDivideAfterInit() {
 		// Act
-		calculator.binary(BiOperator.divide);
+		var record = calculator.binary(BiOperator.divide);
 
 		// Assert
-		verifyExpression(BiOperator.divide, "0");
-		verifyNoEquation();
+		assertExpression(record, "0", BiOperator.divide);
+		verifyNoEquation(record);
 	}
 
 	@Test
@@ -345,11 +342,11 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.divide);
 
 		// Act
-		calculator.resolve();
+		var record = calculator.resolve();
 
 		// Assert
-		verifyIdleExpression();
-		verifyEquation(BiOperator.divide, "0", "0", ResolveType.UNDEFINED);
+		assertIdleExpression(record);
+		verifyEquation(record, "0", BiOperator.divide, "0", ResolveType.UNDEFINED);
 	}
 
 	@Test
@@ -360,11 +357,11 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.divide);
 
 		// Act
-		calculator.resolve();
+		var record = calculator.resolve();
 
 		// Assert
-		verifyIdleExpression();
-		verifyEquation(BiOperator.divide, number, number, "1");
+		assertIdleExpression(record);
+		verifyEquation(record, number, BiOperator.divide, number, "1");
 	}
 
 	@Test
@@ -376,14 +373,14 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.divide);
 
 		// Act
-		calculator.number(number2);
+		var record = calculator.number(number2);
 
 		// Assert
-		verifyIdleExpression();
-		verifyEquation(BiOperator.divide, number1, number2, "0.2697368421052632");
+		assertIdleExpression(record);
+		verifyEquation(record, number1, BiOperator.divide, number2, "0.2697368421052632");
 	}
 	
-//	@Test
+//	@Test // TODO
 //	void testResolveOfDivideByZero() {
 //		// Arrange
 //		String number1 = "123";
@@ -395,8 +392,8 @@ class SimpleCalculatorTest {
 //		calculator.number(number2);
 //		
 //		// Assert
-//		verifyIdleExpression();
-//		verifyEquation(BiOperator.divide, number1, ResolveType.DIVIDE_BY_ZERO);
+//		assertIdleExpression(record);
+//		verifyEquation(record, BiOperator.divide, number1, ResolveType.DIVIDE_BY_ZERO);
 //	}
 
 	@Test
@@ -410,43 +407,52 @@ class SimpleCalculatorTest {
 		calculator.number(number2);
 
 		// Act
-		calculator.binary(BiOperator.divide);
+		var record = calculator.binary(BiOperator.divide);
 
 		// Assert
-		verifyExpression(BiOperator.divide, result);
-		verifyEquation(BiOperator.plus, number1, number2, result);
+		assertExpression(record, result, BiOperator.divide);
+		verifyEquation(record, number1, BiOperator.plus, number2, result);
+		
+	}
+
+	
+	private void assertIdleExpression(SimpleCalculatorRecord actual) {
+		assertEquals(IdleExpression.of(), actual.expression());
+	}
+	
+	private void assertExpression(SimpleCalculatorRecord actual, String number) {
+		assertEquals(number(number), actual.expression());
+	}
+	
+	private void assertExpression(SimpleCalculatorRecord actual, String number, BiOperator operator) {
+		assertEquals(BinaryExpression.of(bd(number), operator), actual.expression());
+	}
+	
+	private void verifyNoEquation(SimpleCalculatorRecord actual) {
+		assertNull(actual.equation());
+	}
+	
+	private void assertEquation(SimpleCalculatorRecord actual, String left, String right) {
+		assertEquals(Equation.of(number(left), bd(right)), actual.equation());
+	}
+	
+	private void verifyEquation(SimpleCalculatorRecord actual, String left, BiOperator operator, String right, String result) {
+		assertEquals(Equation.of(BinaryExpression.of(operator, bd(left), bd(right)), bd(result)), actual.equation());
+	}
+	
+	private void verifyEquation(SimpleCalculatorRecord actual, String left, BiOperator operator, String right, ResolveType type) {
+		assertEquals(Equation.of(BinaryExpression.of(operator, bd(left), bd(right)), type), actual.equation());
 	}
 	
 	private BigDecimal bd(String s) {
 		return new BigDecimal(s);
 	}
-
-	private void verifyIdleExpression() {
-		var expression = calculator.getExpression();
-		assertEquals(IdleExpression.of(), expression);
-	}
-
-	private void verifyNumberExpression(String number) {
-		assertEquals(NumberExpression.of(number), calculator.getExpression());
-	}
-
-	private void verifyExpression(BiOperator operator, String left) {
-		assertEquals(BinaryExpression.of(bd(left), operator), calculator.getExpression());
-	}
-
-	private void verifyNoEquation() {
-		assertNull(calculator.getPreviousEquation());
-	}
-
-	private void verifyIdentityEquation(String number) {
-		assertEquals(Equation.of(NumberExpression.of(bd(number)), bd(number)), calculator.getPreviousEquation());
-	}
-
-	private void verifyEquation(BiOperator operator, String left, String right, String result) {
-		assertEquals(Equation.of(BinaryExpression.of(operator, bd(left), bd(right)), bd(result)), calculator.getPreviousEquation());
+	
+	private NumberExpression number(String s) {
+		return NumberExpression.of(bd(s));
 	}
 	
-	private void verifyEquation(BiOperator operator, String left, String right, ResolveType type) {
-		assertEquals(Equation.of(BinaryExpression.of(operator, bd(left), bd(right)), type), calculator.getPreviousEquation());
+	private Expression idleExpression() {
+		return IdleExpression.of();
 	}
 }

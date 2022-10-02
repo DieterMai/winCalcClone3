@@ -14,46 +14,47 @@ public class SimpleCalculator {
 
 	private static final Expression INITIAL_EXPRESSION = IdleExpression.of();
 
-	private Expression currentExpression = INITIAL_EXPRESSION;
-	private Equation previousEquation;
-
+	private SimpleCalculatorRecord record = SimpleCalculatorRecord.initial();
+	
 	public Expression getExpression() {
-		return currentExpression;
+		return record.expression();
 	}
 
 	public Equation getPreviousEquation() {
-		return previousEquation;
+		return record.equation();
 	}
-
-	public void resolve() {
-		switch(currentExpression) {
+	
+	public SimpleCalculatorRecord resolve() {
+		switch(record.expression()) {
 		case null -> throw new NullPointerException();
-		case IdleExpression i -> previousEquation = Equation.of(NumberExpression.of(BigDecimal.ZERO), BigDecimal.ZERO);
-		case NumberExpression ne -> previousEquation = Equation.of(ne, ne.value());
-		case BinaryExpression binary -> previousEquation = resolveBinaryExpression(binary);
+		case IdleExpression i -> record = record.withEquation(Equation.of(NumberExpression.of(BigDecimal.ZERO), BigDecimal.ZERO));
+		case NumberExpression ne -> record = record.withEquation(Equation.of(ne, ne.value()));
+		case BinaryExpression binary -> record = record.withEquation(resolveBinaryExpression(binary));
 		}
 		
-		currentExpression = INITIAL_EXPRESSION;
+		record = record.withExpression(INITIAL_EXPRESSION);
+		return record;
 	}
 
-	public void number(String number) {
-		if (currentExpression instanceof BinaryExpression binaryExpression) {
-			currentExpression = binaryExpression.withRight(new BigDecimal(number));
+	public SimpleCalculatorRecord number(String number) {
+		if (record.expression() instanceof BinaryExpression binaryExpression) {
+			record = record.withExpression(binaryExpression.withRight(new BigDecimal(number)));
 			resolve();
 		} else {
-			currentExpression = NumberExpression.of(number);
+			record = record.withExpression(NumberExpression.of(number));
 		}
+		return record;
 	}
 
-	public void binary(BiOperator operator) {
+	public SimpleCalculatorRecord binary(BiOperator operator) {
 		// TODO handle case when there is already a incomplete binary expression
 		BigDecimal initalValue = getInitialValueForBinaryOperation();
-		currentExpression = BinaryExpression.of(initalValue, operator);
-//		currentExpression = operator.of(getInitialValueForBinaryOperation());
+		record = record.withExpression(BinaryExpression.of(initalValue, operator));
+		return record;
 	}
 
 	private BigDecimal getInitialValueForBinaryOperation() {
-		if (currentExpression instanceof NumberExpression numberExpression) {
+		if (record.expression() instanceof NumberExpression numberExpression) {
 			return numberExpression.value();
 		} else {
 			return getPreviousResult();
@@ -61,8 +62,8 @@ public class SimpleCalculator {
 	}
 
 	private BigDecimal getPreviousResult() {
-		if (previousEquation != null) {
-			return previousEquation.value();
+		if (record.equation() != null) {
+			return record.equation().value();
 		} else {
 			return BigDecimal.ZERO;
 		}
