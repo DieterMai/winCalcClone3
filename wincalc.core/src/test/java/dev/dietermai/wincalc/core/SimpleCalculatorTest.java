@@ -21,7 +21,7 @@ import dev.dietermai.wincalc.core.simple.expr.binary.BinaryExpression;
 // TODO add tests for multiple operations
 // TODO add tests for multiple of the same operation
 class SimpleCalculatorTest {
-	
+
 	private SimpleCalculator calculator;
 
 	@BeforeEach
@@ -29,7 +29,6 @@ class SimpleCalculatorTest {
 		this.calculator = new SimpleCalculator();
 	}
 
-	
 	@Test
 	void testResolveOfInitialEquation() {
 		var record = calculator.resolve();
@@ -247,7 +246,6 @@ class SimpleCalculatorTest {
 		verifyEquation(record, number1, BiOperator.plus, number2, result);
 	}
 
-	
 	/* ***********************/
 	/* Multiply related methods */
 	/* ***********************/
@@ -322,7 +320,7 @@ class SimpleCalculatorTest {
 		assertExpression(record, result, BiOperator.multiply);
 		verifyEquation(record, number1, BiOperator.plus, number2, result);
 	}
-	
+
 	/* ************************/
 	/* Divide related methods */
 	/* ************************/
@@ -379,22 +377,22 @@ class SimpleCalculatorTest {
 		assertIdleExpression(record);
 		verifyEquation(record, number1, BiOperator.divide, number2, "0.2697368421052632");
 	}
-	
-//	@Test // TODO
-//	void testResolveOfDivideByZero() {
-//		// Arrange
-//		String number1 = "123";
-//		String number2 = "0";
-//		calculator.number(number1);
-//		calculator.binary(BiOperator.divide);
-//
-//		// Act
-//		calculator.number(number2);
-//		
-//		// Assert
-//		assertIdleExpression(record);
-//		verifyEquation(record, BiOperator.divide, number1, ResolveType.DIVIDE_BY_ZERO);
-//	}
+
+	@Test // TODO
+	void testResolveOfDivideByZero() {
+		// Arrange
+		String number1 = "123";
+		String number2 = "0";
+		calculator.number(number1);
+		calculator.binary(BiOperator.divide);
+
+		// Act
+		var record = calculator.number(number2);
+
+		// Assert
+		assertIdleExpression(record);
+		verifyEquation(record, number1, BiOperator.divide, number2, ResolveType.DIVIDE_BY_ZERO);
+	}
 
 	@Test
 	void testDivideUsesResultOfPreviousEquation() {
@@ -412,47 +410,42 @@ class SimpleCalculatorTest {
 		// Assert
 		assertExpression(record, result, BiOperator.divide);
 		verifyEquation(record, number1, BiOperator.plus, number2, result);
-		
+
 	}
 
-	
 	private void assertIdleExpression(SimpleCalculatorRecord actual) {
 		assertEquals(IdleExpression.of(), actual.expression());
 	}
-	
+
 	private void assertExpression(SimpleCalculatorRecord actual, String number) {
 		assertEquals(number(number), actual.expression());
 	}
-	
+
 	private void assertExpression(SimpleCalculatorRecord actual, String number, BiOperator operator) {
 		assertEquals(BinaryExpression.of(bd(number), operator), actual.expression());
 	}
-	
+
 	private void verifyNoEquation(SimpleCalculatorRecord actual) {
 		assertNull(actual.equation());
 	}
-	
+
 	private void assertEquation(SimpleCalculatorRecord actual, String left, String right) {
 		assertEquals(Equation.of(number(left), bd(right)), actual.equation());
 	}
-	
+
 	private void verifyEquation(SimpleCalculatorRecord actual, String left, BiOperator operator, String right, String result) {
 		assertEquals(Equation.of(BinaryExpression.of(operator, bd(left), bd(right)), bd(result)), actual.equation());
 	}
-	
+
 	private void verifyEquation(SimpleCalculatorRecord actual, String left, BiOperator operator, String right, ResolveType type) {
 		assertEquals(Equation.of(BinaryExpression.of(operator, bd(left), bd(right)), type), actual.equation());
 	}
-	
+
 	private BigDecimal bd(String s) {
 		return new BigDecimal(s);
 	}
-	
+
 	private NumberExpression number(String s) {
 		return NumberExpression.of(bd(s));
-	}
-	
-	private Expression idleExpression() {
-		return IdleExpression.of();
 	}
 }
