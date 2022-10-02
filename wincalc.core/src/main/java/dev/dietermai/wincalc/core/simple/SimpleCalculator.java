@@ -15,21 +15,20 @@ public class SimpleCalculator {
 	private static final Expression INITIAL_EXPRESSION = IdleExpression.of();
 
 	private SimpleCalculatorRecord record = SimpleCalculatorRecord.initial();
-	
+
 	public SimpleCalculatorRecord getState() {
 		return record;
 	}
-	
+
 	public SimpleCalculatorRecord resolve() {
-		switch(record.expression()) {
+		record = switch (record.expression()) {
 		case null -> throw new NullPointerException();
-		case IdleExpression i -> record = record.withEquation(Equation.of(NumberExpression.of(BigDecimal.ZERO), BigDecimal.ZERO));
-		case NumberExpression ne -> record = record.withEquation(Equation.of(ne, ne.value()));
-		case BinaryExpression binary -> record = record.withEquation(resolveBinaryExpression(binary));
-		}
-		
-		record = record.withExpression(INITIAL_EXPRESSION);
-		return record;
+		case IdleExpression i -> record.withEquation(Equation.of(NumberExpression.of(BigDecimal.ZERO), BigDecimal.ZERO));
+		case NumberExpression ne -> record.withEquation(Equation.of(ne, ne.value()));
+		case BinaryExpression binary -> record.withEquation(resolveBinaryExpression(binary));
+		};
+
+		return record = record.withExpression(INITIAL_EXPRESSION);
 	}
 
 	public SimpleCalculatorRecord number(String number) {
@@ -45,8 +44,7 @@ public class SimpleCalculator {
 	public SimpleCalculatorRecord binary(BiOperator operator) {
 		// TODO handle case when there is already a incomplete binary expression
 		BigDecimal initalValue = getInitialValueForBinaryOperation();
-		record = record.withExpression(BinaryExpression.of(initalValue, operator));
-		return record;
+		return record = record.withExpression(BinaryExpression.of(initalValue, operator));
 	}
 
 	private BigDecimal getInitialValueForBinaryOperation() {
@@ -80,15 +78,13 @@ public class SimpleCalculator {
 	public Equation resolvePlusExpression(BigDecimal left, BigDecimal right) {
 		BigDecimal result = left.add(right);
 		Expression expression = BinaryExpression.of(BiOperator.plus, left, right);
-		Equation equation = Equation.of(expression, result);
-		return equation;
+		return Equation.of(expression, result);
 	}
 
 	public Equation resolveMinusExpression(BigDecimal left, BigDecimal right) {
 		BigDecimal result = left.subtract(right);
 		Expression expression = BinaryExpression.of(BiOperator.minus, left, right);
-		Equation equation = Equation.of(expression, result);
-		return equation;
+		return Equation.of(expression, result);
 	}
 
 	public Equation resolveMultiplyExpression(BigDecimal left, BigDecimal right) {
@@ -108,8 +104,7 @@ public class SimpleCalculator {
 			}
 		} else {
 			BigDecimal result = left.divide(right, 16, RoundingMode.HALF_UP).stripTrailingZeros();
-			Equation equation = Equation.of(expression, result);
-			return equation;
+			return Equation.of(expression, result);
 		}
 	}
 }
