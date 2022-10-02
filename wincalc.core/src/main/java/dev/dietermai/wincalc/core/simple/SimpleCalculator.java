@@ -16,14 +16,6 @@ public class SimpleCalculator {
 
 	private SimpleCalculatorRecord record = SimpleCalculatorRecord.initial();
 	
-	public Expression getExpression() {
-		return record.expression();
-	}
-
-	public Equation getPreviousEquation() {
-		return record.equation();
-	}
-	
 	public SimpleCalculatorRecord resolve() {
 		switch(record.expression()) {
 		case null -> throw new NullPointerException();
