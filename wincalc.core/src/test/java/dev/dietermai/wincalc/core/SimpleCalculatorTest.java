@@ -119,6 +119,20 @@ class SimpleCalculatorTest {
 		assertIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), "0", BiOperator.plus, "0", "0");
 	}
+	
+	@Test
+	void testPlusAfterNumberInput() {
+		// Arrange
+		String number = "123";
+		calculator.number(number);
+
+		// Act
+		calculator.binary(BiOperator.plus);
+
+		// Assert
+		assertExpression(calculator.getState(), number, BiOperator.plus);
+		verifyNoEquation(calculator.getState());
+	}
 
 	@Test
 	void testResloveOfPlusAfterNumberInput() {
@@ -193,6 +207,20 @@ class SimpleCalculatorTest {
 		// Assert
 		assertIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), "0", BiOperator.minus, "0", "0");
+	}
+	
+	@Test
+	void testMinusAfterNumberInput() {
+		// Arrange
+		String number = "123";
+		calculator.number(number);
+
+		// Act
+		calculator.binary(BiOperator.minus);
+
+		// Assert
+		assertExpression(calculator.getState(), number, BiOperator.minus);
+		verifyNoEquation(calculator.getState());
 	}
 
 	@Test
@@ -269,6 +297,20 @@ class SimpleCalculatorTest {
 		assertIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), "0", BiOperator.multiply, "0", "0");
 	}
+	
+	@Test
+	void testMultiplyAfterNumberInput() {
+		// Arrange
+		String number = "123";
+		calculator.number(number);
+
+		// Act
+		calculator.binary(BiOperator.multiply);
+
+		// Assert
+		assertExpression(calculator.getState(), number, BiOperator.multiply);
+		verifyNoEquation(calculator.getState());
+	}
 
 	@Test
 	void testResloveOfMultiplyAfterNumberInput() {
@@ -343,6 +385,20 @@ class SimpleCalculatorTest {
 		// Assert
 		assertIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), "0", BiOperator.divide, "0", ResolveType.UNDEFINED);
+	}
+	
+	@Test
+	void testDivideAfterNumberInput() {
+		// Arrange
+		String number = "123";
+		calculator.number(number);
+
+		// Act
+		calculator.binary(BiOperator.divide);
+
+		// Assert
+		assertExpression(calculator.getState(), number, BiOperator.divide);
+		verifyNoEquation(calculator.getState());
 	}
 
 	@Test
