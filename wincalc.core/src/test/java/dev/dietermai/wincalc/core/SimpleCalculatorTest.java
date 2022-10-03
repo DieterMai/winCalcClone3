@@ -30,8 +30,8 @@ class SimpleCalculatorTest {
 	void testResolveOfInitialEquation() {
 		calculator.resolve();
 
-		assertIdleExpression(calculator.getState());
-		assertEquation(calculator.getState(), "0", "0");
+		verifyIdleExpression(calculator.getState());
+		verifyEquation(calculator.getState(), "0", "0");
 	}
 
 	@Test
@@ -40,7 +40,7 @@ class SimpleCalculatorTest {
 
 		calculator.number(number);
 
-		assertExpression(calculator.getState(), number);
+		verifyExpression(calculator.getState(), number);
 		assertNull(calculator.getState().equation());
 	}
 
@@ -54,8 +54,8 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 
 		// Assert
-		assertIdleExpression(calculator.getState());
-		assertEquation(calculator.getState(), number, number);
+		verifyIdleExpression(calculator.getState());
+		verifyEquation(calculator.getState(), number, number);
 	}
 
 	@Test
@@ -70,8 +70,8 @@ class SimpleCalculatorTest {
 		calculator.number(number2);
 
 		// Assert
-		assertEquation(calculator.getState(), number1, number1);
-		assertExpression(calculator.getState(), number2);
+		verifyEquation(calculator.getState(), number1, number1);
+		verifyExpression(calculator.getState(), number2);
 	}
 
 	@Test
@@ -87,9 +87,9 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 
 		// Assert
-		assertIdleExpression(calculator.getState());
-		assertIdleExpression(calculator.getState());
-		assertEquation(calculator.getState(), number2, number2);
+		verifyIdleExpression(calculator.getState());
+		verifyIdleExpression(calculator.getState());
+		verifyEquation(calculator.getState(), number2, number2);
 	}
 
 	/* ******************** */
@@ -101,7 +101,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.plus);
 
 		// Assert
-		assertExpression(calculator.getState(), "0", BiOperator.plus);
+		verifyExpression(calculator.getState(), "0", BiOperator.plus);
 		verifyNoEquation(calculator.getState());
 	}
 
@@ -114,7 +114,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 
 		// Assert
-		assertIdleExpression(calculator.getState());
+		verifyIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), "0", BiOperator.plus, "0", "0");
 	}
 
@@ -128,7 +128,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.plus);
 
 		// Assert
-		assertExpression(calculator.getState(), number, BiOperator.plus);
+		verifyExpression(calculator.getState(), number, BiOperator.plus);
 		verifyNoEquation(calculator.getState());
 	}
 
@@ -143,7 +143,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.plus);
 
 		// Assert
-		assertExpression(calculator.getState(), number, BiOperator.plus);
+		verifyExpression(calculator.getState(), number, BiOperator.plus);
 		verifyNoEquation(calculator.getState());
 	}
 
@@ -158,7 +158,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.plus);
 
 		// Assert
-		assertExpression(calculator.getState(), number, BiOperator.plus);
+		verifyExpression(calculator.getState(), number, BiOperator.plus);
 		verifyNoEquation(calculator.getState());
 	}
 
@@ -173,7 +173,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 
 		// Assert
-		assertIdleExpression(calculator.getState());
+		verifyIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), number, BiOperator.plus, number, "246");
 	}
 
@@ -189,7 +189,7 @@ class SimpleCalculatorTest {
 		calculator.number(number2);
 
 		// Assert
-		assertIdleExpression(calculator.getState());
+		verifyIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), number1, BiOperator.plus, number2, "579");
 	}
 
@@ -207,7 +207,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.plus);
 
 		// Assert
-		assertExpression(calculator.getState(), result, BiOperator.plus);
+		verifyExpression(calculator.getState(), result, BiOperator.plus);
 		verifyEquation(calculator.getState(), number1, BiOperator.plus, number2, result);
 	}
 
@@ -222,7 +222,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 
 		// Assert
-		assertIdleExpression(calculator.getState());
+		verifyIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), "3", BiOperator.plus, "2", "5");
 	}
 
@@ -235,7 +235,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.minus);
 
 		// Assert
-		assertExpression(calculator.getState(), "0", BiOperator.minus);
+		verifyExpression(calculator.getState(), "0", BiOperator.minus);
 		verifyNoEquation(calculator.getState());
 	}
 
@@ -248,7 +248,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 
 		// Assert
-		assertIdleExpression(calculator.getState());
+		verifyIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), "0", BiOperator.minus, "0", "0");
 	}
 
@@ -262,7 +262,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.minus);
 
 		// Assert
-		assertExpression(calculator.getState(), number, BiOperator.minus);
+		verifyExpression(calculator.getState(), number, BiOperator.minus);
 		verifyNoEquation(calculator.getState());
 	}
 
@@ -277,7 +277,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.minus);
 
 		// Assert
-		assertExpression(calculator.getState(), number, BiOperator.minus);
+		verifyExpression(calculator.getState(), number, BiOperator.minus);
 		verifyNoEquation(calculator.getState());
 	}
 
@@ -292,7 +292,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.minus);
 
 		// Assert
-		assertExpression(calculator.getState(), number, BiOperator.minus);
+		verifyExpression(calculator.getState(), number, BiOperator.minus);
 		verifyNoEquation(calculator.getState());
 	}
 
@@ -307,7 +307,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 
 		// Assert
-		assertIdleExpression(calculator.getState());
+		verifyIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), number, BiOperator.minus, number, "0");
 	}
 
@@ -323,7 +323,7 @@ class SimpleCalculatorTest {
 		calculator.number(number2);
 
 		// Assert
-		assertIdleExpression(calculator.getState());
+		verifyIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), number1, BiOperator.minus, number2, "-333");
 	}
 
@@ -341,7 +341,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.minus);
 
 		// Assert
-		assertExpression(calculator.getState(), result, BiOperator.minus);
+		verifyExpression(calculator.getState(), result, BiOperator.minus);
 		verifyEquation(calculator.getState(), number1, BiOperator.plus, number2, result);
 	}
 
@@ -356,7 +356,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 
 		// Assert
-		assertIdleExpression(calculator.getState());
+		verifyIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), "-1", BiOperator.minus, "2", "-3");
 	}
 
@@ -369,7 +369,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.multiply);
 
 		// Assert
-		assertExpression(calculator.getState(), "0", BiOperator.multiply);
+		verifyExpression(calculator.getState(), "0", BiOperator.multiply);
 		verifyNoEquation(calculator.getState());
 	}
 
@@ -382,7 +382,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 
 		// Assert
-		assertIdleExpression(calculator.getState());
+		verifyIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), "0", BiOperator.multiply, "0", "0");
 	}
 
@@ -396,7 +396,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.multiply);
 
 		// Assert
-		assertExpression(calculator.getState(), number, BiOperator.multiply);
+		verifyExpression(calculator.getState(), number, BiOperator.multiply);
 		verifyNoEquation(calculator.getState());
 	}
 
@@ -411,7 +411,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.multiply);
 
 		// Assert
-		assertExpression(calculator.getState(), number, BiOperator.multiply);
+		verifyExpression(calculator.getState(), number, BiOperator.multiply);
 		verifyNoEquation(calculator.getState());
 	}
 
@@ -426,7 +426,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.multiply);
 
 		// Assert
-		assertExpression(calculator.getState(), number, BiOperator.multiply);
+		verifyExpression(calculator.getState(), number, BiOperator.multiply);
 		verifyNoEquation(calculator.getState());
 	}
 
@@ -441,7 +441,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 
 		// Assert
-		assertIdleExpression(calculator.getState());
+		verifyIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), number, BiOperator.multiply, number, "15129");
 	}
 
@@ -457,7 +457,7 @@ class SimpleCalculatorTest {
 		calculator.number(number2);
 
 		// Assert
-		assertIdleExpression(calculator.getState());
+		verifyIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), number1, BiOperator.multiply, number2, "56088");
 	}
 
@@ -475,7 +475,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.multiply);
 
 		// Assert
-		assertExpression(calculator.getState(), result, BiOperator.multiply);
+		verifyExpression(calculator.getState(), result, BiOperator.multiply);
 		verifyEquation(calculator.getState(), number1, BiOperator.plus, number2, result);
 	}
 
@@ -490,7 +490,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 
 		// Assert
-		assertIdleExpression(calculator.getState());
+		verifyIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), "2", BiOperator.multiply, "2", "4");
 	}
 
@@ -503,7 +503,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.divide);
 
 		// Assert
-		assertExpression(calculator.getState(), "0", BiOperator.divide);
+		verifyExpression(calculator.getState(), "0", BiOperator.divide);
 		verifyNoEquation(calculator.getState());
 	}
 
@@ -516,7 +516,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 
 		// Assert
-		assertIdleExpression(calculator.getState());
+		verifyIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), "0", BiOperator.divide, "0", ResolveType.UNDEFINED);
 	}
 
@@ -530,7 +530,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.divide);
 
 		// Assert
-		assertExpression(calculator.getState(), number, BiOperator.divide);
+		verifyExpression(calculator.getState(), number, BiOperator.divide);
 		verifyNoEquation(calculator.getState());
 	}
 
@@ -545,7 +545,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.divide);
 
 		// Assert
-		assertExpression(calculator.getState(), number, BiOperator.divide);
+		verifyExpression(calculator.getState(), number, BiOperator.divide);
 		verifyNoEquation(calculator.getState());
 	}
 
@@ -560,7 +560,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.divide);
 
 		// Assert
-		assertExpression(calculator.getState(), number, BiOperator.divide);
+		verifyExpression(calculator.getState(), number, BiOperator.divide);
 		verifyNoEquation(calculator.getState());
 	}
 
@@ -575,7 +575,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 
 		// Assert
-		assertIdleExpression(calculator.getState());
+		verifyIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), number, BiOperator.divide, number, "1");
 	}
 
@@ -591,7 +591,7 @@ class SimpleCalculatorTest {
 		calculator.number(number2);
 
 		// Assert
-		assertIdleExpression(calculator.getState());
+		verifyIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), number1, BiOperator.divide, number2, "0.2697368421052632");
 	}
 
@@ -607,7 +607,7 @@ class SimpleCalculatorTest {
 		calculator.number(number2);
 
 		// Assert
-		assertIdleExpression(calculator.getState());
+		verifyIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), number1, BiOperator.divide, number2, ResolveType.DIVIDE_BY_ZERO);
 	}
 
@@ -625,7 +625,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.divide);
 
 		// Assert
-		assertExpression(calculator.getState(), result, BiOperator.divide);
+		verifyExpression(calculator.getState(), result, BiOperator.divide);
 		verifyEquation(calculator.getState(), number1, BiOperator.plus, number2, result);
 
 	}
@@ -641,19 +641,19 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 
 		// Assert
-		assertIdleExpression(calculator.getState());
+		verifyIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), "0.5", BiOperator.divide, "2", "0.25");
 	}
 
-	private void assertIdleExpression(SimpleCalculatorRecord actual) {
+	private void verifyIdleExpression(SimpleCalculatorRecord actual) {
 		assertEquals(IdleExpression.of(), actual.expression());
 	}
 
-	private void assertExpression(SimpleCalculatorRecord actual, String number) {
+	private void verifyExpression(SimpleCalculatorRecord actual, String number) {
 		assertEquals(number(number), actual.expression());
 	}
 
-	private void assertExpression(SimpleCalculatorRecord actual, String number, BiOperator operator) {
+	private void verifyExpression(SimpleCalculatorRecord actual, String number, BiOperator operator) {
 		assertEquals(BinaryExpression.of(bd(number), operator), actual.expression());
 	}
 
@@ -661,7 +661,7 @@ class SimpleCalculatorTest {
 		assertNull(actual.equation());
 	}
 
-	private void assertEquation(SimpleCalculatorRecord actual, String left, String right) {
+	private void verifyEquation(SimpleCalculatorRecord actual, String left, String right) {
 		assertEquals(Equation.of(number(left), bd(right)), actual.equation());
 	}
 
