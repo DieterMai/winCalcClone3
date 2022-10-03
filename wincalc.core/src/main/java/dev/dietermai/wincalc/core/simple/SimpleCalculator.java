@@ -23,12 +23,23 @@ public class SimpleCalculator {
 	public SimpleCalculatorRecord resolve() {
 		record = switch (record.expression()) {
 		case null -> throw new NullPointerException();
-		case IdleExpression i -> record.withEquation(Equation.of(NumberExpression.of(BigDecimal.ZERO), BigDecimal.ZERO));
+		case IdleExpression i -> resolveOfIdle();
 		case NumberExpression ne -> record.withEquation(Equation.of(ne, ne.value()));
 		case BinaryExpression binary -> record.withEquation(resolveBinaryExpression(binary));
 		};
 
 		return record = record.withExpression(INITIAL_EXPRESSION);
+	}
+
+	private SimpleCalculatorRecord resolveOfIdle() {
+		if (record.equation() == null) {
+			return record.withEquation(Equation.of(NumberExpression.of(BigDecimal.ZERO), BigDecimal.ZERO));
+		} else if (record.equation().expression() instanceof BinaryExpression be) {
+			record = record.withExpression(BinaryExpression.of(be.operator(), record.equation().value(), be.right()));
+			return resolve();
+		} else {
+			throw new IllegalStateException("expression: " + record.equation().expression());
+		}
 	}
 
 	public SimpleCalculatorRecord number(String number) {
@@ -43,9 +54,9 @@ public class SimpleCalculator {
 
 	public SimpleCalculatorRecord binary(BiOperator operator) {
 		Expression currentExpression = record.expression();
-		if(currentExpression instanceof BinaryExpression be) {
+		if (currentExpression instanceof BinaryExpression be) {
 			return record = record.withExpression(be.withOperator(operator));
-		}else {
+		} else {
 			BigDecimal initalValue = getInitialValueForBinaryOperation();
 			return record = record.withExpression(BinaryExpression.of(initalValue, operator));
 		}

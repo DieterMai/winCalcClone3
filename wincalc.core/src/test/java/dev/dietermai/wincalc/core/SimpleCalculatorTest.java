@@ -17,8 +17,6 @@ import dev.dietermai.wincalc.core.simple.expr.NumberExpression;
 import dev.dietermai.wincalc.core.simple.expr.binary.BiOperator;
 import dev.dietermai.wincalc.core.simple.expr.binary.BinaryExpression;
 
-// TODO add tests for multiple operations
-// TODO add tests for multiple of the same operation
 class SimpleCalculatorTest {
 
 	private SimpleCalculator calculator;
@@ -119,7 +117,7 @@ class SimpleCalculatorTest {
 		assertIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), "0", BiOperator.plus, "0", "0");
 	}
-	
+
 	@Test
 	void testPlusAfterNumberInput() {
 		// Arrange
@@ -133,7 +131,7 @@ class SimpleCalculatorTest {
 		assertExpression(calculator.getState(), number, BiOperator.plus);
 		verifyNoEquation(calculator.getState());
 	}
-	
+
 	@Test
 	void testPlusAfterPlus() {
 		// Arrange
@@ -148,7 +146,7 @@ class SimpleCalculatorTest {
 		assertExpression(calculator.getState(), number, BiOperator.plus);
 		verifyNoEquation(calculator.getState());
 	}
-	
+
 	@Test
 	void testPlusAfterMinus() {
 		// Arrange
@@ -213,6 +211,21 @@ class SimpleCalculatorTest {
 		verifyEquation(calculator.getState(), number1, BiOperator.plus, number2, result);
 	}
 
+	@Test
+	void testResolveAfterResolvedPlusEquation() {
+		// Arrange
+		calculator.number("1");
+		calculator.binary(BiOperator.plus);
+		calculator.number("2");
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		assertIdleExpression(calculator.getState());
+		verifyEquation(calculator.getState(), "3", BiOperator.plus, "2", "5");
+	}
+
 	/* ***********************/
 	/* Minus related methods */
 	/* ***********************/
@@ -238,7 +251,7 @@ class SimpleCalculatorTest {
 		assertIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), "0", BiOperator.minus, "0", "0");
 	}
-	
+
 	@Test
 	void testMinusAfterNumberInput() {
 		// Arrange
@@ -252,7 +265,7 @@ class SimpleCalculatorTest {
 		assertExpression(calculator.getState(), number, BiOperator.minus);
 		verifyNoEquation(calculator.getState());
 	}
-	
+
 	@Test
 	void testMinusAfterMinus() {
 		// Arrange
@@ -267,7 +280,7 @@ class SimpleCalculatorTest {
 		assertExpression(calculator.getState(), number, BiOperator.minus);
 		verifyNoEquation(calculator.getState());
 	}
-	
+
 	@Test
 	void testMinusAfterPlus() {
 		// Arrange
@@ -332,6 +345,21 @@ class SimpleCalculatorTest {
 		verifyEquation(calculator.getState(), number1, BiOperator.plus, number2, result);
 	}
 
+	@Test
+	void testResolveAfterResolvedMinusEquation() {
+		// Arrange
+		calculator.number("1");
+		calculator.binary(BiOperator.minus);
+		calculator.number("2");
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		assertIdleExpression(calculator.getState());
+		verifyEquation(calculator.getState(), "-1", BiOperator.minus, "2", "-3");
+	}
+
 	/* ***********************/
 	/* Multiply related methods */
 	/* ***********************/
@@ -357,7 +385,7 @@ class SimpleCalculatorTest {
 		assertIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), "0", BiOperator.multiply, "0", "0");
 	}
-	
+
 	@Test
 	void testMultiplyAfterNumberInput() {
 		// Arrange
@@ -371,7 +399,7 @@ class SimpleCalculatorTest {
 		assertExpression(calculator.getState(), number, BiOperator.multiply);
 		verifyNoEquation(calculator.getState());
 	}
-	
+
 	@Test
 	void testMultiplyAfterMultiply() {
 		// Arrange
@@ -386,7 +414,7 @@ class SimpleCalculatorTest {
 		assertExpression(calculator.getState(), number, BiOperator.multiply);
 		verifyNoEquation(calculator.getState());
 	}
-	
+
 	@Test
 	void testMultiplyAfterPlus() {
 		// Arrange
@@ -451,6 +479,21 @@ class SimpleCalculatorTest {
 		verifyEquation(calculator.getState(), number1, BiOperator.plus, number2, result);
 	}
 
+	@Test
+	void testResolveAfterResolvedMultiplyEquation() {
+		// Arrange
+		calculator.number("1");
+		calculator.binary(BiOperator.multiply);
+		calculator.number("2");
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		assertIdleExpression(calculator.getState());
+		verifyEquation(calculator.getState(), "2", BiOperator.multiply, "2", "4");
+	}
+
 	/* ************************/
 	/* Divide related methods */
 	/* ************************/
@@ -476,7 +519,7 @@ class SimpleCalculatorTest {
 		assertIdleExpression(calculator.getState());
 		verifyEquation(calculator.getState(), "0", BiOperator.divide, "0", ResolveType.UNDEFINED);
 	}
-	
+
 	@Test
 	void testDivideAfterNumberInput() {
 		// Arrange
@@ -490,7 +533,7 @@ class SimpleCalculatorTest {
 		assertExpression(calculator.getState(), number, BiOperator.divide);
 		verifyNoEquation(calculator.getState());
 	}
-	
+
 	@Test
 	void testDivideAfterDivide() {
 		// Arrange
@@ -505,7 +548,7 @@ class SimpleCalculatorTest {
 		assertExpression(calculator.getState(), number, BiOperator.divide);
 		verifyNoEquation(calculator.getState());
 	}
-	
+
 	@Test
 	void testDivideAfterPlus() {
 		// Arrange
@@ -585,6 +628,21 @@ class SimpleCalculatorTest {
 		assertExpression(calculator.getState(), result, BiOperator.divide);
 		verifyEquation(calculator.getState(), number1, BiOperator.plus, number2, result);
 
+	}
+
+	@Test
+	void testResolveAfterResolvedDivideEquation() {
+		// Arrange
+		calculator.number("1");
+		calculator.binary(BiOperator.divide);
+		calculator.number("2");
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		assertIdleExpression(calculator.getState());
+		verifyEquation(calculator.getState(), "0.5", BiOperator.divide, "2", "0.25");
 	}
 
 	private void assertIdleExpression(SimpleCalculatorRecord actual) {
