@@ -35,7 +35,7 @@ public class SimpleCalculator {
 		if (record.equation() == null) {
 			return record.withEquation(Equation.of(NumberExpression.of(BigDecimal.ZERO), BigDecimal.ZERO));
 		} else if (record.equation().expression() instanceof BinaryExpression be) {
-			record = record.withExpression(BinaryExpression.of(be.operator(), record.equation().value(), be.right()));
+			record = record.withExpression(BinaryExpression.of(record.equation().value(), be.operator(), be.right()));
 			return resolve();
 		} else {
 			throw new IllegalStateException("expression: " + record.equation().expression());
@@ -92,25 +92,25 @@ public class SimpleCalculator {
 
 	public Equation resolvePlusExpression(BigDecimal left, BigDecimal right) {
 		BigDecimal result = left.add(right);
-		Expression expression = BinaryExpression.of(BiOperator.plus, left, right);
+		Expression expression = BinaryExpression.of(left, BiOperator.plus, right);
 		return Equation.of(expression, result);
 	}
 
 	public Equation resolveMinusExpression(BigDecimal left, BigDecimal right) {
 		BigDecimal result = left.subtract(right);
-		Expression expression = BinaryExpression.of(BiOperator.minus, left, right);
+		Expression expression = BinaryExpression.of(left, BiOperator.minus, right);
 		return Equation.of(expression, result);
 	}
 
 	public Equation resolveMultiplyExpression(BigDecimal left, BigDecimal right) {
 		BigDecimal result = left.multiply(right);
-		Expression expression = BinaryExpression.of(BiOperator.multiply, left, right);
+		Expression expression = BinaryExpression.of(left, BiOperator.multiply, right);
 		Equation equation = Equation.of(expression, result);
 		return equation;
 	}
 
 	public Equation resolveDivideExpression(BigDecimal left, BigDecimal right) {
-		Expression expression = BinaryExpression.of(BiOperator.divide, left, right);
+		Expression expression = BinaryExpression.of(left, BiOperator.divide, right);
 		if (right.equals(BigDecimal.ZERO)) {
 			if (left.equals(BigDecimal.ZERO)) {
 				return Equation.of(expression, ResolveType.UNDEFINED);

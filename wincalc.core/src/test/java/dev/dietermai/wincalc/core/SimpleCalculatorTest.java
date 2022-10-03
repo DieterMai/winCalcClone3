@@ -666,11 +666,11 @@ class SimpleCalculatorTest {
 	}
 
 	private void verifyEquation(SimpleCalculatorRecord actual, String left, BiOperator operator, String right, String result) {
-		assertEquals(Equation.of(BinaryExpression.of(operator, bd(left), bd(right)), bd(result)), actual.equation());
+		assertEquals(Equation.of(BinaryExpression.of(bd(left), operator, bd(right)), bd(result)), actual.equation());
 	}
 
 	private void verifyEquation(SimpleCalculatorRecord actual, String left, BiOperator operator, String right, ResolveType type) {
-		assertEquals(Equation.of(BinaryExpression.of(operator, bd(left), bd(right)), type), actual.equation());
+		assertEquals(Equation.of(BinaryExpression.of(bd(left), operator, bd(right)), type), actual.equation());
 	}
 
 	private BigDecimal bd(String s) {
