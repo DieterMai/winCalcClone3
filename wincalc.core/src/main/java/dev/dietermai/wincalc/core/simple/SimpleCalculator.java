@@ -42,9 +42,13 @@ public class SimpleCalculator {
 	}
 
 	public SimpleCalculatorRecord binary(BiOperator operator) {
-		// TODO handle case when there is already a incomplete binary expression
-		BigDecimal initalValue = getInitialValueForBinaryOperation();
-		return record = record.withExpression(BinaryExpression.of(initalValue, operator));
+		Expression currentExpression = record.expression();
+		if(currentExpression instanceof BinaryExpression be) {
+			return record = record.withExpression(be.withOperator(operator));
+		}else {
+			BigDecimal initalValue = getInitialValueForBinaryOperation();
+			return record = record.withExpression(BinaryExpression.of(initalValue, operator));
+		}
 	}
 
 	private BigDecimal getInitialValueForBinaryOperation() {

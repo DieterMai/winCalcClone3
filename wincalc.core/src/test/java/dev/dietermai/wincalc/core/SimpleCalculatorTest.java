@@ -133,6 +133,21 @@ class SimpleCalculatorTest {
 		assertExpression(calculator.getState(), number, BiOperator.plus);
 		verifyNoEquation(calculator.getState());
 	}
+	
+	@Test
+	void testPlusAfterPlus() {
+		// Arrange
+		String number = "123";
+		calculator.number(number);
+		calculator.binary(BiOperator.plus);
+
+		// Act
+		calculator.binary(BiOperator.plus);
+
+		// Assert
+		assertExpression(calculator.getState(), number, BiOperator.plus);
+		verifyNoEquation(calculator.getState());
+	}
 
 	@Test
 	void testResloveOfPlusAfterNumberInput() {
@@ -214,6 +229,21 @@ class SimpleCalculatorTest {
 		// Arrange
 		String number = "123";
 		calculator.number(number);
+
+		// Act
+		calculator.binary(BiOperator.minus);
+
+		// Assert
+		assertExpression(calculator.getState(), number, BiOperator.minus);
+		verifyNoEquation(calculator.getState());
+	}
+	
+	@Test
+	void testMinusAfterMinus() {
+		// Arrange
+		String number = "123";
+		calculator.number(number);
+		calculator.binary(BiOperator.minus);
 
 		// Act
 		calculator.binary(BiOperator.minus);
@@ -311,6 +341,21 @@ class SimpleCalculatorTest {
 		assertExpression(calculator.getState(), number, BiOperator.multiply);
 		verifyNoEquation(calculator.getState());
 	}
+	
+	@Test
+	void testMultiplyAfterMultiply() {
+		// Arrange
+		String number = "123";
+		calculator.number(number);
+		calculator.binary(BiOperator.multiply);
+
+		// Act
+		calculator.binary(BiOperator.multiply);
+
+		// Assert
+		assertExpression(calculator.getState(), number, BiOperator.multiply);
+		verifyNoEquation(calculator.getState());
+	}
 
 	@Test
 	void testResloveOfMultiplyAfterNumberInput() {
@@ -392,6 +437,21 @@ class SimpleCalculatorTest {
 		// Arrange
 		String number = "123";
 		calculator.number(number);
+
+		// Act
+		calculator.binary(BiOperator.divide);
+
+		// Assert
+		assertExpression(calculator.getState(), number, BiOperator.divide);
+		verifyNoEquation(calculator.getState());
+	}
+	
+	@Test
+	void testDivideAfterDivide() {
+		// Arrange
+		String number = "123";
+		calculator.number(number);
+		calculator.binary(BiOperator.divide);
 
 		// Act
 		calculator.binary(BiOperator.divide);
