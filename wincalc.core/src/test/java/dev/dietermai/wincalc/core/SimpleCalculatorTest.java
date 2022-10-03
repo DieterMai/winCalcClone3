@@ -148,6 +148,21 @@ class SimpleCalculatorTest {
 		assertExpression(calculator.getState(), number, BiOperator.plus);
 		verifyNoEquation(calculator.getState());
 	}
+	
+	@Test
+	void testPlusAfterMinus() {
+		// Arrange
+		String number = "123";
+		calculator.number(number);
+		calculator.binary(BiOperator.minus);
+
+		// Act
+		calculator.binary(BiOperator.plus);
+
+		// Assert
+		assertExpression(calculator.getState(), number, BiOperator.plus);
+		verifyNoEquation(calculator.getState());
+	}
 
 	@Test
 	void testResloveOfPlusAfterNumberInput() {
@@ -244,6 +259,21 @@ class SimpleCalculatorTest {
 		String number = "123";
 		calculator.number(number);
 		calculator.binary(BiOperator.minus);
+
+		// Act
+		calculator.binary(BiOperator.minus);
+
+		// Assert
+		assertExpression(calculator.getState(), number, BiOperator.minus);
+		verifyNoEquation(calculator.getState());
+	}
+	
+	@Test
+	void testMinusAfterPlus() {
+		// Arrange
+		String number = "123";
+		calculator.number(number);
+		calculator.binary(BiOperator.plus);
 
 		// Act
 		calculator.binary(BiOperator.minus);
@@ -356,6 +386,21 @@ class SimpleCalculatorTest {
 		assertExpression(calculator.getState(), number, BiOperator.multiply);
 		verifyNoEquation(calculator.getState());
 	}
+	
+	@Test
+	void testMultiplyAfterPlus() {
+		// Arrange
+		String number = "123";
+		calculator.number(number);
+		calculator.binary(BiOperator.plus);
+
+		// Act
+		calculator.binary(BiOperator.multiply);
+
+		// Assert
+		assertExpression(calculator.getState(), number, BiOperator.multiply);
+		verifyNoEquation(calculator.getState());
+	}
 
 	@Test
 	void testResloveOfMultiplyAfterNumberInput() {
@@ -452,6 +497,21 @@ class SimpleCalculatorTest {
 		String number = "123";
 		calculator.number(number);
 		calculator.binary(BiOperator.divide);
+
+		// Act
+		calculator.binary(BiOperator.divide);
+
+		// Assert
+		assertExpression(calculator.getState(), number, BiOperator.divide);
+		verifyNoEquation(calculator.getState());
+	}
+	
+	@Test
+	void testDivideAfterPlus() {
+		// Arrange
+		String number = "123";
+		calculator.number(number);
+		calculator.binary(BiOperator.plus);
 
 		// Act
 		calculator.binary(BiOperator.divide);
