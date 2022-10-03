@@ -680,11 +680,11 @@ class SimpleCalculatorTest {
 	private NumberExpression number(String s) {
 		return NumberExpression.of(bd(s));
 	}
-	
+
 	private Expression getExpression() {
 		return calculator.getState().expression();
 	}
-	
+
 	private Equation getEquation() {
 		return calculator.getState().equation();
 	}
