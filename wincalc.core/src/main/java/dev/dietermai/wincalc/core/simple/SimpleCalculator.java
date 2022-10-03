@@ -11,7 +11,6 @@ import dev.dietermai.wincalc.core.simple.expr.binary.BiOperator;
 import dev.dietermai.wincalc.core.simple.expr.binary.BinaryExpression;
 
 public class SimpleCalculator {
-
 	private static final Expression INITIAL_EXPRESSION = IdleExpression.of();
 
 	private SimpleCalculatorRecord record = SimpleCalculatorRecord.initial();
@@ -20,45 +19,44 @@ public class SimpleCalculator {
 		return record;
 	}
 
-	public SimpleCalculatorRecord resolve() {
-		record = switch (record.expression()) {
+	public void resolve() {
+		switch (record.expression()) {
 		case null -> throw new NullPointerException();
 		case IdleExpression i -> resolveOfIdle();
-		case NumberExpression ne -> record.withEquation(Equation.of(ne, ne.value()));
-		case BinaryExpression binary -> record.withEquation(resolveBinaryExpression(binary));
-		};
+		case NumberExpression ne -> record = record.withEquation(Equation.of(ne, ne.value()));
+		case BinaryExpression binary -> record = record.withEquation(resolveBinaryExpression(binary));
+		}
 
-		return record = record.withExpression(INITIAL_EXPRESSION);
+		record = record.withExpression(INITIAL_EXPRESSION);
 	}
 
-	private SimpleCalculatorRecord resolveOfIdle() {
+	private void resolveOfIdle() {
 		if (record.equation() == null) {
-			return record.withEquation(Equation.of(NumberExpression.of(BigDecimal.ZERO), BigDecimal.ZERO));
+			record = record.withEquation(Equation.of(NumberExpression.of(BigDecimal.ZERO), BigDecimal.ZERO));
 		} else if (record.equation().expression() instanceof BinaryExpression be) {
 			record = record.withExpression(BinaryExpression.of(record.equation().value(), be.operator(), be.right()));
-			return resolve();
+			resolve();
 		} else {
 			throw new IllegalStateException("expression: " + record.equation().expression());
 		}
 	}
 
-	public SimpleCalculatorRecord number(String number) {
+	public void number(String number) {
 		if (record.expression() instanceof BinaryExpression binaryExpression) {
 			record = record.withExpression(binaryExpression.withRight(new BigDecimal(number)));
 			resolve();
 		} else {
 			record = record.withExpression(NumberExpression.of(number));
 		}
-		return record;
 	}
 
-	public SimpleCalculatorRecord binary(BiOperator operator) {
+	public void binary(BiOperator operator) {
 		Expression currentExpression = record.expression();
 		if (currentExpression instanceof BinaryExpression be) {
-			return record = record.withExpression(be.withOperator(operator));
+			record = record.withExpression(be.withOperator(operator));
 		} else {
 			BigDecimal initalValue = getInitialValueForBinaryOperation();
-			return record = record.withExpression(BinaryExpression.of(initalValue, operator));
+			record = record.withExpression(BinaryExpression.of(initalValue, operator));
 		}
 	}
 
