@@ -10,10 +10,6 @@ public record SimpleCalculatorRecord(Expression expression, Equation equation) {
 		return new SimpleCalculatorRecord(expression, equation);
 	}
 	
-	public static SimpleCalculatorRecord of(Expression expression) {
-		return new SimpleCalculatorRecord(expression, null);
-	}
-	
 	public static SimpleCalculatorRecord initial() {
 		return of(INITIAL_EXPRESSION, null);
 	}
