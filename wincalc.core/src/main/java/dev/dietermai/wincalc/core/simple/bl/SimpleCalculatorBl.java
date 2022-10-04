@@ -9,7 +9,7 @@ import dev.dietermai.wincalc.core.simple.ResolveType;
 import dev.dietermai.wincalc.core.simple.SimpleCalculatorRecord;
 import dev.dietermai.wincalc.core.simple.expr.Expression;
 import dev.dietermai.wincalc.core.simple.expr.IdleExpression;
-import dev.dietermai.wincalc.core.simple.expr.NumberExpression;
+import dev.dietermai.wincalc.core.simple.expr.UnaryExpression;
 import dev.dietermai.wincalc.core.simple.expr.binary.BiOperator;
 import dev.dietermai.wincalc.core.simple.expr.binary.BinaryExpression;
 
@@ -18,8 +18,9 @@ public class SimpleCalculatorBl {
 		final var after = switch (before.expression()) {
 		case null -> throw new NullPointerException();
 		case IdleExpression i -> resolveOfIdle(before);
-		case NumberExpression ne -> before.withEquation(Equation.of(ne, ne.value()));
+		case UnaryExpression unary -> before.withEquation(Equation.of(unary, unary.value()));
 		case BinaryExpression binary -> before.withEquation(resolveBinaryExpression(binary));
+		default -> throw new IllegalStateException("Not yet implemented!");
 		};
 
 		return after.withExpression(IdleExpression.of());
@@ -30,7 +31,7 @@ public class SimpleCalculatorBl {
 			final SimpleCalculatorRecord after = before.withExpression(binaryExpression.withRight(new BigDecimal(number)));
 			return resolve(after);
 		} else {
-			return before.withExpression(NumberExpression.of(number));
+			return before.withExpression(UnaryExpression.of(number));
 		}
 	}
 
@@ -46,7 +47,7 @@ public class SimpleCalculatorBl {
 
 	private static SimpleCalculatorRecord resolveOfIdle(SimpleCalculatorRecord before) {
 		if (before.equation() == null) {
-			return before.withEquation(Equation.of(NumberExpression.of(BigDecimal.ZERO), BigDecimal.ZERO));
+			return before.withEquation(Equation.of(UnaryExpression.of(BigDecimal.ZERO), BigDecimal.ZERO));
 		} else if (before.equation().expression() instanceof BinaryExpression be) {
 			var after = before.withExpression(BinaryExpression.of(before.equation().value(), be.operator(), be.right()));
 			return resolve(after);
@@ -100,8 +101,8 @@ public class SimpleCalculatorBl {
 	}
 
 	private static BigDecimal getInitialValueForBinaryOperation(final SimpleCalculatorRecord before) {
-		if (before.expression() instanceof NumberExpression numberExpression) {
-			return numberExpression.value();
+		if (before.expression() instanceof UnaryExpression unary) {
+			return getUnaryValue(unary);
 		} else {
 			return getPreviousResult(before);
 		}
@@ -113,5 +114,16 @@ public class SimpleCalculatorBl {
 		} else {
 			return BigDecimal.ZERO;
 		}
+	}
+	
+	private static BigDecimal getUnaryValue(UnaryExpression unary) {
+		return switch(unary.operator()) {
+		case divByX -> null; 
+		case identity -> unary.value();
+		case nigate -> null;
+		case percent -> null;
+		case root -> null;
+		case sqrt -> null;
+		};
 	}
 }

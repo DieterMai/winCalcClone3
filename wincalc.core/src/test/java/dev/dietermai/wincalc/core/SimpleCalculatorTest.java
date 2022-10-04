@@ -13,7 +13,7 @@ import dev.dietermai.wincalc.core.simple.ResolveType;
 import dev.dietermai.wincalc.core.simple.SimpleCalculator;
 import dev.dietermai.wincalc.core.simple.expr.Expression;
 import dev.dietermai.wincalc.core.simple.expr.IdleExpression;
-import dev.dietermai.wincalc.core.simple.expr.NumberExpression;
+import dev.dietermai.wincalc.core.simple.expr.UnaryExpression;
 import dev.dietermai.wincalc.core.simple.expr.binary.BiOperator;
 import dev.dietermai.wincalc.core.simple.expr.binary.BinaryExpression;
 
@@ -677,8 +677,8 @@ class SimpleCalculatorTest {
 		return new BigDecimal(s);
 	}
 
-	private NumberExpression number(String s) {
-		return NumberExpression.of(bd(s));
+	private UnaryExpression number(String s) {
+		return UnaryExpression.of(bd(s));
 	}
 
 	private Expression getExpression() {
