@@ -14,6 +14,7 @@ import dev.dietermai.wincalc.core.simple.SimpleCalculator;
 import dev.dietermai.wincalc.core.simple.expr.Expression;
 import dev.dietermai.wincalc.core.simple.expr.IdleExpression;
 import dev.dietermai.wincalc.core.simple.expr.UnaryExpression;
+import dev.dietermai.wincalc.core.simple.expr.UnaryOperator;
 import dev.dietermai.wincalc.core.simple.expr.binary.BiOperator;
 import dev.dietermai.wincalc.core.simple.expr.binary.BinaryExpression;
 
@@ -644,6 +645,157 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("0.5", BiOperator.divide, "2", "0.25");
 	}
+	
+	/* ***********************/
+	/* Negate related methods */
+	/* ***********************/
+	@Test
+	void testNegateAfterInit() {
+		// Act
+		calculator.unary(UnaryOperator.negate);
+
+		// Assert
+		verifyExpression(UnaryOperator.negate, "0");
+		verifyNoEquation();
+	}
+
+	@Test
+	void testResolveOfNegateAfterInit() {
+		// Arrange
+		calculator.unary(UnaryOperator.negate);
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyIdleExpression();
+		verifyEquation(UnaryOperator.negate, "0", "0");
+	}
+
+	@Test
+	void testNegateAfterNumberInput() {
+		// Arrange
+		String number = "123";
+		calculator.number(number);
+
+		// Act
+		calculator.unary(UnaryOperator.negate);
+
+		// Assert
+		verifyExpression(UnaryOperator.identity, "-123");
+		verifyNoEquation();
+	}
+
+//	@Test
+//	void testDivideAfterDivide() {
+//		// Arrange
+//		String number = "123";
+//		calculator.number(number);
+//		calculator.binary(BiOperator.divide);
+//
+//		// Act
+//		calculator.binary(BiOperator.divide);
+//
+//		// Assert
+//		verifyExpression(number, BiOperator.divide);
+//		verifyNoEquation();
+//	}
+//
+//	@Test
+//	void testDivideAfterPlus() {
+//		// Arrange
+//		String number = "123";
+//		calculator.number(number);
+//		calculator.binary(BiOperator.plus);
+//
+//		// Act
+//		calculator.binary(BiOperator.divide);
+//
+//		// Assert
+//		verifyExpression(number, BiOperator.divide);
+//		verifyNoEquation();
+//	}
+//
+//	@Test
+//	void testResloveOfDivideAfterNumberInput() {
+//		// Arrange
+//		String number = "123";
+//		calculator.number(number);
+//		calculator.binary(BiOperator.divide);
+//
+//		// Act
+//		calculator.resolve();
+//
+//		// Assert
+//		verifyIdleExpression();
+//		verifyEquation(number, BiOperator.divide, number, "1");
+//	}
+//
+//	@Test
+//	void testResolveOfDivideDueToNumberInput() {
+//		// Arrange
+//		String number1 = "123";
+//		String number2 = "456";
+//		calculator.number(number1);
+//		calculator.binary(BiOperator.divide);
+//
+//		// Act
+//		calculator.number(number2);
+//
+//		// Assert
+//		verifyIdleExpression();
+//		verifyEquation(number1, BiOperator.divide, number2, "0.2697368421052632");
+//	}
+//
+//	@Test
+//	void testResolveOfDivideByZero() {
+//		// Arrange
+//		String number1 = "123";
+//		String number2 = "0";
+//		calculator.number(number1);
+//		calculator.binary(BiOperator.divide);
+//
+//		// Act
+//		calculator.number(number2);
+//
+//		// Assert
+//		verifyIdleExpression();
+//		verifyEquation(number1, BiOperator.divide, number2, ResolveType.DIVIDE_BY_ZERO);
+//	}
+//
+//	@Test
+//	void testDivideUsesResultOfPreviousEquation() {
+//		// Arrange
+//		String number1 = "123";
+//		String number2 = "456";
+//		String result = "579";
+//		calculator.number(number1);
+//		calculator.binary(BiOperator.plus);
+//		calculator.number(number2);
+//
+//		// Act
+//		calculator.binary(BiOperator.divide);
+//
+//		// Assert
+//		verifyExpression(result, BiOperator.divide);
+//		verifyEquation(number1, BiOperator.plus, number2, result);
+//
+//	}
+//
+//	@Test
+//	void testResolveAfterResolvedDivideEquation() {
+//		// Arrange
+//		calculator.number("1");
+//		calculator.binary(BiOperator.divide);
+//		calculator.number("2");
+//
+//		// Act
+//		calculator.resolve();
+//
+//		// Assert
+//		verifyIdleExpression();
+//		verifyEquation("0.5", BiOperator.divide, "2", "0.25");
+//	}
 
 	private void verifyIdleExpression() {
 		assertEquals(IdleExpression.of(), getExpression());
@@ -655,6 +807,10 @@ class SimpleCalculatorTest {
 
 	private void verifyExpression(String number, BiOperator operator) {
 		assertEquals(BinaryExpression.of(bd(number), operator), getExpression());
+	}
+	
+	private void verifyExpression(UnaryOperator operator, String number) {
+		assertEquals(UnaryExpression.of(operator, bd(number)), getExpression());
 	}
 
 	private void verifyNoEquation() {
@@ -671,6 +827,10 @@ class SimpleCalculatorTest {
 
 	private void verifyEquation(String left, BiOperator operator, String right, ResolveType type) {
 		assertEquals(Equation.of(BinaryExpression.of(bd(left), operator, bd(right)), type), getEquation());
+	}
+	
+	private void verifyEquation(UnaryOperator operator, String value, String result) {
+		assertEquals(Equation.of(UnaryExpression.of(operator, bd(value)), bd(result)), getEquation());
 	}
 
 	private BigDecimal bd(String s) {

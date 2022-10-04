@@ -10,6 +10,7 @@ import dev.dietermai.wincalc.core.simple.SimpleCalculatorRecord;
 import dev.dietermai.wincalc.core.simple.expr.Expression;
 import dev.dietermai.wincalc.core.simple.expr.IdleExpression;
 import dev.dietermai.wincalc.core.simple.expr.UnaryExpression;
+import dev.dietermai.wincalc.core.simple.expr.UnaryOperator;
 import dev.dietermai.wincalc.core.simple.expr.binary.BiOperator;
 import dev.dietermai.wincalc.core.simple.expr.binary.BinaryExpression;
 
@@ -43,6 +44,17 @@ public class SimpleCalculatorBl {
 			BigDecimal initalValue = getInitialValueForBinaryOperation(before);
 			return before.withExpression(BinaryExpression.of(initalValue, operator));
 		}
+	}
+	
+	public static SimpleCalculatorRecord unary(final SimpleCalculatorRecord before, UnaryOperator operator) {
+		return switch(operator) {
+		case identity -> null; // TODO
+		case negate -> handleNegate(before);
+		case divByX -> null; 
+		case percent -> null;
+		case root -> null;
+		case sqrt -> null;
+		};
 	}
 
 	private static SimpleCalculatorRecord resolveOfIdle(SimpleCalculatorRecord before) {
@@ -120,10 +132,22 @@ public class SimpleCalculatorBl {
 		return switch(unary.operator()) {
 		case divByX -> null; 
 		case identity -> unary.value();
-		case nigate -> null;
+		case negate -> null;
 		case percent -> null;
 		case root -> null;
 		case sqrt -> null;
 		};
+	}
+	
+	private static SimpleCalculatorRecord handleNegate(SimpleCalculatorRecord before) {
+		var beforeExpression = before.expression();
+		if(beforeExpression instanceof IdleExpression) {
+			return before.withExpression(UnaryExpression.of(UnaryOperator.negate, new BigDecimal("0")));
+		}else if(beforeExpression instanceof UnaryExpression ue) {
+			if(ue.operator() == UnaryOperator.identity) {
+				return before.withExpression(UnaryExpression.of(ue.value().negate()));
+			}
+		}
+		throw new IllegalStateException("Not implemented yet!");
 	}
 }
