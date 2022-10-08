@@ -3,17 +3,30 @@ package dev.dietermai.wincalc.core.simple.expr.binary;
 import java.math.BigDecimal;
 
 import dev.dietermai.wincalc.core.simple.expr.Expression;
+import dev.dietermai.wincalc.core.simple.expr.NumberExpression;
 
-public record BinaryExpression(BigDecimal left, BiOperator operator, BigDecimal right) implements Expression {
+public record BinaryExpression(Expression left, BiOperator operator, Expression right) implements Expression {
 	public static BinaryExpression of(BigDecimal left, BiOperator operator) {
-		return new BinaryExpression(left, operator, null);
+		return new BinaryExpression(NumberExpression.of(left), operator, null);
 	}
 
 	public static Expression of(BigDecimal left, BiOperator operator, BigDecimal right) {
-		return new BinaryExpression(left, operator, right);
+		return new BinaryExpression(NumberExpression.of(left), operator, NumberExpression.of(right));
+	}
+	
+	public static Expression of(Expression left, BiOperator operator, BigDecimal right) {
+		return new BinaryExpression(left, operator, NumberExpression.of(right));
+	}
+	
+	public static Expression of(BigDecimal left, BiOperator operator, Expression right) {
+		return new BinaryExpression(NumberExpression.of(left), operator, right);
 	}
 
 	public BinaryExpression withRight(BigDecimal right) {
+		return new BinaryExpression(left(), operator(), NumberExpression.of(right));
+	}
+	
+	public BinaryExpression withRight(Expression right) {
 		return new BinaryExpression(left(), operator(), right);
 	}
 
