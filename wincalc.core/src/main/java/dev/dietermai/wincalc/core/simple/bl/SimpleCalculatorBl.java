@@ -57,23 +57,24 @@ public class SimpleCalculatorBl {
 	private static Equation resolveBinaryExpression(BinaryExpression expression) {
 		BiOperator operator = expression.operator();
 		Expression leftExpression = expression.left();
-		BigDecimal left = valueOfExpression(leftExpression);
-		Expression rightExpression = Objects.requireNonNullElse(expression.right(), NumberExpression.of(left));
-		BigDecimal right = valueOfExpression(rightExpression);
+		// TODO check success of results
+		Result left = resultOfExpression(leftExpression);
+		Expression rightExpression = Objects.requireNonNullElse(expression.right(), NumberExpression.of(left.value()));
+		Result right = resultOfExpression(rightExpression);
 
 		return switch (operator) {
-		case plus -> resolvePlusExpression(left, right);
-		case minus -> resolveMinusExpression(left, right);
-		case multiply -> resolveMultiplyExpression(left, right);
-		case divide -> resolveDivideExpression(left, right);
+		case plus -> resolvePlusExpression(left.value(), right.value());
+		case minus -> resolveMinusExpression(left.value(), right.value());
+		case multiply -> resolveMultiplyExpression(left.value(), right.value());
+		case divide -> resolveDivideExpression(left.value(), right.value());
 		};
 	}
 
-	private static BigDecimal valueOfExpression(Expression expression) {
+	private static Result resultOfExpression(Expression expression) {
 		return switch (expression) {
-		case IdleExpression idle -> BigDecimal.ZERO;
-		case NumberExpression ne -> ne.value();
-		case UnaryExpression ue -> valueOfUnaryEquation(ue).value();
+		case IdleExpression idle -> Result.of(BigDecimal.ZERO);
+		case NumberExpression ne -> Result.of(ne.value());
+		case UnaryExpression ue -> valueOfUnaryEquation(ue);
 		case BinaryExpression be -> throw new IllegalArgumentException("Unexpected value: " + expression);
 		};
 	}
