@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import dev.dietermai.wincalc.core.simple.Equation;
 import dev.dietermai.wincalc.core.simple.ResolveType;
+import dev.dietermai.wincalc.core.simple.Result;
 import dev.dietermai.wincalc.core.simple.SimpleCalculatorRecord;
 import dev.dietermai.wincalc.core.simple.expr.Expression;
 import dev.dietermai.wincalc.core.simple.expr.IdleExpression;
@@ -33,14 +34,14 @@ public class SimpleCalculatorBl {
 		case IdleExpression i -> resolveOfIdle(expression, previousEquation);
 		case UnaryExpression unary -> resolveOfUnary(unary);
 		case BinaryExpression binary -> resolveBinaryExpression(binary);
-		case NumberExpression number -> Equation.of(number, number.value());
+		case NumberExpression number -> Equation.of(number, Result.of(number.value()));
 		default -> throw new IllegalStateException("Not yet implemented!");
 		};
 	}
 
 	private static Equation resolveOfIdle(Expression expression, Equation previousEquation) {
 		if (previousEquation == null) {
-			return Equation.of(NumberExpression.of(BigDecimal.ZERO), BigDecimal.ZERO);
+			return Equation.of(NumberExpression.of(BigDecimal.ZERO), Result.of(BigDecimal.ZERO));
 		} else if (previousEquation.expression() instanceof BinaryExpression be) {
 			var after = BinaryExpression.of(previousEquation.value(), be.operator(), be.right());
 			return resolveEquation(after, previousEquation);
@@ -50,7 +51,7 @@ public class SimpleCalculatorBl {
 	}
 
 	private static Equation resolveOfUnary(UnaryExpression unary) {
-		return Equation.of(unary, valueOfUnaryEquation(unary));
+		return Equation.of(unary, Result.of(valueOfUnaryEquation(unary).value()));
 	}
 
 	private static Equation resolveBinaryExpression(BinaryExpression expression) {
@@ -72,7 +73,7 @@ public class SimpleCalculatorBl {
 		return switch (expression) {
 		case IdleExpression idle -> BigDecimal.ZERO;
 		case NumberExpression ne -> ne.value();
-		case UnaryExpression ue -> valueOfUnaryEquation(ue);
+		case UnaryExpression ue -> valueOfUnaryEquation(ue).value();
 		case BinaryExpression be -> throw new IllegalArgumentException("Unexpected value: " + expression);
 		};
 	}
@@ -109,32 +110,32 @@ public class SimpleCalculatorBl {
 	private static Equation resolvePlusExpression(BigDecimal left, BigDecimal right) {
 		BigDecimal result = left.add(right);
 		Expression expression = BinaryExpression.of(left, BiOperator.plus, right);
-		return Equation.of(expression, result);
+		return Equation.of(expression, Result.of(result));
 	}
 
 	private static Equation resolveMinusExpression(BigDecimal left, BigDecimal right) {
 		BigDecimal result = left.subtract(right);
 		Expression expression = BinaryExpression.of(left, BiOperator.minus, right);
-		return Equation.of(expression, result);
+		return Equation.of(expression, Result.of(result));
 	}
 
 	private static Equation resolveMultiplyExpression(BigDecimal left, BigDecimal right) {
 		BigDecimal result = left.multiply(right);
 		Expression expression = BinaryExpression.of(left, BiOperator.multiply, right);
-		return Equation.of(expression, result);
+		return Equation.of(expression, Result.of(result));
 	}
 
 	private static Equation resolveDivideExpression(BigDecimal left, BigDecimal right) {
 		Expression expression = BinaryExpression.of(left, BiOperator.divide, right);
 		if (right.equals(BigDecimal.ZERO)) {
 			if (left.equals(BigDecimal.ZERO)) {
-				return Equation.of(expression, ResolveType.UNDEFINED);
+				return Equation.of(expression, Result.of(ResolveType.UNDEFINED));
 			} else {
-				return Equation.of(expression, ResolveType.DIVIDE_BY_ZERO);
+				return Equation.of(expression, Result.of(ResolveType.DIVIDE_BY_ZERO));
 			}
 		} else {
 			BigDecimal result = left.divide(right, 16, RoundingMode.HALF_UP).stripTrailingZeros();
-			return Equation.of(expression, result);
+			return Equation.of(expression, Result.of(result));
 		}
 	}
 
@@ -171,22 +172,24 @@ public class SimpleCalculatorBl {
 
 		return switch (beforeExpression) {
 		case IdleExpression idle -> before.withExpression(UnaryExpression.of(UnaryOperator.negate, new BigDecimal("0")));
-		case NumberExpression ne -> before.withExpression(NumberExpression.of(resolveNegateExpression(ne.value())));
+		case NumberExpression ne -> before.withExpression(NumberExpression.of(resolveNegateExpression(ne.value()).value()));
 		case UnaryExpression ue -> throw new IllegalStateException("Not implemented yet!");
 		case BinaryExpression be -> before.withExpression(be.withRight(UnaryExpression.of(UnaryOperator.negate, be.left())));
 		};
 	}
 
-	private static BigDecimal valueOfUnaryEquation(UnaryExpression unary) {
-		BigDecimal value = switch (unary.nested()) {
-		case IdleExpression idle -> BigDecimal.ZERO;
-		case NumberExpression ne -> ne.value();
+	private static Result valueOfUnaryEquation(UnaryExpression unary) {
+		Result nestedResult = switch (unary.nested()) {
+		case IdleExpression idle -> Result.of(BigDecimal.ZERO);
+		case NumberExpression ne -> Result.of(ne.value());
 		case UnaryExpression ue -> valueOfUnaryEquation(ue);
 		case BinaryExpression be -> throw new IllegalStateException("No binary expression in unary expression allowed");
 		};
 
+		// TODO check type of nestedResult
+		
 		return switch (unary.operator()) {
-		case negate -> resolveNegateExpression(value);
+		case negate -> resolveNegateExpression(nestedResult.value());
 		case divByX -> throw new IllegalStateException("Not implemented yet!");
 		case percent -> throw new IllegalStateException("Not implemented yet!");
 		case root -> throw new IllegalStateException("Not implemented yet!");
@@ -195,8 +198,8 @@ public class SimpleCalculatorBl {
 		};
 	}
 
-	private static BigDecimal resolveNegateExpression(BigDecimal value) {
-		return value.negate();
+	private static Result resolveNegateExpression(BigDecimal value) {
+		return Result.of(value.negate());
 	}
 
 }

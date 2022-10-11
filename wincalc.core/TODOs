@@ -1,3 +1,5 @@
+- Change implementation of SimpleCalculatorBl so that never BigDecimal is returned but Result
+
 Implement History
 Implement negate
 Implement percent

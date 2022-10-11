@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import dev.dietermai.wincalc.core.simple.Equation;
 import dev.dietermai.wincalc.core.simple.ResolveType;
+import dev.dietermai.wincalc.core.simple.Result;
 import dev.dietermai.wincalc.core.simple.SimpleCalculator;
 import dev.dietermai.wincalc.core.simple.expr.Expression;
 import dev.dietermai.wincalc.core.simple.expr.IdleExpression;
@@ -733,19 +734,20 @@ class SimpleCalculatorTest {
 	}
 
 	private void verifyEquation(String left, String right) {
-		assertEquals(Equation.of(number(left), bd(right)), getEquation());
+		assertEquals(Equation.of(number(left), Result.of(bd(right))), getEquation());
 	}
 
 	private void verifyEquation(String left, BiOperator operator, String right, String result) {
-		assertEquals(Equation.of(BinaryExpression.of(bd(left), operator, bd(right)), bd(result)), getEquation());
+		assertEquals(Equation.of(BinaryExpression.of(bd(left), operator, bd(right)), Result.of(bd(result))), getEquation());
 	}
 
 	private void verifyEquation(String left, BiOperator operator, String right, ResolveType type) {
-		assertEquals(Equation.of(BinaryExpression.of(bd(left), operator, bd(right)), type), getEquation());
+		assertEquals(Equation.of(BinaryExpression.of(bd(left), operator, bd(right)), Result.of(type)), getEquation());
+		
 	}
 	
 	private void verifyEquation(UnaryOperator operator, String value, String result) {
-		assertEquals(Equation.of(UnaryExpression.of(operator, bd(value)), bd(result)), getEquation());
+		assertEquals(Equation.of(UnaryExpression.of(operator, bd(value)), Result.of((bd(result)))), getEquation());
 	}
 
 	private BigDecimal bd(String s) {
