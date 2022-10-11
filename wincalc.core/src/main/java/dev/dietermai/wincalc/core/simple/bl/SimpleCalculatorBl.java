@@ -51,7 +51,7 @@ public class SimpleCalculatorBl {
 	}
 
 	private static Equation resolveOfUnary(UnaryExpression unary) {
-		return Equation.of(unary, Result.of(resultOfUnaryEquation(unary).value()));
+		return Equation.of(unary, Result.of(resultOfUnaryExpression(unary).value()));
 	}
 
 	private static Equation resolveBinaryExpression(BinaryExpression expression) {
@@ -171,24 +171,34 @@ public class SimpleCalculatorBl {
 	}
 
 
-	private static Result resultNegateExpression(BigDecimal value) {
-		return Result.of(value.negate());
-	}
+
 	
 	private static Result resultOfExpression(Expression expression) {
 		return switch (expression) {
-		case IdleExpression idle -> Result.of(BigDecimal.ZERO);
-		case NumberExpression ne -> Result.of(ne.value());
-		case UnaryExpression ue -> resultOfUnaryEquation(ue);
+		case IdleExpression idle -> resultOfIdleExpression();
+		case NumberExpression ne -> resultOfNumberExpression(ne);
+		case UnaryExpression ue -> resultOfUnaryExpression(ue);
 		case BinaryExpression be -> throw new IllegalArgumentException("Unexpected value: " + expression);
 		};
 	}
 	
-	private static Result resultOfUnaryEquation(UnaryExpression unary) {
+	private static Result resultOfIdleExpression() {
+		return Result.of(BigDecimal.ZERO);
+	}
+	
+	private static Result resultOfNumberExpression(NumberExpression number) {
+		return Result.of(number.value());
+	}
+	
+	private static Result resultOfBinaryExpression(BinaryExpression binary) {
+		throw new IllegalStateException("Not implemented yet!");
+	}
+	
+	private static Result resultOfUnaryExpression(UnaryExpression unary) {
 		Result nestedResult = switch (unary.nested()) {
 		case IdleExpression idle -> Result.of(BigDecimal.ZERO);
 		case NumberExpression ne -> Result.of(ne.value());
-		case UnaryExpression ue -> resultOfUnaryEquation(ue);
+		case UnaryExpression ue -> resultOfUnaryExpression(ue);
 		case BinaryExpression be -> throw new IllegalStateException("No binary expression in unary expression allowed");
 		};
 
@@ -202,6 +212,10 @@ public class SimpleCalculatorBl {
 		case sqrt -> throw new IllegalStateException("Not implemented yet!");
 		default -> null;
 		};
+	}
+	
+	private static Result resultNegateExpression(BigDecimal value) {
+		return Result.of(value.negate());
 	}
 
 }
