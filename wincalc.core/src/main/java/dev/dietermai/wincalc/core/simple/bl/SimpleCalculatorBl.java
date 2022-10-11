@@ -49,7 +49,7 @@ public class SimpleCalculatorBl {
 	}
 	
 	private static Equation resolveOfUnary(UnaryExpression unary) {
-		return Equation.of(unary, Result.of(resultOfUnaryExpression(unary).value()));
+		return equationOf(unary);
 	}
 	
 	private static Equation equationOf(Expression expression) {
