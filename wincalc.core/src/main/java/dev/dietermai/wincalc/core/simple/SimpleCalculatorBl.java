@@ -53,13 +53,13 @@ public class SimpleCalculatorBl {
 	}
 
 	private static Equation resolveBinaryExpression(BinaryExpression expression) {
-		// TODO refactore this
 		BiOperator operator = expression.operator();
 		Expression leftExpression = expression.left();
-		// TODO check success of results
 		Result left = resultOf(leftExpression);
+		if(left.error()) return Equation.of(expression, left);
 		Expression rightExpression = Objects.requireNonNullElse(expression.right(), NumberExpression.of(left.value()));
 		Result right = resultOf(rightExpression);
+		if(right.error()) return Equation.of(expression, right);
 
 		return switch (operator) {
 		case plus -> resolvePlusExpression(left.value(), right.value());
@@ -189,7 +189,9 @@ public class SimpleCalculatorBl {
 	private static Result resultOfBinaryExpression(BinaryExpression binary) {
 		Result leftResult = resultOf(binary.left());
 		Result rightResult = resultOf(binary.right());
-		// TODO handle result type
+		if(leftResult.error()) return leftResult;
+		if(rightResult.error()) return rightResult;
+		
 		BigDecimal left = leftResult.value();
 		BigDecimal right = rightResult.value();
 
@@ -234,7 +236,9 @@ public class SimpleCalculatorBl {
 		case BinaryExpression be -> throw new IllegalStateException("No binary expression in unary expression allowed");
 		};
 
-		// TODO check type of nestedResult
+		if(nestedResult.error()) {
+			return nestedResult;
+		}
 
 		return switch (unary.operator()) {
 		case negate -> resultNegateExpression(nestedResult.value());

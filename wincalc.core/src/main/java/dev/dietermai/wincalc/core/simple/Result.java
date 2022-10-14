@@ -11,4 +11,11 @@ public record Result(BigDecimal value, ResolveType type) {
 		return new Result(null, type);
 	}
 	
+	public boolean error() {
+		return type.isError();
+	}
+	
+	public boolean isSuccess() {
+		return type.isSuccess();
+	}
 }
