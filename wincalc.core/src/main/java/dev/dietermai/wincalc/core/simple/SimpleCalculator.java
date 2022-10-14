@@ -1,6 +1,5 @@
 package dev.dietermai.wincalc.core.simple;
 
-import dev.dietermai.wincalc.core.simple.bl.SimpleCalculatorBl;
 import dev.dietermai.wincalc.core.simple.expr.UnaryOperator;
 import dev.dietermai.wincalc.core.simple.expr.binary.BiOperator;
 

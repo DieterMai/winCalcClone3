@@ -1,13 +1,9 @@
-package dev.dietermai.wincalc.core.simple.bl;
+package dev.dietermai.wincalc.core.simple;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 
-import dev.dietermai.wincalc.core.simple.Equation;
-import dev.dietermai.wincalc.core.simple.ResolveType;
-import dev.dietermai.wincalc.core.simple.Result;
-import dev.dietermai.wincalc.core.simple.SimpleCalculatorRecord;
 import dev.dietermai.wincalc.core.simple.expr.Expression;
 import dev.dietermai.wincalc.core.simple.expr.IdleExpression;
 import dev.dietermai.wincalc.core.simple.expr.NumberExpression;
@@ -57,6 +53,7 @@ public class SimpleCalculatorBl {
 	}
 
 	private static Equation resolveBinaryExpression(BinaryExpression expression) {
+		// TODO refactore this
 		BiOperator operator = expression.operator();
 		Expression leftExpression = expression.left();
 		// TODO check success of results
@@ -249,7 +246,7 @@ public class SimpleCalculatorBl {
 		};
 	}
 
-	private static Result resultNegateExpression(BigDecimal value) {
+	public static Result resultNegateExpression(BigDecimal value) {
 		return Result.of(value.negate());
 	}
 
