@@ -10,9 +10,13 @@ public record SimpleCalculatorRecord(String input, Expression expression, Equati
 	public static SimpleCalculatorRecord of(String input, Expression expression, Equation equation) {
 		return new SimpleCalculatorRecord(input, expression, equation);
 	}
+	
+	public static SimpleCalculatorRecord of(Equation equation) {
+		return new SimpleCalculatorRecord("", INITIAL_EXPRESSION, equation);
+	}
 
 	public static SimpleCalculatorRecord initial() {
-		return of("0", INITIAL_EXPRESSION, null);
+		return of("", INITIAL_EXPRESSION, null);
 	}
 
 	public SimpleCalculatorRecord with(Expression expression) {
