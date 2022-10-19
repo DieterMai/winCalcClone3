@@ -21,8 +21,8 @@ public class SimpleCalculatorBl {
 
 	public static SimpleCalculatorRecord resolve(final SimpleCalculatorRecord before) {
 		final Equation equation = resolveEquation(before.expression(), before.equation());
-		var after = before.withEquation(equation);
-		return after.withExpression(IdleExpression.of());
+		var after = before.with(equation);
+		return after.with(IdleExpression.of());
 	}
 
 	private static Equation resolveEquation(Expression expression, Equation previousEquation) {
@@ -71,20 +71,20 @@ public class SimpleCalculatorBl {
 
 	public static SimpleCalculatorRecord number(final SimpleCalculatorRecord before, final String number) {
 		if (before.expression() instanceof BinaryExpression binaryExpression) {
-			final SimpleCalculatorRecord after = before.withExpression(binaryExpression.withRight(new BigDecimal(number)));
+			final SimpleCalculatorRecord after = before.with(binaryExpression.withRight(new BigDecimal(number)));
 			return resolve(after);
 		} else {
-			return before.withExpression(NumberExpression.of(number));
+			return before.with(NumberExpression.of(number));
 		}
 	}
 
 	public static SimpleCalculatorRecord binary(final SimpleCalculatorRecord before, final BiOperator operator) {
 		Expression currentExpression = before.expression();
 		if (currentExpression instanceof BinaryExpression be) {
-			return before.withExpression(be.withOperator(operator));
+			return before.with(be.withOperator(operator));
 		} else {
 			BigDecimal initalValue = getInitialValueForBinaryOperation(before);
-			return before.withExpression(BinaryExpression.of(initalValue, operator));
+			return before.with(BinaryExpression.of(initalValue, operator));
 		}
 	}
 
@@ -162,10 +162,10 @@ public class SimpleCalculatorBl {
 		var beforeExpression = before.expression();
 
 		return switch (beforeExpression) {
-		case IdleExpression idle -> before.withExpression(UnaryExpression.of(UnaryOperator.negate, new BigDecimal("0")));
-		case NumberExpression ne -> before.withExpression(NumberExpression.of(resultNegateExpression(ne.value()).value()));
+		case IdleExpression idle -> before.with(UnaryExpression.of(UnaryOperator.negate, new BigDecimal("0")));
+		case NumberExpression ne -> before.with(NumberExpression.of(resultNegateExpression(ne.value()).value()));
 		case UnaryExpression ue -> throw new IllegalStateException("Not implemented yet!");
-		case BinaryExpression be -> before.withExpression(be.withRight(UnaryExpression.of(UnaryOperator.negate, be.left())));
+		case BinaryExpression be -> before.with(be.withRight(UnaryExpression.of(UnaryOperator.negate, be.left())));
 		};
 	}
 
