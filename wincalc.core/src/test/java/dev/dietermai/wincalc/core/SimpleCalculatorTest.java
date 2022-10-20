@@ -405,346 +405,324 @@ class SimpleCalculatorTest {
 	}
 	
 	
-//	/* ***********************/
-//	/* Multiply related methods */
-//	/* ***********************/
-//	@Test
-//	void testMultiplyAfterInit() {
-//		// Act
-//		calculator.binary(BiOperator.multiply);
-//
-//		// Assert
-//		verifyExpression("0", BiOperator.multiply);
-//		verifyNoEquation();
-//	}
-//
-//	@Test
-//	void testResolveOfMultiplyAfterInit() {
-//		// Arrange
-//		calculator.binary(BiOperator.multiply);
-//
-//		// Act
-//		calculator.resolve();
-//
-//		// Assert
-//		verifyIdleExpression();
-//		verifyEquation("0", BiOperator.multiply, "0", "0");
-//	}
-//
-//	@Test
-//	void testMultiplyAfterNumberInput() {
-//		// Arrange
-//		String number = "123";
-//		calculator.number(number);
-//
-//		// Act
-//		calculator.binary(BiOperator.multiply);
-//
-//		// Assert
-//		verifyExpression(number, BiOperator.multiply);
-//		verifyNoEquation();
-//	}
-//
-//	@Test
-//	void testMultiplyAfterMultiply() {
-//		// Arrange
-//		String number = "123";
-//		calculator.number(number);
-//		calculator.binary(BiOperator.multiply);
-//
-//		// Act
-//		calculator.binary(BiOperator.multiply);
-//
-//		// Assert
-//		verifyExpression(number, BiOperator.multiply);
-//		verifyNoEquation();
-//	}
-//
-//	@Test
-//	void testMultiplyAfterPlus() {
-//		// Arrange
-//		String number = "123";
-//		calculator.number(number);
-//		calculator.binary(BiOperator.plus);
-//
-//		// Act
-//		calculator.binary(BiOperator.multiply);
-//
-//		// Assert
-//		verifyExpression(number, BiOperator.multiply);
-//		verifyNoEquation();
-//	}
-//
-//	@Test
-//	void testResloveOfMultiplyAfterNumberInput() {
-//		// Arrange
-//		String number = "123";
-//		calculator.number(number);
-//		calculator.binary(BiOperator.multiply);
-//
-//		// Act
-//		calculator.resolve();
-//
-//		// Assert
-//		verifyIdleExpression();
-//		verifyEquation(number, BiOperator.multiply, number, "15129");
-//	}
-//
-//	@Test
-//	void testResolveOfMultiplyDueToNumberInput() {
-//		// Arrange
-//		String number1 = "123";
-//		String number2 = "456";
-//		calculator.number(number1);
-//		calculator.binary(BiOperator.multiply);
-//
-//		// Act
-//		calculator.number(number2);
-//
-//		// Assert
-//		verifyIdleExpression();
-//		verifyEquation(number1, BiOperator.multiply, number2, "56088");
-//	}
-//
-//	@Test
-//	void testMultiplyUsesResultOfPreviousEquation() {
-//		// Arrange
-//		String number1 = "123";
-//		String number2 = "456";
-//		String result = "579";
-//		calculator.number(number1);
-//		calculator.binary(BiOperator.plus);
-//		calculator.number(number2);
-//
-//		// Act
-//		calculator.binary(BiOperator.multiply);
-//
-//		// Assert
-//		verifyExpression(result, BiOperator.multiply);
-//		verifyEquation(number1, BiOperator.plus, number2, result);
-//	}
-//
-//	@Test
-//	void testResolveAfterResolvedMultiplyEquation() {
-//		// Arrange
-//		calculator.number("1");
-//		calculator.binary(BiOperator.multiply);
-//		calculator.number("2");
-//
-//		// Act
-//		calculator.resolve();
-//
-//		// Assert
-//		verifyIdleExpression();
-//		verifyEquation("2", BiOperator.multiply, "2", "4");
-//	}
-//
-//	/* ************************/
-//	/* Divide related methods */
-//	/* ************************/
-//	@Test
-//	void testDivideAfterInit() {
-//		// Act
-//		calculator.binary(BiOperator.divide);
-//
-//		// Assert
-//		verifyExpression("0", BiOperator.divide);
-//		verifyNoEquation();
-//	}
-//
-//	@Test
-//	void testResolveOfDivideAfterInit() {
-//		// Arrange
-//		calculator.binary(BiOperator.divide);
-//
-//		// Act
-//		calculator.resolve();
-//
-//		// Assert
-//		verifyIdleExpression();
-//		verifyEquation("0", BiOperator.divide, "0", ResolveType.UNDEFINED);
-//	}
-//
-//	@Test
-//	void testDivideAfterNumberInput() {
-//		// Arrange
-//		String number = "123";
-//		calculator.number(number);
-//
-//		// Act
-//		calculator.binary(BiOperator.divide);
-//
-//		// Assert
-//		verifyExpression(number, BiOperator.divide);
-//		verifyNoEquation();
-//	}
-//
-//	@Test
-//	void testDivideAfterDivide() {
-//		// Arrange
-//		String number = "123";
-//		calculator.number(number);
-//		calculator.binary(BiOperator.divide);
-//
-//		// Act
-//		calculator.binary(BiOperator.divide);
-//
-//		// Assert
-//		verifyExpression(number, BiOperator.divide);
-//		verifyNoEquation();
-//	}
-//
-//	@Test
-//	void testDivideAfterPlus() {
-//		// Arrange
-//		String number = "123";
-//		calculator.number(number);
-//		calculator.binary(BiOperator.plus);
-//
-//		// Act
-//		calculator.binary(BiOperator.divide);
-//
-//		// Assert
-//		verifyExpression(number, BiOperator.divide);
-//		verifyNoEquation();
-//	}
-//
-//	@Test
-//	void testResloveOfDivideAfterNumberInput() {
-//		// Arrange
-//		String number = "123";
-//		calculator.number(number);
-//		calculator.binary(BiOperator.divide);
-//
-//		// Act
-//		calculator.resolve();
-//
-//		// Assert
-//		verifyIdleExpression();
-//		verifyEquation(number, BiOperator.divide, number, "1");
-//	}
-//
-//	@Test
-//	void testResolveOfDivideDueToNumberInput() {
-//		// Arrange
-//		String number1 = "123";
-//		String number2 = "456";
-//		calculator.number(number1);
-//		calculator.binary(BiOperator.divide);
-//
-//		// Act
-//		calculator.number(number2);
-//
-//		// Assert
-//		verifyIdleExpression();
-//		verifyEquation(number1, BiOperator.divide, number2, "0.2697368421052632");
-//	}
-//
-//	@Test
-//	void testResolveOfDivideByZero() {
-//		// Arrange
-//		String number1 = "123";
-//		String number2 = "0";
-//		calculator.number(number1);
-//		calculator.binary(BiOperator.divide);
-//
-//		// Act
-//		calculator.number(number2);
-//
-//		// Assert
-//		verifyIdleExpression();
-//		verifyEquation(number1, BiOperator.divide, number2, ResolveType.DIVIDE_BY_ZERO);
-//	}
-//
-//	@Test
-//	void testDivideUsesResultOfPreviousEquation() {
-//		// Arrange
-//		String number1 = "123";
-//		String number2 = "456";
-//		String result = "579";
-//		calculator.number(number1);
-//		calculator.binary(BiOperator.plus);
-//		calculator.number(number2);
-//
-//		// Act
-//		calculator.binary(BiOperator.divide);
-//
-//		// Assert
-//		verifyExpression(result, BiOperator.divide);
-//		verifyEquation(number1, BiOperator.plus, number2, result);
-//
-//	}
-//
-//	@Test
-//	void testResolveAfterResolvedDivideEquation() {
-//		// Arrange
-//		calculator.number("1");
-//		calculator.binary(BiOperator.divide);
-//		calculator.number("2");
-//
-//		// Act
-//		calculator.resolve();
-//
-//		// Assert
-//		verifyIdleExpression();
-//		verifyEquation("0.5", BiOperator.divide, "2", "0.25");
-//	}
-//	
-//	/* ***********************/
-//	/* Negate related methods */
-//	/* ***********************/
-//	@Test
-//	void testNegateAfterInit() {
-//		// Act
-//		calculator.unary(UnaryOperator.negate);
-//
-//		// Assert
-//		verifyExpression(UnaryOperator.negate, "0");
-//		verifyNoEquation();
-//	}
-//
-//	@Test
-//	void testResolveOfNegateAfterInit() {
-//		// Arrange
-//		calculator.unary(UnaryOperator.negate);
-//
-//		// Act
-//		calculator.resolve();
-//
-//		// Assert
-//		verifyIdleExpression();
-//		verifyEquation(UnaryOperator.negate, "0", "0");
-//	}
-//
-//	@Test
-//	void testNegateAfterNumberInput() {
-//		// Arrange
-//		String number = "123";
-//		calculator.number(number);
-//
-//		// Act
-//		calculator.unary(UnaryOperator.negate);
-//
-//		// Assert
-//		verifyNumberExpression("-123");
-//		verifyNoEquation();
-//	}
-//	
-//	@Test
-//	void testNegateAfterBinary() {
-//		// Arrange
-//		String number = "123";
-//		calculator.number(number);
-//		calculator.binary(BiOperator.plus);
-//
-//		// Act
-//		calculator.unary(UnaryOperator.negate);
-//
-//		// Assert
-//		verifyExpression("123", BiOperator.plus, unary(UnaryOperator.negate, "-123"));
-//		verifyNoEquation();
-//	}
+	/* ***********************/
+	/* Multiply related methods */
+	/* ***********************/
+	@Test
+	void testMultiplyAfterInit() {
+		// Act
+		calculator.binary(BiOperator.multiply);
 
+		// Assert
+		verifyInput("");
+		verifyExpression("0", BiOperator.multiply);
+		verifyNoEquation();
+	}
+
+	@Test
+	void testResolveOfInitialMultiply() {
+		// Arrange
+		calculator.binary(BiOperator.multiply);
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("0", BiOperator.multiply, "0", "0");
+	}
+
+	@Test
+	void testMultiplyAfterNumber() {
+		// Arrange
+		calculator.number("123");
+
+		// Act
+		calculator.binary(BiOperator.multiply);
+
+		// Assert
+		verifyInput("");
+		verifyExpression("123", BiOperator.multiply);
+		verifyNoEquation();
+	}
+
+	@Test
+	void testMultiplyAfterMultiply() {
+		// Arrange
+		calculator.number("123");
+		calculator.binary(BiOperator.multiply);
+
+		// Act
+		calculator.binary(BiOperator.multiply);
+
+		// Assert
+		verifyInput("");
+		verifyExpression("123", BiOperator.multiply);
+		verifyNoEquation();
+	}
+
+	@Test
+	void testMultiplyAfterDifferentBinaryOperator() {
+		// Arrange
+		calculator.number("123");
+		calculator.binary(BiOperator.plus);
+
+		// Act
+		calculator.binary(BiOperator.multiply);
+
+		// Assert
+		verifyInput("");
+		verifyExpression("123", BiOperator.multiply);
+		verifyNoEquation();
+	}
+
+	@Test
+	void testResloveOfMultiplyAfterNumberInput() {
+		// Arrange
+		calculator.number("123");
+		calculator.binary(BiOperator.multiply);
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("123", BiOperator.multiply, "123", "15129");
+	}
+
+	@Test
+	void testSecondNumberOfMultiply() {
+		// Arrange
+		calculator.number("123");
+		calculator.binary(BiOperator.multiply);
+
+		// Act
+		calculator.number("456");
+
+		// Assert
+		verifyInput("456");
+		verifyExpression("123", BiOperator.multiply);
+		verifyNoEquation();
+	}
+
+	@Test
+	void testMultiplyAfterCompleteMultiplyExpression() {
+		// Arrange
+		calculator.number("123");
+		calculator.binary(BiOperator.multiply);
+		calculator.number("456");
+
+		// Act
+		calculator.binary(BiOperator.multiply);
+
+		// Assert
+		verifyInput("");
+		verifyExpression("56088", BiOperator.multiply);
+		verifyEquation("123", BiOperator.multiply, "456", "56088");
+	}
+
+	@Test
+	void testResolveAfterCompleteMultiplyEquation() {
+		// Arrange
+		calculator.number("1");
+		calculator.binary(BiOperator.multiply);
+		calculator.number("2");
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("1", BiOperator.multiply, "2", "2");
+	}
+	
+	@Test
+	void testResolveAfterResolvedMultiplyExpression() {
+		// Arrange
+		calculator.number("1");
+		calculator.binary(BiOperator.multiply);
+		calculator.number("2");
+		calculator.resolve();
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("2", BiOperator.multiply, "2", "4");
+	}
+	
+	
+	/* ************************/
+	/* Divide related methods */
+	/* ************************/
+	@Test
+	void testDivideAfterInit() {
+		// Act
+		calculator.binary(BiOperator.divide);
+
+		// Assert
+		verifyInput("");
+		verifyExpression("0", BiOperator.divide);
+		verifyNoEquation();
+	}
+
+	@Test
+	void testResolveOfInitialDivide() {
+		// Arrange
+		calculator.binary(BiOperator.divide);
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("0", BiOperator.divide, "0", ResolveType.UNDEFINED);
+	}
+
+	@Test
+	void testDivideAfterNumber() {
+		// Arrange
+		calculator.number("123");
+
+		// Act
+		calculator.binary(BiOperator.divide);
+
+		// Assert
+		verifyInput("");
+		verifyExpression("123", BiOperator.divide);
+		verifyNoEquation();
+	}
+
+	@Test
+	void testDivideAfterDivide() {
+		// Arrange
+		calculator.number("123");
+		calculator.binary(BiOperator.divide);
+
+		// Act
+		calculator.binary(BiOperator.divide);
+
+		// Assert
+		verifyInput("");
+		verifyExpression("123", BiOperator.divide);
+		verifyNoEquation();
+	}
+
+	@Test
+	void testDivideAfterDifferentBinaryOperator() {
+		// Arrange
+		calculator.number("123");
+		calculator.binary(BiOperator.plus);
+
+		// Act
+		calculator.binary(BiOperator.divide);
+
+		// Assert
+		verifyInput("");
+		verifyExpression("123", BiOperator.divide);
+		verifyNoEquation();
+	}
+
+	@Test
+	void testResloveOfDivideAfterNumberInput() {
+		// Arrange
+		calculator.number("123");
+		calculator.binary(BiOperator.divide);
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("123", BiOperator.divide, "123", "1");
+	}
+
+	@Test
+	void testSecondNumberOfDivide() {
+		// Arrange
+		calculator.number("123");
+		calculator.binary(BiOperator.divide);
+
+		// Act
+		calculator.number("456");
+
+		// Assert
+		verifyInput("456");
+		verifyExpression("123", BiOperator.divide);
+		verifyNoEquation();
+	}
+
+	@Test
+	void testDivideAfterCompleteDivideExpression() {
+		// Arrange
+		calculator.number("100");
+		calculator.binary(BiOperator.divide);
+		calculator.number("8");
+
+		// Act
+		calculator.binary(BiOperator.divide);
+
+		// Assert
+		verifyInput("");
+		verifyExpression("12.5", BiOperator.divide);
+		verifyEquation("100", BiOperator.divide, "8", "12.5");
+	}
+
+	@Test
+	void testResolveAfterCompleteDivideEquation() {
+		// Arrange
+		calculator.number("1");
+		calculator.binary(BiOperator.divide);
+		calculator.number("2");
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("1", BiOperator.divide, "2", "0.5");
+	}
+	
+	@Test
+	void testResolveAfterResolvedDivideExpression() {
+		// Arrange
+		calculator.number("1");
+		calculator.binary(BiOperator.divide);
+		calculator.number("2");
+		calculator.resolve();
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("0.5", BiOperator.divide, "2", "0.25");
+	}
+	
+	@Test
+	void testDivideBy0Test() {
+		// Arrange
+		calculator.number("100");
+		calculator.binary(BiOperator.divide);
+		calculator.number("0");
+
+		// Act
+		calculator.binary(BiOperator.divide);
+
+		// Assert
+		verifyInput("");
+		verifyEquation("100", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
+		verifyIdleExpression();
+	}
 	
 	private void verifyInput(String expected) {
 		assertEquals(expected, calculator.getState().input());
@@ -754,25 +732,8 @@ class SimpleCalculatorTest {
 		assertEquals(IdleExpression.of(), getExpression());
 	}
 
-	private void verifyExpression(String number) {
-		assertEquals(number(number), getExpression());
-	}
-
 	private void verifyExpression(String number, BiOperator operator) {
 		assertEquals(BinaryExpression.of(bd(number), operator), getExpression());
-	}
-	
-	private void verifyExpression(String number, BiOperator operator, UnaryExpression right) {
-//		assertEquals(BinaryExpression.of(bd(number), operator, right), getExpression());
-	}
-	
-	
-	private void verifyExpression(UnaryOperator operator, String number) {
-		assertEquals(UnaryExpression.of(operator, bd(number)), getExpression());
-	}
-
-	private void verifyNumberExpression(String number) {
-		assertEquals(number(number), getExpression());
 	}
 
 	private void verifyNoEquation() {
@@ -789,13 +750,8 @@ class SimpleCalculatorTest {
 
 	private void verifyEquation(String left, BiOperator operator, String right, ResolveType type) {
 		assertEquals(Equation.of(BinaryExpression.of(bd(left), operator, bd(right)), Result.of(type)), getEquation());
-		
 	}
 	
-	private void verifyEquation(UnaryOperator operator, String value, String result) {
-		assertEquals(Equation.of(UnaryExpression.of(operator, bd(value)), Result.of((bd(result)))), getEquation());
-	}
-
 	private BigDecimal bd(String s) {
 		return new BigDecimal(s);
 	}
@@ -811,9 +767,4 @@ class SimpleCalculatorTest {
 	private Equation getEquation() {
 		return calculator.getState().equation();
 	}
-	
-	private UnaryExpression unary(UnaryOperator operator, String number) {
-		return UnaryExpression.of(operator, bd(number));
-	}
-	
 }
