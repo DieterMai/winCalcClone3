@@ -253,140 +253,158 @@ class SimpleCalculatorTest {
 		verifyEquation("3", BiOperator.plus, "2", "5");
 	}
 
-//	/* ***********************/
-//	/* Minus related methods */
-//	/* ***********************/
-//	@Test
-//	void testMinusAfterInit() {
-//		// Act
-//		calculator.binary(BiOperator.minus);
-//
-//		// Assert
-//		verifyExpression("0", BiOperator.minus);
-//		verifyNoEquation();
-//	}
-//
-//	@Test
-//	void testResolveOfMinusAfterInit() {
-//		// Arrange
-//		calculator.binary(BiOperator.minus);
-//
-//		// Act
-//		calculator.resolve();
-//
-//		// Assert
-//		verifyIdleExpression();
-//		verifyEquation("0", BiOperator.minus, "0", "0");
-//	}
-//
-//	@Test
-//	void testMinusAfterNumberInput() {
-//		// Arrange
-//		String number = "123";
-//		calculator.number(number);
-//
-//		// Act
-//		calculator.binary(BiOperator.minus);
-//
-//		// Assert
-//		verifyExpression(number, BiOperator.minus);
-//		verifyNoEquation();
-//	}
-//
-//	@Test
-//	void testMinusAfterMinus() {
-//		// Arrange
-//		String number = "123";
-//		calculator.number(number);
-//		calculator.binary(BiOperator.minus);
-//
-//		// Act
-//		calculator.binary(BiOperator.minus);
-//
-//		// Assert
-//		verifyExpression(number, BiOperator.minus);
-//		verifyNoEquation();
-//	}
-//
-//	@Test
-//	void testMinusAfterPlus() {
-//		// Arrange
-//		String number = "123";
-//		calculator.number(number);
-//		calculator.binary(BiOperator.plus);
-//
-//		// Act
-//		calculator.binary(BiOperator.minus);
-//
-//		// Assert
-//		verifyExpression(number, BiOperator.minus);
-//		verifyNoEquation();
-//	}
-//
-//	@Test
-//	void testResloveOfMinusAfterNumberInput() {
-//		// Arrange
-//		String number = "123";
-//		calculator.number(number);
-//		calculator.binary(BiOperator.minus);
-//
-//		// Act
-//		calculator.resolve();
-//
-//		// Assert
-//		verifyIdleExpression();
-//		verifyEquation(number, BiOperator.minus, number, "0");
-//	}
-//
-//	@Test
-//	void testResolveOfMinusDueToNumberInput() {
-//		// Arrange
-//		String number1 = "123";
-//		String number2 = "456";
-//		calculator.number(number1);
-//		calculator.binary(BiOperator.minus);
-//
-//		// Act
-//		calculator.number(number2);
-//
-//		// Assert
-//		verifyIdleExpression();
-//		verifyEquation(number1, BiOperator.minus, number2, "-333");
-//	}
-//
-//	@Test
-//	void testMinusUsesResultOfPreviousEquation() {
-//		// Arrange
-//		String number1 = "123";
-//		String number2 = "456";
-//		String result = "579";
-//		calculator.number(number1);
-//		calculator.binary(BiOperator.plus);
-//		calculator.number(number2);
-//
-//		// Act
-//		calculator.binary(BiOperator.minus);
-//
-//		// Assert
-//		verifyExpression(result, BiOperator.minus);
-//		verifyEquation(number1, BiOperator.plus, number2, result);
-//	}
-//
-//	@Test
-//	void testResolveAfterResolvedMinusEquation() {
-//		// Arrange
-//		calculator.number("1");
-//		calculator.binary(BiOperator.minus);
-//		calculator.number("2");
-//
-//		// Act
-//		calculator.resolve();
-//
-//		// Assert
-//		verifyIdleExpression();
-//		verifyEquation("-1", BiOperator.minus, "2", "-3");
-//	}
-//
+	/* ***********************/
+	/* Minus related methods */
+	/* ***********************/
+	@Test
+	void testMinusAfterInit() {
+		// Act
+		calculator.binary(BiOperator.minus);
+
+		// Assert
+		verifyInput("");
+		verifyExpression("0", BiOperator.minus);
+		verifyNoEquation();
+	}
+
+	@Test
+	void testResolveOfInitialMinus() {
+		// Arrange
+		calculator.binary(BiOperator.minus);
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("0", BiOperator.minus, "0", "0");
+	}
+
+	@Test
+	void testMinusAfterNumber() {
+		// Arrange
+		calculator.number("123");
+
+		// Act
+		calculator.binary(BiOperator.minus);
+
+		// Assert
+		verifyInput("");
+		verifyExpression("123", BiOperator.minus);
+		verifyNoEquation();
+	}
+
+	@Test
+	void testMinusAfterMinus() {
+		// Arrange
+		calculator.number("123");
+		calculator.binary(BiOperator.minus);
+
+		// Act
+		calculator.binary(BiOperator.minus);
+
+		// Assert
+		verifyInput("");
+		verifyExpression("123", BiOperator.minus);
+		verifyNoEquation();
+	}
+
+	@Test
+	void testMinusAfterDifferentBinaryOperator() {
+		// Arrange
+		calculator.number("123");
+		calculator.binary(BiOperator.plus);
+
+		// Act
+		calculator.binary(BiOperator.minus);
+
+		// Assert
+		verifyInput("");
+		verifyExpression("123", BiOperator.minus);
+		verifyNoEquation();
+	}
+
+	@Test
+	void testResloveOfMinusAfterNumberInput() {
+		// Arrange
+		calculator.number("123");
+		calculator.binary(BiOperator.minus);
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("123", BiOperator.minus, "123", "0");
+	}
+
+	@Test
+	void testSecondNumberOfMinus() {
+		// Arrange
+		calculator.number("123");
+		calculator.binary(BiOperator.minus);
+
+		// Act
+		calculator.number("456");
+
+		// Assert
+		verifyInput("456");
+		verifyExpression("123", BiOperator.minus);
+		verifyNoEquation();
+	}
+
+	@Test
+	void testMinusAfterCompleteMinusExpression() {
+		// Arrange
+		calculator.number("123");
+		calculator.binary(BiOperator.minus);
+		calculator.number("456");
+
+		// Act
+		calculator.binary(BiOperator.minus);
+
+		// Assert
+		verifyInput("");
+		verifyExpression("-333", BiOperator.minus);
+		verifyEquation("123", BiOperator.minus, "456", "-333");
+	}
+
+	@Test
+	void testResolveAfterCompleteMinusEquation() {
+		// Arrange
+		calculator.number("1");
+		calculator.binary(BiOperator.minus);
+		calculator.number("2");
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("1", BiOperator.minus, "2", "-1");
+	}
+	
+	@Test
+	void testResolveAfterResolvedMinusExpression() {
+		// Arrange
+		calculator.number("1");
+		calculator.binary(BiOperator.minus);
+		calculator.number("2");
+		calculator.resolve();
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("-1", BiOperator.minus, "2", "-3");
+	}
+	
+	
 //	/* ***********************/
 //	/* Multiply related methods */
 //	/* ***********************/
