@@ -117,7 +117,7 @@ class SimpleCalculatorTest {
 	}
 
 	@Test
-	void testResolveOfPlusAfterInit() {
+	void testResolveOfInitialPlus() {
 		// Arrange
 		calculator.binary(BiOperator.plus);
 
@@ -131,25 +131,23 @@ class SimpleCalculatorTest {
 	}
 
 	@Test
-	void testPlusAfterNumberInput() {
+	void testPlusAfterNumber() {
 		// Arrange
-		String number = "123";
-		calculator.number(number);
+		calculator.number("123");
 
 		// Act
 		calculator.binary(BiOperator.plus);
 
 		// Assert
 		verifyInput("");
-		verifyExpression(number, BiOperator.plus);
+		verifyExpression("123", BiOperator.plus);
 		verifyNoEquation();
 	}
 
 	@Test
 	void testPlusAfterPlus() {
 		// Arrange
-		String number = "123";
-		calculator.number(number);
+		calculator.number("123");
 		calculator.binary(BiOperator.plus);
 
 		// Act
@@ -157,15 +155,14 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verifyInput("");
-		verifyExpression(number, BiOperator.plus);
+		verifyExpression("123", BiOperator.plus);
 		verifyNoEquation();
 	}
 
 	@Test
-	void testPlusAfterMinus() {
+	void testPlusAfterDifferentBinaryOperator() {
 		// Arrange
-		String number = "123";
-		calculator.number(number);
+		calculator.number("123");
 		calculator.binary(BiOperator.minus);
 
 		// Act
@@ -173,15 +170,14 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verifyInput("");
-		verifyExpression(number, BiOperator.plus);
+		verifyExpression("123", BiOperator.plus);
 		verifyNoEquation();
 	}
 
 	@Test
 	void testResloveOfPlusAfterNumberInput() {
 		// Arrange
-		String number = "123";
-		calculator.number(number);
+		calculator.number("123");
 		calculator.binary(BiOperator.plus);
 
 		// Act
@@ -190,11 +186,11 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyInput("");
 		verifyIdleExpression();
-		verifyEquation(number, BiOperator.plus, number, "246");
+		verifyEquation("123", BiOperator.plus, "123", "246");
 	}
 
 	@Test
-	void testResolveOfPlusDueToNumberInput() {
+	void testSecondNumberOfPlus() {
 		// Arrange
 		calculator.number("123");
 		calculator.binary(BiOperator.plus);
@@ -209,7 +205,7 @@ class SimpleCalculatorTest {
 	}
 
 	@Test
-	void testPlusUsesResultOfPreviousEquation() {
+	void testPlusAfterCompletePlusExpression() {
 		// Arrange
 		calculator.number("123");
 		calculator.binary(BiOperator.plus);
@@ -224,21 +220,39 @@ class SimpleCalculatorTest {
 		verifyEquation("123", BiOperator.plus, "456", "579");
 	}
 
-//	@Test
-//	void testResolveAfterResolvedPlusEquation() {
-//		// Arrange
-//		calculator.number("1");
-//		calculator.binary(BiOperator.plus);
-//		calculator.number("2");
-//
-//		// Act
-//		calculator.resolve();
-//
-//		// Assert
-//		verifyIdleExpression();
-//		verifyEquation("3", BiOperator.plus, "2", "5");
-//	}
-//
+	@Test
+	void testResolveAfterCompletePlusEquation() {
+		// Arrange
+		calculator.number("1");
+		calculator.binary(BiOperator.plus);
+		calculator.number("2");
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("1", BiOperator.plus, "2", "3");
+	}
+	
+	@Test
+	void testResolveAfterResolvedPlusExpression() {
+		// Arrange
+		calculator.number("1");
+		calculator.binary(BiOperator.plus);
+		calculator.number("2");
+		calculator.resolve();
+
+		// Act
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("3", BiOperator.plus, "2", "5");
+	}
+
 //	/* ***********************/
 //	/* Minus related methods */
 //	/* ***********************/
