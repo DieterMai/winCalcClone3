@@ -709,7 +709,7 @@ class SimpleCalculatorTest {
 	}
 	
 	@Test
-	void testDivideBy0Test() {
+	void testDivideBy0TestTriggerdViaBinaryOperator() {
 		// Arrange
 		calculator.number("100");
 		calculator.binary(BiOperator.divide);
@@ -717,6 +717,22 @@ class SimpleCalculatorTest {
 
 		// Act
 		calculator.binary(BiOperator.divide);
+
+		// Assert
+		verifyInput("");
+		verifyEquation("100", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
+		verifyIdleExpression();
+	}
+	
+	@Test
+	void testDivideBy0TestTriggerdViaResolve() {
+		// Arrange
+		calculator.number("100");
+		calculator.binary(BiOperator.divide);
+		calculator.number("0");
+
+		// Act
+		calculator.resolve();
 
 		// Assert
 		verifyInput("");

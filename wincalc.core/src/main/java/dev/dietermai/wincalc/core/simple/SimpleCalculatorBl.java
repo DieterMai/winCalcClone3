@@ -103,7 +103,11 @@ public class SimpleCalculatorBl {
 				return state.with(be.withOperator(operator));
 			}else {
 				var newState = resolve(state);
-				return newState.with(BinaryExpression.of(newState.equation().value(), operator));
+				if(newState.equation().type().isSuccess()) {
+					return newState.with(BinaryExpression.of(newState.equation().value(), operator));
+				}else {
+					return newState;
+				}
 			}
 		} else {
 			BigDecimal initalValue = getInitialValueForBinaryOperation(state);
