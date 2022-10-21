@@ -405,9 +405,9 @@ class SimpleCalculatorTest {
 	}
 	
 	
-	/* ***********************/
+	/* **************************/
 	/* Multiply related methods */
-	/* ***********************/
+	/* **************************/
 	@Test
 	void testMultiplyAfterInit() {
 		// Act
@@ -740,6 +740,70 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 	}
 	
+	/* ************************/
+	/* Negate related methods */
+	/* ************************/
+	@Test
+	void testInitialNegate() {
+		// Act
+		calculator.unary(UnaryOperator.negate);
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyNoEquation();
+	}
+	
+	@Test
+	void testNegateOfPositiveNumber() {
+		// Act
+		calculator.number("123");
+		calculator.unary(UnaryOperator.negate);
+
+		// Assert
+		verifyInput("-123");
+		verifyIdleExpression();
+		verifyNoEquation();
+	}
+	
+	@Test
+	void testNegateOfNegativeNumber() {
+		// Act
+		calculator.number("-123");
+		calculator.unary(UnaryOperator.negate);
+
+		// Assert
+		verifyInput("123");
+		verifyIdleExpression();
+		verifyNoEquation();
+	}
+	
+	@Test
+	void testNegateOfZero() {
+		// Act
+		calculator.number("0");
+		calculator.unary(UnaryOperator.negate);
+
+		// Assert
+		verifyInput("0");
+		verifyIdleExpression();
+		verifyNoEquation();
+	}
+	
+	@Test
+	void testNegateOfZeroResult() {
+		// Act
+		calculator.number("0");
+		calculator.resolve();
+		calculator.unary(UnaryOperator.negate);
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.negate, "0");
+		verifyEquation("0", "0");
+	}
+	
+	
 	private void verifyInput(String expected) {
 		assertEquals(expected, calculator.getState().input());
 	}
@@ -750,6 +814,10 @@ class SimpleCalculatorTest {
 
 	private void verifyExpression(String number, BiOperator operator) {
 		assertEquals(BinaryExpression.of(bd(number), operator), getExpression());
+	}
+	
+	private void verifyExpression(UnaryOperator operator, String number) {
+		assertEquals(UnaryExpression.of(operator, bd(number)), getExpression());
 	}
 
 	private void verifyNoEquation() {

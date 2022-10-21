@@ -20,8 +20,7 @@ import dev.dietermai.wincalc.core.simple.expr.binary.BinaryExpression;
 public class SimpleCalculatorBl {
 
 	public static SimpleCalculatorRecord resolve(final SimpleCalculatorRecord before) {
-		final Equation equation = resolveEquation(before);
-		return SimpleCalculatorRecord.of(equation);
+		return SimpleCalculatorRecord.of("", IdleExpression.of(), resolveEquation(before));
 	}
 
 	private static Equation resolveEquation(final SimpleCalculatorRecord state) {
@@ -188,14 +187,21 @@ public class SimpleCalculatorBl {
 	}
 
 	private static SimpleCalculatorRecord handleNegate(SimpleCalculatorRecord before) {
-		var beforeExpression = before.expression();
-
-		return switch (beforeExpression) {
-		case IdleExpression idle -> before.with(UnaryExpression.of(UnaryOperator.negate, new BigDecimal("0")));
-		case NumberExpression ne -> before.with(NumberExpression.of(resultNegateExpression(ne.value()).value()));
-		case UnaryExpression ue -> throw new IllegalStateException("Not implemented yet!");
-		case BinaryExpression be -> before.with(be.withRight(UnaryExpression.of(UnaryOperator.negate, be.left())));
-		};
+		String input = before.input();
+		if(input.isBlank()) {
+			return switch (before.expression()) {
+			case IdleExpression idle -> before.equation() == null ? before : before.with(before.equation().value().negate().toString());
+			case NumberExpression ne -> before.with(NumberExpression.of(resultNegateExpression(ne.value()).value()));
+			case UnaryExpression ue -> throw new IllegalStateException("Not implemented yet!");
+			case BinaryExpression be -> before.with(be.withRight(UnaryExpression.of(UnaryOperator.negate, be.left())));
+			};
+		}else if(input.equals("0")) {
+			return before;
+		}else if(input.startsWith("-")) {
+			return before.with(input.substring(1));
+		}else {
+			return before.with("-"+input);
+		}
 	}
 
 	private static Result resultOf(Expression expression) {
