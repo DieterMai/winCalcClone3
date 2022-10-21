@@ -29,6 +29,10 @@ public record BinaryExpression(Expression left, BiOperator operator, Expression 
 	public BinaryExpression withRight(Expression right) {
 		return new BinaryExpression(left(), operator(), right);
 	}
+	
+	public BinaryExpression withLeft(Expression left) {
+		return new BinaryExpression(left, operator(), right());
+	}
 
 	public BinaryExpression withOperator(BiOperator operator) {
 		return new BinaryExpression(left(), operator, right());

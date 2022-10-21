@@ -113,6 +113,40 @@ public class SimpleCalculatorBl {
 			return new SimpleCalculatorRecord("", BinaryExpression.of(initalValue, operator), state.equation());
 		}
 	}
+	
+	public static SimpleCalculatorRecord negate(final SimpleCalculatorRecord state) {
+		String input = state.input();
+		if(!input.isBlank()) {
+			if(input.equals("0")) {
+				return state;
+			}else if(input.startsWith("-")) {
+				return state.with(input.substring(1));
+			}else {
+				return state.with("-"+input);
+			}
+		}
+		
+		Expression expression = state.expression();
+		if(expression instanceof UnaryExpression unary) {
+			return state.with(UnaryExpression.of(UnaryOperator.negate, unary));
+		}
+		if(expression instanceof BinaryExpression binary) {
+			if(binary.right() != null) {
+				return state.with(binary.withRight(UnaryExpression.of(UnaryOperator.negate, binary.right())));
+			}else {
+				return state.with(binary.withLeft(UnaryExpression.of(UnaryOperator.negate, binary.left())));
+			}
+		}
+		
+		Equation equation = state.equation();
+		if(equation == null) {
+			return state;
+		}else if(equation.type().isError()) {
+			throw new IllegalStateException("Can not operatoe on error result");
+		}else {
+			return state.with(UnaryExpression.of(UnaryOperator.negate, equation.value().negate()));
+		}
+	}	
 
 	public static SimpleCalculatorRecord unary(final SimpleCalculatorRecord state, UnaryOperator operator) {
 		return switch (operator) {

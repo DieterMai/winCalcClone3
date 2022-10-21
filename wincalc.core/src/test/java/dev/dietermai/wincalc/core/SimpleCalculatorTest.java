@@ -746,7 +746,7 @@ class SimpleCalculatorTest {
 	@Test
 	void testInitialNegate() {
 		// Act
-		calculator.unary(UnaryOperator.negate);
+		calculator.negate();
 
 		// Assert
 		verifyInput("");
@@ -758,7 +758,7 @@ class SimpleCalculatorTest {
 	void testNegateOfPositiveNumber() {
 		// Act
 		calculator.number("123");
-		calculator.unary(UnaryOperator.negate);
+		calculator.negate();
 
 		// Assert
 		verifyInput("-123");
@@ -770,7 +770,7 @@ class SimpleCalculatorTest {
 	void testNegateOfNegativeNumber() {
 		// Act
 		calculator.number("-123");
-		calculator.unary(UnaryOperator.negate);
+		calculator.negate();
 
 		// Assert
 		verifyInput("123");
@@ -782,7 +782,7 @@ class SimpleCalculatorTest {
 	void testNegateOfZero() {
 		// Act
 		calculator.number("0");
-		calculator.unary(UnaryOperator.negate);
+		calculator.negate();
 
 		// Assert
 		verifyInput("0");
@@ -795,7 +795,7 @@ class SimpleCalculatorTest {
 		// Act
 		calculator.number("0");
 		calculator.resolve();
-		calculator.unary(UnaryOperator.negate);
+		calculator.negate();
 
 		// Assert
 		verifyInput("");

@@ -25,4 +25,8 @@ public class SimpleCalculator {
 	public void unary(UnaryOperator operator) {
 		state = SimpleCalculatorBl.unary(state, operator);
 	}
+	
+	public void negate() {
+		state = SimpleCalculatorBl.negate(state);
+	}
 }
