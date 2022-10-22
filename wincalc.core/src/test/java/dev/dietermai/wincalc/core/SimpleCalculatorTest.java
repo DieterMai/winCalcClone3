@@ -2,6 +2,7 @@ package dev.dietermai.wincalc.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 import java.math.BigDecimal;
 
@@ -803,6 +804,208 @@ class SimpleCalculatorTest {
 		verifyEquation("0", "0");
 	}
 	
+	@Test
+	void testNegateOfResult() {
+		// Act
+		calculator.number("5");
+		calculator.resolve();
+		calculator.negate();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.negate, "5");
+		verifyEquation("5", "5");
+	}
+	
+	@Test
+	void testNegateOfUnaryExpression() {
+		// Act
+		calculator.number("5");
+		calculator.resolve();
+		calculator.negate();
+		calculator.negate();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(unary(UnaryOperator.negate, unary(UnaryOperator.negate, "5")));
+		verifyEquation("5", "5");
+	}
+	
+	@Test
+	void testNegateOfBinaryLeft() {
+		// Act
+		calculator.number("5");
+		calculator.binary(BiOperator.plus);
+		calculator.negate();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(binary("5", BiOperator.plus, unary(UnaryOperator.negate, "5")));
+		verifyNoEquation();
+	}
+	
+	@Test
+	void testNegateOfBinaryRight() {
+		// Act
+		calculator.number("5");
+		calculator.binary(BiOperator.plus);
+		calculator.negate();
+		calculator.negate();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(binary("5", BiOperator.plus, unary(UnaryOperator.negate, unary(UnaryOperator.negate, "5"))));
+		verifyNoEquation();
+	}
+	
+	@Test
+	void testNegateOfError() {
+		// Act
+		calculator.number("5");
+		calculator.binary(BiOperator.divide);
+		calculator.number("0");
+		calculator.resolve();
+		assertThrowsExactly(IllegalStateException.class, () -> calculator.negate());
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("5", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
+	}
+	
+	
+	/* *************************/
+	/* Percent related methods */
+	/* *************************/
+	@Test
+	void testPercentNegate() {
+		// Act
+		calculator.percent();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("0", "0");
+	}
+	
+	@Test
+	void testPercentOfPositiveNumber() {
+		// Act
+		calculator.number("123");
+		calculator.percent();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("0", "0");
+	}
+	
+	@Test
+	void testPercentOfNegativeNumber() {
+		// Act
+		calculator.number("-123");
+		calculator.percent();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("0", "0");
+	}
+	
+	@Test
+	void testPercentOfZero() {
+		// Act
+		calculator.number("0");
+		calculator.percent();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("0", "0");
+	}
+	
+	@Test
+	void testPercentOfZeroResult() {
+		// Act
+		calculator.number("0");
+		calculator.resolve();
+		calculator.percent();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("0", "0");
+	}
+	
+	@Test
+	void testPercentOfResult() {
+		// Act
+		calculator.number("5");
+		calculator.resolve();
+		calculator.percent();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("0", "0");
+	}
+	
+	@Test
+	void testPercentOfUnaryExpression() {
+		// Act
+		calculator.number("5");
+		calculator.resolve();
+		calculator.negate();
+		calculator.percent();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("0", "0");
+	}
+	
+	@Test
+	void testPercentOfBinaryLeft() {
+		// Act
+		calculator.number("5");
+		calculator.binary(BiOperator.plus);
+		calculator.percent();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(binary("5", BiOperator.plus, "0.25"));
+		verifyNoEquation();
+	}
+	
+	@Test
+	void testPercentOfBinaryRight() {
+		// Act
+		calculator.number("5");
+		calculator.binary(BiOperator.plus);
+		calculator.negate();
+		calculator.percent();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(binary("5", BiOperator.plus, "-0.25"));
+		verifyNoEquation();
+	}
+	
+	@Test
+	void testPercentOfError() {
+		// Act
+		calculator.number("5");
+		calculator.binary(BiOperator.divide);
+		calculator.number("0");
+		calculator.resolve();
+		assertThrowsExactly(IllegalStateException.class, () -> calculator.percent());
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("5", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
+	}
+	
 	
 	private void verifyInput(String expected) {
 		assertEquals(expected, calculator.getState().input());
@@ -812,6 +1015,10 @@ class SimpleCalculatorTest {
 		assertEquals(IdleExpression.of(), getExpression());
 	}
 
+	private void verifyExpression(Expression expected) {
+		assertEquals(expected, getExpression());
+	}
+	
 	private void verifyExpression(String number, BiOperator operator) {
 		assertEquals(BinaryExpression.of(bd(number), operator), getExpression());
 	}
@@ -834,6 +1041,22 @@ class SimpleCalculatorTest {
 
 	private void verifyEquation(String left, BiOperator operator, String right, ResolveType type) {
 		assertEquals(Equation.of(BinaryExpression.of(bd(left), operator, bd(right)), Result.of(type)), getEquation());
+	}
+	
+	private BinaryExpression binary(String left, BiOperator operator, Expression right) {
+		return BinaryExpression.of(bd(left), operator, right);
+	}
+	
+	private BinaryExpression binary(String left, BiOperator operator, String right) {
+		return BinaryExpression.of(bd(left), operator, bd(right));
+	}
+	
+	private UnaryExpression unary(UnaryOperator operator, Expression nested) {
+		return UnaryExpression.of(operator, nested);
+	}
+	
+	private UnaryExpression unary(UnaryOperator operator, String number) {
+		return UnaryExpression.of(operator, number(number));
 	}
 	
 	private BigDecimal bd(String s) {

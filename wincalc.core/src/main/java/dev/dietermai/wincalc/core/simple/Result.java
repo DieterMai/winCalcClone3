@@ -3,6 +3,8 @@ package dev.dietermai.wincalc.core.simple;
 import java.math.BigDecimal;
 
 public record Result(BigDecimal value, ResolveType type) {
+	public static final Result ZERO = of(BigDecimal.ZERO);
+	
 	public static Result of(BigDecimal value) {
 		return new Result(value, ResolveType.SUCCESS);
 	}

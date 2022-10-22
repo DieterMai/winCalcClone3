@@ -134,7 +134,7 @@ public class SimpleCalculatorBl {
 			if(binary.right() != null) {
 				return state.with(binary.withRight(UnaryExpression.of(UnaryOperator.negate, binary.right())));
 			}else {
-				return state.with(binary.withLeft(UnaryExpression.of(UnaryOperator.negate, binary.left())));
+				return state.with(binary.withRight(UnaryExpression.of(UnaryOperator.negate, binary.left())));
 			}
 		}
 		
@@ -144,7 +144,44 @@ public class SimpleCalculatorBl {
 		}else if(equation.type().isError()) {
 			throw new IllegalStateException("Can not operatoe on error result");
 		}else {
-			return state.with(UnaryExpression.of(UnaryOperator.negate, equation.value().negate()));
+			return state.with(UnaryExpression.of(UnaryOperator.negate, equation.value()));
+		}
+	}	
+	
+	public static SimpleCalculatorRecord percent(final SimpleCalculatorRecord state) {
+		if(state.equation() != null && state.equation().type().isError()) {
+			throw new IllegalStateException("Can not operatoe on error result");
+		}
+		
+		Expression expression = state.expression();
+		
+		if(expression instanceof BinaryExpression be){
+			BigDecimal percentNumber;
+			String input = state.input();
+			if(!input.isBlank()) {
+				percentNumber = new BigDecimal(input);
+			}else {
+				Result result;
+				if(be.right() == null) {
+					result = resultOf(be.left());
+					percentNumber = result.value();
+				}else {
+					result = resultOf(be.right());
+				}
+				if(result.error()) {
+					throw new IllegalStateException("Not implemented yet!");
+				}
+				percentNumber = result.value().divide(new BigDecimal(100));
+			}
+			Result leftResult = resultOf(be.left());
+			if(leftResult.error()) {
+				throw new IllegalStateException("Not implemented yet!");
+			}
+			BigDecimal leftValue = leftResult.value();
+			BigDecimal rightValue = leftValue.multiply(percentNumber);
+			return state.with(be.withLeft(leftValue).withRight(rightValue));
+		}else {
+			return SimpleCalculatorRecord.of("", IdleExpression.of(), Equation.of(BigDecimal.ZERO));
 		}
 	}	
 

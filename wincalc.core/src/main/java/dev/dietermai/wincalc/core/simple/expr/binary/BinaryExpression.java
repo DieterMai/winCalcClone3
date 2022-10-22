@@ -10,15 +10,15 @@ public record BinaryExpression(Expression left, BiOperator operator, Expression 
 		return new BinaryExpression(NumberExpression.of(left), operator, null);
 	}
 
-	public static Expression of(BigDecimal left, BiOperator operator, BigDecimal right) {
+	public static BinaryExpression of(BigDecimal left, BiOperator operator, BigDecimal right) {
 		return new BinaryExpression(NumberExpression.of(left), operator, NumberExpression.of(right));
 	}
 	
-	public static Expression of(Expression left, BiOperator operator, BigDecimal right) {
+	public static BinaryExpression of(Expression left, BiOperator operator, BigDecimal right) {
 		return new BinaryExpression(left, operator, NumberExpression.of(right));
 	}
 	
-	public static Expression of(BigDecimal left, BiOperator operator, Expression right) {
+	public static BinaryExpression of(BigDecimal left, BiOperator operator, Expression right) {
 		return new BinaryExpression(NumberExpression.of(left), operator, right);
 	}
 
@@ -28,6 +28,10 @@ public record BinaryExpression(Expression left, BiOperator operator, Expression 
 	
 	public BinaryExpression withRight(Expression right) {
 		return new BinaryExpression(left(), operator(), right);
+	}
+	
+	public BinaryExpression withLeft(BigDecimal left) {
+		return new BinaryExpression(NumberExpression.of(left), operator(), right());
 	}
 	
 	public BinaryExpression withLeft(Expression left) {

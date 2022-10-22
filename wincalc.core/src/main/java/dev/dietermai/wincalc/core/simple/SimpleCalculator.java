@@ -29,4 +29,8 @@ public class SimpleCalculator {
 	public void negate() {
 		state = SimpleCalculatorBl.negate(state);
 	}
+	
+	public void percent() {
+		state = SimpleCalculatorBl.percent(state);
+	}
 }
