@@ -442,10 +442,7 @@ public class SimpleCalculatorBl {
 		};
 	}
 
-	public static Result resultNegateExpression(BigDecimal value) {
+	private static Result resultNegateExpression(BigDecimal value) {
 		return Result.of(value.negate());
 	}
-
-
-
 }
