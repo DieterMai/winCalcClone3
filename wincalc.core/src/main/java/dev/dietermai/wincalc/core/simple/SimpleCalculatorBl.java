@@ -327,16 +327,6 @@ public class SimpleCalculatorBl {
 		}
 	}	
 
-	public static SimpleCalculatorRecord unary(final SimpleCalculatorRecord state, UnaryOperator operator) {
-		return switch (operator) {
-		case negate -> handleNegate(state);
-		case divByX -> null;
-		case percent -> null;
-		case root -> null;
-		case sqrt -> null;
-		};
-	}
-
 	private static Equation resolvePlusExpression(BigDecimal left, BigDecimal right) {
 		BigDecimal result = left.add(right);
 		Expression expression = BinaryExpression.of(left, BiOperator.plus, right);

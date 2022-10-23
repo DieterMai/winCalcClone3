@@ -18,10 +18,6 @@ public class SimpleCalculator {
 		state = SimpleCalculatorBl.number(state, number);
 	}
 
-	public void unary(UnaryOperator operator) {
-		state = SimpleCalculatorBl.unary(state, operator);
-	}
-	
 	public void plus() {
 		state = SimpleCalculatorBl.plus(state);
 	}
