@@ -109,7 +109,7 @@ class SimpleCalculatorTest {
 	@Test
 	void testPlusAfterInit() {
 		// Act
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 
 		// Assert
 		verifyInput("");
@@ -120,7 +120,7 @@ class SimpleCalculatorTest {
 	@Test
 	void testResolveOfInitialPlus() {
 		// Arrange
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 
 		// Act
 		calculator.resolve();
@@ -137,7 +137,7 @@ class SimpleCalculatorTest {
 		calculator.number("123");
 
 		// Act
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 
 		// Assert
 		verifyInput("");
@@ -149,10 +149,10 @@ class SimpleCalculatorTest {
 	void testPlusAfterPlus() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 
 		// Act
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 
 		// Assert
 		verifyInput("");
@@ -167,7 +167,7 @@ class SimpleCalculatorTest {
 		calculator.binary(BiOperator.minus);
 
 		// Act
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 
 		// Assert
 		verifyInput("");
@@ -179,7 +179,7 @@ class SimpleCalculatorTest {
 	void testResloveOfPlusAfterNumberInput() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 
 		// Act
 		calculator.resolve();
@@ -194,7 +194,7 @@ class SimpleCalculatorTest {
 	void testSecondNumberOfPlus() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 
 		// Act
 		calculator.number("456");
@@ -209,11 +209,11 @@ class SimpleCalculatorTest {
 	void testPlusAfterCompletePlusExpression() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 		calculator.number("456");
 
 		// Act
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 
 		// Assert
 		verifyInput("");
@@ -225,7 +225,7 @@ class SimpleCalculatorTest {
 	void testResolveAfterCompletePlusEquation() {
 		// Arrange
 		calculator.number("1");
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 		calculator.number("2");
 
 		// Act
@@ -241,7 +241,7 @@ class SimpleCalculatorTest {
 	void testResolveAfterResolvedPlusExpression() {
 		// Arrange
 		calculator.number("1");
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 		calculator.number("2");
 		calculator.resolve();
 
@@ -260,7 +260,7 @@ class SimpleCalculatorTest {
 	@Test
 	void testMinusAfterInit() {
 		// Act
-		calculator.binary(BiOperator.minus);
+		calculator.minus();
 
 		// Assert
 		verifyInput("");
@@ -271,7 +271,7 @@ class SimpleCalculatorTest {
 	@Test
 	void testResolveOfInitialMinus() {
 		// Arrange
-		calculator.binary(BiOperator.minus);
+		calculator.minus();
 
 		// Act
 		calculator.resolve();
@@ -288,7 +288,7 @@ class SimpleCalculatorTest {
 		calculator.number("123");
 
 		// Act
-		calculator.binary(BiOperator.minus);
+		calculator.minus();
 
 		// Assert
 		verifyInput("");
@@ -300,10 +300,10 @@ class SimpleCalculatorTest {
 	void testMinusAfterMinus() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.minus);
+		calculator.minus();
 
 		// Act
-		calculator.binary(BiOperator.minus);
+		calculator.minus();
 
 		// Assert
 		verifyInput("");
@@ -315,10 +315,10 @@ class SimpleCalculatorTest {
 	void testMinusAfterDifferentBinaryOperator() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 
 		// Act
-		calculator.binary(BiOperator.minus);
+		calculator.minus();
 
 		// Assert
 		verifyInput("");
@@ -330,7 +330,7 @@ class SimpleCalculatorTest {
 	void testResloveOfMinusAfterNumberInput() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.minus);
+		calculator.minus();
 
 		// Act
 		calculator.resolve();
@@ -345,7 +345,7 @@ class SimpleCalculatorTest {
 	void testSecondNumberOfMinus() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.minus);
+		calculator.minus();
 
 		// Act
 		calculator.number("456");
@@ -360,11 +360,11 @@ class SimpleCalculatorTest {
 	void testMinusAfterCompleteMinusExpression() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.minus);
+		calculator.minus();
 		calculator.number("456");
 
 		// Act
-		calculator.binary(BiOperator.minus);
+		calculator.minus();
 
 		// Assert
 		verifyInput("");
@@ -376,7 +376,7 @@ class SimpleCalculatorTest {
 	void testResolveAfterCompleteMinusEquation() {
 		// Arrange
 		calculator.number("1");
-		calculator.binary(BiOperator.minus);
+		calculator.minus();
 		calculator.number("2");
 
 		// Act
@@ -392,7 +392,7 @@ class SimpleCalculatorTest {
 	void testResolveAfterResolvedMinusExpression() {
 		// Arrange
 		calculator.number("1");
-		calculator.binary(BiOperator.minus);
+		calculator.minus();
 		calculator.number("2");
 		calculator.resolve();
 
@@ -412,7 +412,7 @@ class SimpleCalculatorTest {
 	@Test
 	void testMultiplyAfterInit() {
 		// Act
-		calculator.binary(BiOperator.multiply);
+		calculator.multiply();
 
 		// Assert
 		verifyInput("");
@@ -423,7 +423,7 @@ class SimpleCalculatorTest {
 	@Test
 	void testResolveOfInitialMultiply() {
 		// Arrange
-		calculator.binary(BiOperator.multiply);
+		calculator.multiply();
 
 		// Act
 		calculator.resolve();
@@ -440,7 +440,7 @@ class SimpleCalculatorTest {
 		calculator.number("123");
 
 		// Act
-		calculator.binary(BiOperator.multiply);
+		calculator.multiply();
 
 		// Assert
 		verifyInput("");
@@ -452,10 +452,10 @@ class SimpleCalculatorTest {
 	void testMultiplyAfterMultiply() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.multiply);
+		calculator.multiply();
 
 		// Act
-		calculator.binary(BiOperator.multiply);
+		calculator.multiply();
 
 		// Assert
 		verifyInput("");
@@ -467,10 +467,10 @@ class SimpleCalculatorTest {
 	void testMultiplyAfterDifferentBinaryOperator() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 
 		// Act
-		calculator.binary(BiOperator.multiply);
+		calculator.multiply();
 
 		// Assert
 		verifyInput("");
@@ -482,7 +482,7 @@ class SimpleCalculatorTest {
 	void testResloveOfMultiplyAfterNumberInput() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.multiply);
+		calculator.multiply();
 
 		// Act
 		calculator.resolve();
@@ -497,7 +497,7 @@ class SimpleCalculatorTest {
 	void testSecondNumberOfMultiply() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.multiply);
+		calculator.multiply();
 
 		// Act
 		calculator.number("456");
@@ -512,11 +512,11 @@ class SimpleCalculatorTest {
 	void testMultiplyAfterCompleteMultiplyExpression() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.multiply);
+		calculator.multiply();
 		calculator.number("456");
 
 		// Act
-		calculator.binary(BiOperator.multiply);
+		calculator.multiply();
 
 		// Assert
 		verifyInput("");
@@ -528,7 +528,7 @@ class SimpleCalculatorTest {
 	void testResolveAfterCompleteMultiplyEquation() {
 		// Arrange
 		calculator.number("1");
-		calculator.binary(BiOperator.multiply);
+		calculator.multiply();
 		calculator.number("2");
 
 		// Act
@@ -544,7 +544,7 @@ class SimpleCalculatorTest {
 	void testResolveAfterResolvedMultiplyExpression() {
 		// Arrange
 		calculator.number("1");
-		calculator.binary(BiOperator.multiply);
+		calculator.multiply();
 		calculator.number("2");
 		calculator.resolve();
 
@@ -564,7 +564,7 @@ class SimpleCalculatorTest {
 	@Test
 	void testDivideAfterInit() {
 		// Act
-		calculator.binary(BiOperator.divide);
+		calculator.divide();
 
 		// Assert
 		verifyInput("");
@@ -575,7 +575,7 @@ class SimpleCalculatorTest {
 	@Test
 	void testResolveOfInitialDivide() {
 		// Arrange
-		calculator.binary(BiOperator.divide);
+		calculator.divide();
 
 		// Act
 		calculator.resolve();
@@ -592,7 +592,7 @@ class SimpleCalculatorTest {
 		calculator.number("123");
 
 		// Act
-		calculator.binary(BiOperator.divide);
+		calculator.divide();
 
 		// Assert
 		verifyInput("");
@@ -604,10 +604,10 @@ class SimpleCalculatorTest {
 	void testDivideAfterDivide() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.divide);
+		calculator.divide();
 
 		// Act
-		calculator.binary(BiOperator.divide);
+		calculator.divide();
 
 		// Assert
 		verifyInput("");
@@ -619,10 +619,10 @@ class SimpleCalculatorTest {
 	void testDivideAfterDifferentBinaryOperator() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 
 		// Act
-		calculator.binary(BiOperator.divide);
+		calculator.divide();
 
 		// Assert
 		verifyInput("");
@@ -634,7 +634,7 @@ class SimpleCalculatorTest {
 	void testResloveOfDivideAfterNumberInput() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.divide);
+		calculator.divide();
 
 		// Act
 		calculator.resolve();
@@ -649,7 +649,7 @@ class SimpleCalculatorTest {
 	void testSecondNumberOfDivide() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.divide);
+		calculator.divide();
 
 		// Act
 		calculator.number("456");
@@ -664,11 +664,11 @@ class SimpleCalculatorTest {
 	void testDivideAfterCompleteDivideExpression() {
 		// Arrange
 		calculator.number("100");
-		calculator.binary(BiOperator.divide);
+		calculator.divide();
 		calculator.number("8");
 
 		// Act
-		calculator.binary(BiOperator.divide);
+		calculator.divide();
 
 		// Assert
 		verifyInput("");
@@ -680,7 +680,7 @@ class SimpleCalculatorTest {
 	void testResolveAfterCompleteDivideEquation() {
 		// Arrange
 		calculator.number("1");
-		calculator.binary(BiOperator.divide);
+		calculator.divide();
 		calculator.number("2");
 
 		// Act
@@ -696,7 +696,7 @@ class SimpleCalculatorTest {
 	void testResolveAfterResolvedDivideExpression() {
 		// Arrange
 		calculator.number("1");
-		calculator.binary(BiOperator.divide);
+		calculator.divide();
 		calculator.number("2");
 		calculator.resolve();
 
@@ -713,11 +713,11 @@ class SimpleCalculatorTest {
 	void testDivideBy0TestTriggerdViaBinaryOperator() {
 		// Arrange
 		calculator.number("100");
-		calculator.binary(BiOperator.divide);
+		calculator.divide();
 		calculator.number("0");
 
 		// Act
-		calculator.binary(BiOperator.divide);
+		calculator.divide();
 
 		// Assert
 		verifyInput("");
@@ -729,7 +729,7 @@ class SimpleCalculatorTest {
 	void testDivideBy0TestTriggerdViaResolve() {
 		// Arrange
 		calculator.number("100");
-		calculator.binary(BiOperator.divide);
+		calculator.divide();
 		calculator.number("0");
 
 		// Act
@@ -835,7 +835,7 @@ class SimpleCalculatorTest {
 	void testNegateOfBinaryLeft() {
 		// Act
 		calculator.number("5");
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 		calculator.negate();
 
 		// Assert
@@ -848,7 +848,7 @@ class SimpleCalculatorTest {
 	void testNegateOfBinaryRight() {
 		// Act
 		calculator.number("5");
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 		calculator.negate();
 		calculator.negate();
 
@@ -968,7 +968,7 @@ class SimpleCalculatorTest {
 	void testPercentOfBinaryLeft() {
 		// Act
 		calculator.number("5");
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 		calculator.percent();
 
 		// Assert
@@ -981,7 +981,7 @@ class SimpleCalculatorTest {
 	void testPercentOfBinaryRight() {
 		// Act
 		calculator.number("5");
-		calculator.binary(BiOperator.plus);
+		calculator.plus();
 		calculator.negate();
 		calculator.percent();
 

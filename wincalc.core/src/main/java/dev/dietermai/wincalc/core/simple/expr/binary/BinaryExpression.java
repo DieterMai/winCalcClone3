@@ -41,4 +41,8 @@ public record BinaryExpression(Expression left, BiOperator operator, Expression 
 	public BinaryExpression withOperator(BiOperator operator) {
 		return new BinaryExpression(left(), operator, right());
 	}
+	
+	public boolean isComplete() {
+		return left != null && right != null;
+	}
 }
