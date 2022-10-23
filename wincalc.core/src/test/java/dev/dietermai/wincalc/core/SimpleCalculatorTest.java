@@ -164,7 +164,7 @@ class SimpleCalculatorTest {
 	void testPlusAfterDifferentBinaryOperator() {
 		// Arrange
 		calculator.number("123");
-		calculator.binary(BiOperator.minus);
+		calculator.minus();
 
 		// Act
 		calculator.plus();
@@ -862,7 +862,7 @@ class SimpleCalculatorTest {
 	void testNegateOfError() {
 		// Act
 		calculator.number("5");
-		calculator.binary(BiOperator.divide);
+		calculator.divide();
 		calculator.number("0");
 		calculator.resolve();
 		assertThrowsExactly(IllegalStateException.class, () -> calculator.negate());
@@ -995,7 +995,7 @@ class SimpleCalculatorTest {
 	void testPercentOfError() {
 		// Act
 		calculator.number("5");
-		calculator.binary(BiOperator.divide);
+		calculator.divide();
 		calculator.number("0");
 		calculator.resolve();
 		assertThrowsExactly(IllegalStateException.class, () -> calculator.percent());

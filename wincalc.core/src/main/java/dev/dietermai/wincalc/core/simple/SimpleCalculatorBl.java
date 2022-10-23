@@ -86,33 +86,8 @@ public class SimpleCalculatorBl {
 
 	public static SimpleCalculatorRecord number(final SimpleCalculatorRecord before, final String input) {
 		return before.with(input);
-//		if (before.expression() instanceof BinaryExpression binaryExpression) {
-//			final SimpleCalculatorRecord after = before.with(binaryExpression.withRight(new BigDecimal(input)));
-//			return resolve(after);
-//		} else {
-//			return before.with(NumberExpression.of(input));
-//		}
 	}
 
-	public static SimpleCalculatorRecord binary(final SimpleCalculatorRecord state, final BiOperator operator) {
-		Expression currentExpression = state.expression();
-		if (currentExpression instanceof BinaryExpression be) {
-			if(state.input().isBlank()) {
-				return state.with(be.withOperator(operator));
-			}else {
-				var newState = resolve(state);
-				if(newState.equation().type().isSuccess()) {
-					return newState.with(BinaryExpression.of(newState.equation().value(), operator));
-				}else {
-					return newState;
-				}
-			}
-		} else {
-			BigDecimal initalValue = getInitialValueForBinaryOperation(state);
-			return new SimpleCalculatorRecord("", BinaryExpression.of(initalValue, operator), state.equation());
-		}
-	}
-	
 	public static SimpleCalculatorRecord plus(final SimpleCalculatorRecord state) {
 		final Expression expression = state.expression();
 		final String input = state.input();
