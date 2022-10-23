@@ -359,54 +359,6 @@ public class SimpleCalculatorBl {
 		}
 	}
 
-	private static BigDecimal getInitialValueForBinaryOperation(final SimpleCalculatorRecord before) {
-		if(!before.input().isBlank()) {
-			return new BigDecimal(before.input());
-		}else if (before.expression() instanceof UnaryExpression unary) {
-			return getUnaryValue(unary);
-		} else if (before.expression() instanceof NumberExpression ne) {
-			return ne.value();
-		} else {
-			return getPreviousResult(before);
-		}
-	}
-
-	private static BigDecimal getPreviousResult(final SimpleCalculatorRecord before) {
-		if (before.equation() != null) {
-			return before.equation().value();
-		} else {
-			return BigDecimal.ZERO;
-		}
-	}
-
-	private static BigDecimal getUnaryValue(UnaryExpression unary) {
-		return switch (unary.operator()) {
-		case divByX -> null;
-		case negate -> null;
-		case percent -> null;
-		case root -> null;
-		case sqrt -> null;
-		};
-	}
-
-	private static SimpleCalculatorRecord handleNegate(SimpleCalculatorRecord before) {
-		String input = before.input();
-		if(input.isBlank()) {
-			return switch (before.expression()) {
-			case IdleExpression idle -> before.equation() == null ? before : before.with(before.equation().value().negate().toString());
-			case NumberExpression ne -> before.with(NumberExpression.of(resultNegateExpression(ne.value()).value()));
-			case UnaryExpression ue -> throw new IllegalStateException("Not implemented yet!");
-			case BinaryExpression be -> before.with(be.withRight(UnaryExpression.of(UnaryOperator.negate, be.left())));
-			};
-		}else if(input.equals("0")) {
-			return before;
-		}else if(input.startsWith("-")) {
-			return before.with(input.substring(1));
-		}else {
-			return before.with("-"+input);
-		}
-	}
-
 	private static Result resultOf(Expression expression) {
 		return switch (expression) {
 		case IdleExpression idle -> resultOfIdleExpression();
