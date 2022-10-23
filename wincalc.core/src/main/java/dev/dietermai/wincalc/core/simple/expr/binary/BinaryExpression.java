@@ -9,6 +9,10 @@ public record BinaryExpression(Expression left, BiOperator operator, Expression 
 	public static BinaryExpression of(BigDecimal left, BiOperator operator) {
 		return new BinaryExpression(NumberExpression.of(left), operator, null);
 	}
+	
+	public static BinaryExpression of(String left, BiOperator operator) {
+		return new BinaryExpression(NumberExpression.of(left), operator, null);
+	}
 
 	public static BinaryExpression of(BigDecimal left, BiOperator operator, BigDecimal right) {
 		return new BinaryExpression(NumberExpression.of(left), operator, NumberExpression.of(right));
@@ -22,12 +26,16 @@ public record BinaryExpression(Expression left, BiOperator operator, Expression 
 		return new BinaryExpression(NumberExpression.of(left), operator, right);
 	}
 
+	public BinaryExpression withRight(Expression right) {
+		return new BinaryExpression(left(), operator(), right);
+	}
+	
 	public BinaryExpression withRight(BigDecimal right) {
 		return new BinaryExpression(left(), operator(), NumberExpression.of(right));
 	}
 	
-	public BinaryExpression withRight(Expression right) {
-		return new BinaryExpression(left(), operator(), right);
+	public BinaryExpression withRight(String right) {
+		return new BinaryExpression(left(), operator(), NumberExpression.of(right));
 	}
 	
 	public BinaryExpression withLeft(BigDecimal left) {
@@ -38,7 +46,7 @@ public record BinaryExpression(Expression left, BiOperator operator, Expression 
 		return new BinaryExpression(left, operator(), right());
 	}
 
-	public BinaryExpression withOperator(BiOperator operator) {
+	public BinaryExpression with(BiOperator operator) {
 		return new BinaryExpression(left(), operator, right());
 	}
 	
