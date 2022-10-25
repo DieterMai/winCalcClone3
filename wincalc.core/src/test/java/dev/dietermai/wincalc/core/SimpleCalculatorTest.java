@@ -253,6 +253,51 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("3", BiOperator.plus, "2", "5");
 	}
+	
+	@Test
+	void testPlusAfterResolvedExpression() {
+		// Arrange
+		calculator.number("1");
+		calculator.plus();
+		calculator.number("2");
+		calculator.resolve();
+
+		// Act
+		calculator.plus();
+
+		// Assert
+		verifyInput("");
+		verifyExpression("3", BiOperator.plus);
+		verifyEquation("1", BiOperator.plus, "2", "3");
+	}
+	
+	@Test
+	void testPlusAfterErrorInResolve() {
+		// Arrange
+		calculator.number("1");
+		calculator.divide();
+		calculator.number("0");
+		calculator.resolve();
+
+		// Act
+		assertThrowsExactly(IllegalStateException.class, () -> calculator.plus());
+	}
+	
+	@Test
+	void testPlusCompletesErrorEquation() {
+		// Arrange
+		calculator.number("1");
+		calculator.divide();
+		calculator.number("0");
+
+		// Act
+		calculator.plus();
+		
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("1", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
+	}
 
 	/* ***********************/
 	/* Minus related methods */
@@ -405,6 +450,50 @@ class SimpleCalculatorTest {
 		verifyEquation("-1", BiOperator.minus, "2", "-3");
 	}
 	
+	@Test
+	void testMinusAfterResolvedExpression() {
+		// Arrange
+		calculator.number("1");
+		calculator.plus();
+		calculator.number("2");
+		calculator.resolve();
+
+		// Act
+		calculator.minus();
+
+		// Assert
+		verifyInput("");
+		verifyExpression("3", BiOperator.minus);
+		verifyEquation("1", BiOperator.plus, "2", "3");
+	}
+	
+	@Test
+	void testMinusAfterErrorInResolve() {
+		// Arrange
+		calculator.number("1");
+		calculator.divide();
+		calculator.number("0");
+		calculator.resolve();
+
+		// Act
+		assertThrowsExactly(IllegalStateException.class, () -> calculator.minus());
+	}
+	
+	@Test
+	void testMinusCompletesErrorEquation() {
+		// Arrange
+		calculator.number("1");
+		calculator.divide();
+		calculator.number("0");
+
+		// Act
+		calculator.minus();
+		
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("1", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
+	}
 	
 	/* **************************/
 	/* Multiply related methods */
@@ -557,6 +646,50 @@ class SimpleCalculatorTest {
 		verifyEquation("2", BiOperator.multiply, "2", "4");
 	}
 	
+	@Test
+	void testMultiplyAfterResolvedExpression() {
+		// Arrange
+		calculator.number("1");
+		calculator.plus();
+		calculator.number("2");
+		calculator.resolve();
+
+		// Act
+		calculator.multiply();
+
+		// Assert
+		verifyInput("");
+		verifyExpression("3", BiOperator.multiply);
+		verifyEquation("1", BiOperator.plus, "2", "3");
+	}
+	
+	@Test
+	void testMultiplyAfterErrorInResolve() {
+		// Arrange
+		calculator.number("1");
+		calculator.divide();
+		calculator.number("0");
+		calculator.resolve();
+
+		// Act
+		assertThrowsExactly(IllegalStateException.class, () -> calculator.multiply());
+	}
+	
+	@Test
+	void testMultiplyCompletesErrorEquation() {
+		// Arrange
+		calculator.number("1");
+		calculator.divide();
+		calculator.number("0");
+
+		// Act
+		calculator.multiply();
+		
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("1", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
+	}
 	
 	/* ************************/
 	/* Divide related methods */
@@ -739,6 +872,51 @@ class SimpleCalculatorTest {
 		verifyInput("");
 		verifyEquation("100", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
 		verifyIdleExpression();
+	}
+	
+	@Test
+	void testdivideAfterResolvedExpression() {
+		// Arrange
+		calculator.number("1");
+		calculator.plus();
+		calculator.number("2");
+		calculator.resolve();
+
+		// Act
+		calculator.divide();
+
+		// Assert
+		verifyInput("");
+		verifyExpression("3", BiOperator.divide);
+		verifyEquation("1", BiOperator.plus, "2", "3");
+	}
+	
+	@Test
+	void testDivideAfterErrorInResolve() {
+		// Arrange
+		calculator.number("1");
+		calculator.divide();
+		calculator.number("0");
+		calculator.resolve();
+
+		// Act
+		assertThrowsExactly(IllegalStateException.class, () -> calculator.divide());
+	}
+	
+	@Test
+	void testDivideCompletesErrorEquation() {
+		// Arrange
+		calculator.number("1");
+		calculator.divide();
+		calculator.number("0");
+
+		// Act
+		calculator.divide();
+		
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("1", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
 	}
 	
 	/* ************************/

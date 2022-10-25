@@ -106,9 +106,10 @@ public class SimpleCalculatorBl {
 				return SimpleCalculatorRecord.of(BinaryExpression.of(BigDecimal.ZERO, BiOperator.plus), equation);
 			}
 		} else if (expression instanceof BinaryExpression be) {
-			if (be.isComplete()) {
-				final Result result = resultOf(be);
-				final Equation newEquation = Equation.of(be, result);
+			if (!input.isBlank()) {
+				BinaryExpression completedExpression = be.withRight(input);
+				final Result result = resultOf(completedExpression);
+				final Equation newEquation = Equation.of(completedExpression, result);
 				if (result.error()) {
 					return SimpleCalculatorRecord.of(newEquation);
 				} else {
@@ -147,9 +148,10 @@ public class SimpleCalculatorBl {
 				return SimpleCalculatorRecord.of(BinaryExpression.of(BigDecimal.ZERO, BiOperator.minus), equation);
 			}
 		} else if (expression instanceof BinaryExpression be) {
-			if (be.isComplete()) {
-				final Result result = resultOf(be);
-				final Equation newEquation = Equation.of(be, result);
+			if (!input.isBlank()) {
+				BinaryExpression completedExpression = be.withRight(input);
+				final Result result = resultOf(completedExpression);
+				final Equation newEquation = Equation.of(completedExpression, result);
 				if (result.error()) {
 					return SimpleCalculatorRecord.of(newEquation);
 				} else {
@@ -188,9 +190,10 @@ public class SimpleCalculatorBl {
 				return SimpleCalculatorRecord.of(BinaryExpression.of(BigDecimal.ZERO, BiOperator.multiply), equation);
 			}
 		} else if (expression instanceof BinaryExpression be) {
-			if (be.isComplete()) {
-				final Result result = resultOf(be);
-				final Equation newEquation = Equation.of(be, result);
+			if (!input.isBlank()) {
+				BinaryExpression completedExpression = be.withRight(input);
+				final Result result = resultOf(completedExpression);
+				final Equation newEquation = Equation.of(completedExpression, result);
 				if (result.error()) {
 					return SimpleCalculatorRecord.of(newEquation);
 				} else {
@@ -229,9 +232,10 @@ public class SimpleCalculatorBl {
 				return SimpleCalculatorRecord.of(BinaryExpression.of(BigDecimal.ZERO, BiOperator.divide), equation);
 			}
 		} else if (expression instanceof BinaryExpression be) {
-			if (be.isComplete()) {
-				final Result result = resultOf(be);
-				final Equation newEquation = Equation.of(be, result);
+			if (!input.isBlank()) {
+				BinaryExpression completedExpression = be.withRight(input);
+				final Result result = resultOf(completedExpression);
+				final Equation newEquation = Equation.of(completedExpression, result);
 				if (result.error()) {
 					return SimpleCalculatorRecord.of(newEquation);
 				} else {
