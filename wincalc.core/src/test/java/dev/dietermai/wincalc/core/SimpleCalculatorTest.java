@@ -29,7 +29,7 @@ class SimpleCalculatorTest {
 	public void beforeEach() {
 		this.calculator = new SimpleCalculator();
 	}
-	
+
 	@Test
 	void testInitialState() {
 		verifyInput("");
@@ -236,7 +236,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("1", BiOperator.plus, "2", "3");
 	}
-	
+
 	@Test
 	void testResolveAfterResolvedPlusExpression() {
 		// Arrange
@@ -253,7 +253,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("3", BiOperator.plus, "2", "5");
 	}
-	
+
 	@Test
 	void testPlusAfterResolvedExpression() {
 		// Arrange
@@ -270,7 +270,7 @@ class SimpleCalculatorTest {
 		verifyExpression("3", BiOperator.plus);
 		verifyEquation("1", BiOperator.plus, "2", "3");
 	}
-	
+
 	@Test
 	void testPlusAfterErrorInResolve() {
 		// Arrange
@@ -282,7 +282,7 @@ class SimpleCalculatorTest {
 		// Act
 		assertThrowsExactly(IllegalStateException.class, () -> calculator.plus());
 	}
-	
+
 	@Test
 	void testPlusCompletesErrorEquation() {
 		// Arrange
@@ -292,12 +292,34 @@ class SimpleCalculatorTest {
 
 		// Act
 		calculator.plus();
-		
+
 		// Assert
 		verifyInput("");
 		verifyIdleExpression();
 		verifyEquation("1", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
 	}
+
+	@Test
+	void testPlusOnCompletedButPendingBinaryExpression() {
+		// Arrange
+		calculator.number("5");
+		calculator.plus();
+		calculator.negate();
+
+		// Act
+		calculator.plus();
+
+		// Assert
+		verifyInput("");
+		verifyExpression("0", BiOperator.plus);
+		verifyEquation(plus("5", negate("5")), "0");
+	}
+	// TODO test of binary after binary with 2 numbers
+	// number("20")
+	//	plus()
+	//	number("5")
+	//	percent()
+	//	plus()
 
 	/* ***********************/
 	/* Minus related methods */
@@ -432,7 +454,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("1", BiOperator.minus, "2", "-1");
 	}
-	
+
 	@Test
 	void testResolveAfterResolvedMinusExpression() {
 		// Arrange
@@ -449,7 +471,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("-1", BiOperator.minus, "2", "-3");
 	}
-	
+
 	@Test
 	void testMinusAfterResolvedExpression() {
 		// Arrange
@@ -466,7 +488,7 @@ class SimpleCalculatorTest {
 		verifyExpression("3", BiOperator.minus);
 		verifyEquation("1", BiOperator.plus, "2", "3");
 	}
-	
+
 	@Test
 	void testMinusAfterErrorInResolve() {
 		// Arrange
@@ -478,7 +500,7 @@ class SimpleCalculatorTest {
 		// Act
 		assertThrowsExactly(IllegalStateException.class, () -> calculator.minus());
 	}
-	
+
 	@Test
 	void testMinusCompletesErrorEquation() {
 		// Arrange
@@ -488,13 +510,29 @@ class SimpleCalculatorTest {
 
 		// Act
 		calculator.minus();
-		
+
 		// Assert
 		verifyInput("");
 		verifyIdleExpression();
 		verifyEquation("1", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
 	}
-	
+
+	@Test
+	void testMinusOnCompletedButPendingBinaryExpression() {
+		// Arrange
+		calculator.number("5");
+		calculator.plus();
+		calculator.negate();
+
+		// Act
+		calculator.minus();
+
+		// Assert
+		verifyInput("");
+		verifyExpression("0", BiOperator.minus);
+		verifyEquation(plus("5", negate("5")), "0");
+	}
+
 	/* **************************/
 	/* Multiply related methods */
 	/* **************************/
@@ -628,7 +666,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("1", BiOperator.multiply, "2", "2");
 	}
-	
+
 	@Test
 	void testResolveAfterResolvedMultiplyExpression() {
 		// Arrange
@@ -645,7 +683,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("2", BiOperator.multiply, "2", "4");
 	}
-	
+
 	@Test
 	void testMultiplyAfterResolvedExpression() {
 		// Arrange
@@ -662,7 +700,7 @@ class SimpleCalculatorTest {
 		verifyExpression("3", BiOperator.multiply);
 		verifyEquation("1", BiOperator.plus, "2", "3");
 	}
-	
+
 	@Test
 	void testMultiplyAfterErrorInResolve() {
 		// Arrange
@@ -674,7 +712,7 @@ class SimpleCalculatorTest {
 		// Act
 		assertThrowsExactly(IllegalStateException.class, () -> calculator.multiply());
 	}
-	
+
 	@Test
 	void testMultiplyCompletesErrorEquation() {
 		// Arrange
@@ -684,13 +722,29 @@ class SimpleCalculatorTest {
 
 		// Act
 		calculator.multiply();
-		
+
 		// Assert
 		verifyInput("");
 		verifyIdleExpression();
 		verifyEquation("1", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
 	}
-	
+
+	@Test
+	void testMultiplyOnCompletedButPendingBinaryExpression() {
+		// Arrange
+		calculator.number("5");
+		calculator.plus();
+		calculator.negate();
+
+		// Act
+		calculator.multiply();
+
+		// Assert
+		verifyInput("");
+		verifyExpression("0", BiOperator.multiply);
+		verifyEquation(plus("5", negate("5")), "0");
+	}
+
 	/* ************************/
 	/* Divide related methods */
 	/* ************************/
@@ -824,7 +878,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("1", BiOperator.divide, "2", "0.5");
 	}
-	
+
 	@Test
 	void testResolveAfterResolvedDivideExpression() {
 		// Arrange
@@ -841,7 +895,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("0.5", BiOperator.divide, "2", "0.25");
 	}
-	
+
 	@Test
 	void testDivideBy0TestTriggerdViaBinaryOperator() {
 		// Arrange
@@ -857,7 +911,7 @@ class SimpleCalculatorTest {
 		verifyEquation("100", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
 		verifyIdleExpression();
 	}
-	
+
 	@Test
 	void testDivideBy0TestTriggerdViaResolve() {
 		// Arrange
@@ -873,7 +927,7 @@ class SimpleCalculatorTest {
 		verifyEquation("100", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
 		verifyIdleExpression();
 	}
-	
+
 	@Test
 	void testdivideAfterResolvedExpression() {
 		// Arrange
@@ -890,7 +944,7 @@ class SimpleCalculatorTest {
 		verifyExpression("3", BiOperator.divide);
 		verifyEquation("1", BiOperator.plus, "2", "3");
 	}
-	
+
 	@Test
 	void testDivideAfterErrorInResolve() {
 		// Arrange
@@ -902,7 +956,7 @@ class SimpleCalculatorTest {
 		// Act
 		assertThrowsExactly(IllegalStateException.class, () -> calculator.divide());
 	}
-	
+
 	@Test
 	void testDivideCompletesErrorEquation() {
 		// Arrange
@@ -912,13 +966,29 @@ class SimpleCalculatorTest {
 
 		// Act
 		calculator.divide();
-		
+
 		// Assert
 		verifyInput("");
 		verifyIdleExpression();
 		verifyEquation("1", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
 	}
-	
+
+//	@Test
+//	void testDivideOnCompletedButPendingBinaryExpression() {
+//		// Arrange
+//		calculator.number("5");
+//		calculator.plus();
+//		calculator.negate(); // TODO switch this with another unary operation
+//
+//		// Act
+//		calculator.divide();
+//		
+//		// Assert
+//		verifyInput("");
+//		verifyExpression("0", BiOperator.divide);
+//		verifyEquation(plus("5", negate("5")), "0");
+//	}
+
 	/* ************************/
 	/* Negate related methods */
 	/* ************************/
@@ -932,7 +1002,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyNoEquation();
 	}
-	
+
 	@Test
 	void testNegateOfPositiveNumber() {
 		// Act
@@ -944,7 +1014,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyNoEquation();
 	}
-	
+
 	@Test
 	void testNegateOfNegativeNumber() {
 		// Act
@@ -956,7 +1026,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyNoEquation();
 	}
-	
+
 	@Test
 	void testNegateOfZero() {
 		// Act
@@ -968,7 +1038,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyNoEquation();
 	}
-	
+
 	@Test
 	void testNegateOfZeroResult() {
 		// Act
@@ -981,7 +1051,7 @@ class SimpleCalculatorTest {
 		verifyExpression(UnaryOperator.negate, "0");
 		verifyEquation("0", "0");
 	}
-	
+
 	@Test
 	void testNegateOfResult() {
 		// Act
@@ -994,7 +1064,7 @@ class SimpleCalculatorTest {
 		verifyExpression(UnaryOperator.negate, "5");
 		verifyEquation("5", "5");
 	}
-	
+
 	@Test
 	void testNegateOfUnaryExpression() {
 		// Act
@@ -1008,7 +1078,7 @@ class SimpleCalculatorTest {
 		verifyExpression(unary(UnaryOperator.negate, unary(UnaryOperator.negate, "5")));
 		verifyEquation("5", "5");
 	}
-	
+
 	@Test
 	void testNegateOfBinaryLeft() {
 		// Act
@@ -1021,7 +1091,7 @@ class SimpleCalculatorTest {
 		verifyExpression(binary("5", BiOperator.plus, unary(UnaryOperator.negate, "5")));
 		verifyNoEquation();
 	}
-	
+
 	@Test
 	void testNegateOfBinaryRight() {
 		// Act
@@ -1035,7 +1105,7 @@ class SimpleCalculatorTest {
 		verifyExpression(binary("5", BiOperator.plus, unary(UnaryOperator.negate, unary(UnaryOperator.negate, "5"))));
 		verifyNoEquation();
 	}
-	
+
 	@Test
 	void testNegateOfError() {
 		// Act
@@ -1050,8 +1120,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("5", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
 	}
-	
-	
+
 	/* *************************/
 	/* Percent related methods */
 	/* *************************/
@@ -1065,7 +1134,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("0", "0");
 	}
-	
+
 	@Test
 	void testPercentOfPositiveNumber() {
 		// Act
@@ -1077,7 +1146,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("0", "0");
 	}
-	
+
 	@Test
 	void testPercentOfNegativeNumber() {
 		// Act
@@ -1089,7 +1158,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("0", "0");
 	}
-	
+
 	@Test
 	void testPercentOfZero() {
 		// Act
@@ -1101,7 +1170,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("0", "0");
 	}
-	
+
 	@Test
 	void testPercentOfZeroResult() {
 		// Act
@@ -1114,7 +1183,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("0", "0");
 	}
-	
+
 	@Test
 	void testPercentOfResult() {
 		// Act
@@ -1127,7 +1196,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("0", "0");
 	}
-	
+
 	@Test
 	void testPercentOfUnaryExpression() {
 		// Act
@@ -1141,7 +1210,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("0", "0");
 	}
-	
+
 	@Test
 	void testPercentOfBinaryLeft() {
 		// Act
@@ -1154,7 +1223,7 @@ class SimpleCalculatorTest {
 		verifyExpression(binary("5", BiOperator.plus, "0.25"));
 		verifyNoEquation();
 	}
-	
+
 	@Test
 	void testPercentOfBinaryRight() {
 		// Act
@@ -1168,7 +1237,7 @@ class SimpleCalculatorTest {
 		verifyExpression(binary("5", BiOperator.plus, "-0.25"));
 		verifyNoEquation();
 	}
-	
+
 	@Test
 	void testPercentOfError() {
 		// Act
@@ -1183,8 +1252,21 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation("5", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
 	}
-	
-	
+
+	@Test
+	void testPercentBinaryWithInput() {
+		// Act
+		calculator.number("20");
+		calculator.plus();
+		calculator.number("5");
+		calculator.percent();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(plus("20", "1"));
+		verifyNoEquation();
+	}
+
 	private void verifyInput(String expected) {
 		assertEquals(expected, calculator.getState().input());
 	}
@@ -1196,11 +1278,11 @@ class SimpleCalculatorTest {
 	private void verifyExpression(Expression expected) {
 		assertEquals(expected, getExpression());
 	}
-	
+
 	private void verifyExpression(String number, BiOperator operator) {
 		assertEquals(BinaryExpression.of(bd(number), operator), getExpression());
 	}
-	
+
 	private void verifyExpression(UnaryOperator operator, String number) {
 		assertEquals(UnaryExpression.of(operator, bd(number)), getExpression());
 	}
@@ -1220,23 +1302,27 @@ class SimpleCalculatorTest {
 	private void verifyEquation(String left, BiOperator operator, String right, ResolveType type) {
 		assertEquals(Equation.of(BinaryExpression.of(bd(left), operator, bd(right)), Result.of(type)), getEquation());
 	}
-	
+
+	private void verifyEquation(Expression expression, String value) {
+		assertEquals(Equation.of(expression, Result.of(bd(value))), getEquation());
+	}
+
 	private BinaryExpression binary(String left, BiOperator operator, Expression right) {
 		return BinaryExpression.of(bd(left), operator, right);
 	}
-	
+
 	private BinaryExpression binary(String left, BiOperator operator, String right) {
 		return BinaryExpression.of(bd(left), operator, bd(right));
 	}
-	
+
 	private UnaryExpression unary(UnaryOperator operator, Expression nested) {
 		return UnaryExpression.of(operator, nested);
 	}
-	
+
 	private UnaryExpression unary(UnaryOperator operator, String number) {
 		return UnaryExpression.of(operator, number(number));
 	}
-	
+
 	private BigDecimal bd(String s) {
 		return new BigDecimal(s);
 	}
@@ -1252,4 +1338,17 @@ class SimpleCalculatorTest {
 	private Equation getEquation() {
 		return calculator.getState().equation();
 	}
+
+	private BinaryExpression plus(String left, Expression right) {
+		return BinaryExpression.of(bd(left), BiOperator.plus, right);
+	}
+
+	private BinaryExpression plus(String left, String right) {
+		return BinaryExpression.of(bd(left), BiOperator.plus, bd(right));
+	}
+
+	private UnaryExpression negate(String number) {
+		return UnaryExpression.of(UnaryOperator.negate, number);
+	}
+
 }
