@@ -73,13 +73,13 @@ public class SimpleCalculatorBl {
 		case divide -> resolveDivideExpression(left.value(), right.value());
 		};
 	}
-	
+
 	private static Expression getRightExpression(Expression right, String input, BigDecimal leftValue) {
-		if(right != null) {
+		if (right != null) {
 			return right;
-		}else if(!input.isBlank()) {
+		} else if (!input.isBlank()) {
 			return NumberExpression.of(input);
-		}else {
+		} else {
 			return NumberExpression.of(leftValue);
 		}
 	}
@@ -89,21 +89,37 @@ public class SimpleCalculatorBl {
 	}
 
 	public static SimpleCalculatorRecord plus(final SimpleCalculatorRecord state) {
+		return binaryOperation(state, BiOperator.plus);
+	}
+
+	public static SimpleCalculatorRecord minus(final SimpleCalculatorRecord state) {
+		return binaryOperation(state, BiOperator.minus);
+	}
+
+	public static SimpleCalculatorRecord multiply(final SimpleCalculatorRecord state) {
+		return binaryOperation(state, BiOperator.multiply);
+	}
+
+	public static SimpleCalculatorRecord divide(final SimpleCalculatorRecord state) {
+		return binaryOperation(state, BiOperator.divide);
+	}
+
+	private static SimpleCalculatorRecord binaryOperation(final SimpleCalculatorRecord state, final BiOperator operator) {
 		final Expression expression = state.expression();
 		final String input = state.input();
 		final Equation equation = state.equation();
 
 		if (expression instanceof IdleExpression) {
 			if (!input.isBlank()) {
-				return SimpleCalculatorRecord.of(BinaryExpression.of(input, BiOperator.plus), equation);
+				return SimpleCalculatorRecord.of(BinaryExpression.of(input, operator), equation);
 			} else if (equation != null) {
 				if (equation.type().isError()) {
-					throw new IllegalStateException("Can't add an error");
+					throw new IllegalStateException("Can't operate on an error");
 				} else {
-					return SimpleCalculatorRecord.of(BinaryExpression.of(equation.value(), BiOperator.plus), equation);
+					return SimpleCalculatorRecord.of(BinaryExpression.of(equation.value(), operator), equation);
 				}
 			} else {
-				return SimpleCalculatorRecord.of(BinaryExpression.of(BigDecimal.ZERO, BiOperator.plus), equation);
+				return SimpleCalculatorRecord.of(BinaryExpression.of(BigDecimal.ZERO, operator), equation);
 			}
 		} else if (expression instanceof BinaryExpression be) {
 			if (!input.isBlank()) {
@@ -113,239 +129,101 @@ public class SimpleCalculatorBl {
 				if (result.error()) {
 					return SimpleCalculatorRecord.of(newEquation);
 				} else {
-					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.plus), newEquation);
+					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), operator), newEquation);
 				}
-			} else if (be.isComplete()){
-				if(be.right() instanceof UnaryExpression unaryRight) {
+			} else if (be.isComplete()) {
+				if (be.right() instanceof UnaryExpression unaryRight) {
 					be = be.withRight(unaryRight); // WHY?
 					Result result = resultOf(be);
 					Equation newEquation = Equation.of(be, result);
-					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.plus), newEquation);
-				}else if(be.right() instanceof NumberExpression ne) {
+					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), operator), newEquation);
+				} else if (be.right() instanceof NumberExpression ne) {
 					Result result = resultOf(be);
 					Equation newEquation = Equation.of(be, result);
-					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.plus), newEquation);
-				}
-			}else {
-				return state.with(be.with(BiOperator.plus));
-			}
-		}
-
-		return null;// TODO
-	}
-	
-	public static SimpleCalculatorRecord minus(final SimpleCalculatorRecord state) {
-		final Expression expression = state.expression();
-		final String input = state.input();
-		final Equation equation = state.equation();
-
-		if (expression instanceof IdleExpression) {
-			if (!input.isBlank()) {
-				return SimpleCalculatorRecord.of(BinaryExpression.of(input, BiOperator.minus), equation);
-			} else if (equation != null) {
-				if (equation.type().isError()) {
-					throw new IllegalStateException("Can't add an error");
-				} else {
-					return SimpleCalculatorRecord.of(BinaryExpression.of(equation.value(), BiOperator.minus), equation);
+					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), operator), newEquation);
 				}
 			} else {
-				return SimpleCalculatorRecord.of(BinaryExpression.of(BigDecimal.ZERO, BiOperator.minus), equation);
-			}
-		} else if (expression instanceof BinaryExpression be) {
-			if (!input.isBlank()) {
-				BinaryExpression completedExpression = be.withRight(input);
-				final Result result = resultOf(completedExpression);
-				final Equation newEquation = Equation.of(completedExpression, result);
-				if (result.error()) {
-					return SimpleCalculatorRecord.of(newEquation);
-				} else {
-					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.minus), newEquation);
-				}
-			} else if (be.isComplete()){
-				if(be.right() instanceof UnaryExpression unaryRight) {
-					be = be.withRight(unaryRight);
-					Result result = resultOf(be);
-					Equation newEquation = Equation.of(be, result);
-					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.minus), newEquation);
-				}else if(be.right() instanceof NumberExpression ne) {
-					Result result = resultOf(be);
-					Equation newEquation = Equation.of(be, result);
-					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.minus), newEquation);
-				}
-			}else {
-				return state.with(be.with(BiOperator.minus));
+				return state.with(be.with(operator));
 			}
 		}
 
-		return null;// TODO
+		throw new IllegalStateException("Not implemented yet");
 	}
-	
-	public static SimpleCalculatorRecord multiply(final SimpleCalculatorRecord state) {
-		final Expression expression = state.expression();
-		final String input = state.input();
-		final Equation equation = state.equation();
 
-		if (expression instanceof IdleExpression) {
-			if (!input.isBlank()) {
-				return SimpleCalculatorRecord.of(BinaryExpression.of(input, BiOperator.multiply), equation);
-			} else if (equation != null) {
-				if (equation.type().isError()) {
-					throw new IllegalStateException("Can't add an error");
-				} else {
-					return SimpleCalculatorRecord.of(BinaryExpression.of(equation.value(), BiOperator.multiply), equation);
-				}
-			} else {
-				return SimpleCalculatorRecord.of(BinaryExpression.of(BigDecimal.ZERO, BiOperator.multiply), equation);
-			}
-		} else if (expression instanceof BinaryExpression be) {
-			if (!input.isBlank()) {
-				BinaryExpression completedExpression = be.withRight(input);
-				final Result result = resultOf(completedExpression);
-				final Equation newEquation = Equation.of(completedExpression, result);
-				if (result.error()) {
-					return SimpleCalculatorRecord.of(newEquation);
-				} else {
-					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.multiply), newEquation);
-				}
-			} else if (be.isComplete()){
-				if(be.right() instanceof UnaryExpression unaryRight) {
-					be = be.withRight(unaryRight);
-					Result result = resultOf(be);
-					Equation newEquation = Equation.of(be, result);
-					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.multiply), newEquation);
-				}else if(be.right() instanceof NumberExpression ne) {
-					Result result = resultOf(be);
-					Equation newEquation = Equation.of(be, result);
-					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.multiply), newEquation);
-				}
-			}else {
-				return state.with(be.with(BiOperator.multiply));
-			}
-		}
-
-		return null;// TODO
-	}
-	
-	public static SimpleCalculatorRecord divide(final SimpleCalculatorRecord state) {
-		final Expression expression = state.expression();
-		final String input = state.input();
-		final Equation equation = state.equation();
-
-		if (expression instanceof IdleExpression) {
-			if (!input.isBlank()) {
-				return SimpleCalculatorRecord.of(BinaryExpression.of(input, BiOperator.divide), equation);
-			} else if (equation != null) {
-				if (equation.type().isError()) {
-					throw new IllegalStateException("Can't add an error");
-				} else {
-					return SimpleCalculatorRecord.of(BinaryExpression.of(equation.value(), BiOperator.divide), equation);
-				}
-			} else {
-				return SimpleCalculatorRecord.of(BinaryExpression.of(BigDecimal.ZERO, BiOperator.divide), equation);
-			}
-		} else if (expression instanceof BinaryExpression be) {
-			if (!input.isBlank()) {
-				BinaryExpression completedExpression = be.withRight(input);
-				final Result result = resultOf(completedExpression);
-				final Equation newEquation = Equation.of(completedExpression, result);
-				if (result.error()) {
-					return SimpleCalculatorRecord.of(newEquation);
-				} else {
-					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.divide), newEquation);
-				}
-			} else if (be.isComplete()){
-				if(be.right() instanceof UnaryExpression unaryRight) {
-					be = be.withRight(unaryRight);
-					Result result = resultOf(be);
-					Equation newEquation = Equation.of(be, result);
-					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.divide), newEquation);
-				}else if(be.right() instanceof NumberExpression ne) {
-					Result result = resultOf(be);
-					Equation newEquation = Equation.of(be, result);
-					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.divide), newEquation);
-				}
-			}else {
-				return state.with(be.with(BiOperator.divide));
-			}
-		}
-
-		return null;// TODO
-	}
-	
 	public static SimpleCalculatorRecord negate(final SimpleCalculatorRecord state) {
 		String input = state.input();
-		if(!input.isBlank()) {
-			if(input.equals("0")) {
+		if (!input.isBlank()) {
+			if (input.equals("0")) {
 				return state;
-			}else if(input.startsWith("-")) {
+			} else if (input.startsWith("-")) {
 				return state.with(input.substring(1));
-			}else {
-				return state.with("-"+input);
+			} else {
+				return state.with("-" + input);
 			}
 		}
-		
+
 		Expression expression = state.expression();
-		if(expression instanceof UnaryExpression unary) {
+		if (expression instanceof UnaryExpression unary) {
 			return state.with(UnaryExpression.of(UnaryOperator.negate, unary));
 		}
-		if(expression instanceof BinaryExpression binary) {
-			if(binary.right() != null) {
+		if (expression instanceof BinaryExpression binary) {
+			if (binary.right() != null) {
 				return state.with(binary.withRight(UnaryExpression.of(UnaryOperator.negate, binary.right())));
-			}else {
+			} else {
 				return state.with(binary.withRight(UnaryExpression.of(UnaryOperator.negate, binary.left())));
 			}
 		}
-		
+
 		Equation equation = state.equation();
-		if(equation == null) {
+		if (equation == null) {
 			return state;
-		}else if(equation.type().isError()) {
+		} else if (equation.type().isError()) {
 			throw new IllegalStateException("Can not operatoe on error result");
-		}else {
+		} else {
 			return state.with(UnaryExpression.of(UnaryOperator.negate, equation.value()));
 		}
-	}	
-	
+	}
+
 	public static SimpleCalculatorRecord percent(final SimpleCalculatorRecord state) {
-		if(state.equation() != null && state.equation().type().isError()) {
+		if (state.equation() != null && state.equation().type().isError()) {
 			throw new IllegalStateException("Can not operatoe on error result");
 		}
-		
+
 		Expression expression = state.expression();
-		
-		if(expression instanceof BinaryExpression be){
+
+		if (expression instanceof BinaryExpression be) {
 			BigDecimal percentNumber;
 			String input = state.input();
-			if(!input.isBlank()) {
+			if (!input.isBlank()) {
 				percentNumber = new BigDecimal(input);
-			}else {
+			} else {
 				Result result;
-				if(be.right() == null) {
+				if (be.right() == null) {
 					result = resultOf(be.left());
 					percentNumber = result.value();
-				}else {
+				} else {
 					result = resultOf(be.right());
 				}
-				if(result.error()) {
+				if (result.error()) {
 					throw new IllegalStateException("Not implemented yet!");
 				}
 				percentNumber = result.value();
 			}
 			Result leftResult = resultOf(be.left());
-			if(leftResult.error()) {
+			if (leftResult.error()) {
 				throw new IllegalStateException("Not implemented yet!");
 			}
 			BigDecimal leftValue = leftResult.value();
-			BigDecimal rightValue = switch(be.operator()) {
-			case plus, minus      -> leftValue.multiply(percentNumber.divide(new BigDecimal("100"))).stripTrailingZeros();
+			BigDecimal rightValue = switch (be.operator()) {
+			case plus, minus -> leftValue.multiply(percentNumber.divide(new BigDecimal("100"))).stripTrailingZeros();
 			case multiply, divide -> percentNumber.divide(new BigDecimal("100")).stripTrailingZeros();
 			};
-			
+
 			return state.with(be.withLeft(leftValue).withRight(rightValue)).with("");
-		}else {
+		} else {
 			return SimpleCalculatorRecord.of(Equation.of(BigDecimal.ZERO));
 		}
-	}	
+	}
 
 	private static Equation resolvePlusExpression(BigDecimal left, BigDecimal right) {
 		BigDecimal result = left.add(right);
@@ -465,8 +343,7 @@ public class SimpleCalculatorBl {
 	private static Result resultNegateExpression(BigDecimal value) {
 		return Result.of(value.negate());
 	}
-	
-	
+
 	private static BigDecimal normalize(BigDecimal bd) {
 		return new BigDecimal(bd.stripTrailingZeros().toPlainString());
 	}
