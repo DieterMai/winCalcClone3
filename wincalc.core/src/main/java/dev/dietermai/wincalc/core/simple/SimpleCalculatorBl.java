@@ -117,7 +117,11 @@ public class SimpleCalculatorBl {
 				}
 			} else if (be.isComplete()){
 				if(be.right() instanceof UnaryExpression unaryRight) {
-					be = be.withRight(unaryRight);
+					be = be.withRight(unaryRight); // WHY?
+					Result result = resultOf(be);
+					Equation newEquation = Equation.of(be, result);
+					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.plus), newEquation);
+				}else if(be.right() instanceof NumberExpression ne) {
 					Result result = resultOf(be);
 					Equation newEquation = Equation.of(be, result);
 					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.plus), newEquation);
@@ -163,6 +167,10 @@ public class SimpleCalculatorBl {
 					Result result = resultOf(be);
 					Equation newEquation = Equation.of(be, result);
 					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.minus), newEquation);
+				}else if(be.right() instanceof NumberExpression ne) {
+					Result result = resultOf(be);
+					Equation newEquation = Equation.of(be, result);
+					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.minus), newEquation);
 				}
 			}else {
 				return state.with(be.with(BiOperator.minus));
@@ -205,6 +213,10 @@ public class SimpleCalculatorBl {
 					Result result = resultOf(be);
 					Equation newEquation = Equation.of(be, result);
 					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.multiply), newEquation);
+				}else if(be.right() instanceof NumberExpression ne) {
+					Result result = resultOf(be);
+					Equation newEquation = Equation.of(be, result);
+					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.multiply), newEquation);
 				}
 			}else {
 				return state.with(be.with(BiOperator.multiply));
@@ -244,6 +256,10 @@ public class SimpleCalculatorBl {
 			} else if (be.isComplete()){
 				if(be.right() instanceof UnaryExpression unaryRight) {
 					be = be.withRight(unaryRight);
+					Result result = resultOf(be);
+					Equation newEquation = Equation.of(be, result);
+					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.divide), newEquation);
+				}else if(be.right() instanceof NumberExpression ne) {
 					Result result = resultOf(be);
 					Equation newEquation = Equation.of(be, result);
 					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), BiOperator.divide), newEquation);
@@ -320,7 +336,11 @@ public class SimpleCalculatorBl {
 				throw new IllegalStateException("Not implemented yet!");
 			}
 			BigDecimal leftValue = leftResult.value();
-			BigDecimal rightValue = leftValue.multiply(percentNumber.divide(new BigDecimal("100"))).stripTrailingZeros();
+			BigDecimal rightValue = switch(be.operator()) {
+			case plus, minus      -> leftValue.multiply(percentNumber.divide(new BigDecimal("100"))).stripTrailingZeros();
+			case multiply, divide -> percentNumber.divide(new BigDecimal("100")).stripTrailingZeros();
+			};
+			
 			return state.with(be.withLeft(leftValue).withRight(rightValue)).with("");
 		}else {
 			return SimpleCalculatorRecord.of(Equation.of(BigDecimal.ZERO));
@@ -404,7 +424,7 @@ public class SimpleCalculatorBl {
 	}
 
 	private static Result resultMultiplyExpression(BigDecimal left, BigDecimal right) {
-		return Result.of(left.multiply(right));
+		return Result.of(left.multiply(right).stripTrailingZeros());
 	}
 
 	private static Result resultDivideExpression(BigDecimal left, BigDecimal right) {
@@ -415,7 +435,7 @@ public class SimpleCalculatorBl {
 				return Result.of(ResolveType.DIVIDE_BY_ZERO);
 			}
 		} else {
-			BigDecimal result = left.divide(right, 16, RoundingMode.HALF_UP).stripTrailingZeros();
+			BigDecimal result = new BigDecimal(left.divide(right, 16, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString()); // TODO create normalize method for this
 			return Result.of(result);
 		}
 	}
