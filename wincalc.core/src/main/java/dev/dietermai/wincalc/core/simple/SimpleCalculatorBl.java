@@ -435,7 +435,7 @@ public class SimpleCalculatorBl {
 				return Result.of(ResolveType.DIVIDE_BY_ZERO);
 			}
 		} else {
-			BigDecimal result = new BigDecimal(left.divide(right, 16, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString()); // TODO create normalize method for this
+			BigDecimal result = normalize(left.divide(right, 16, RoundingMode.HALF_UP));
 			return Result.of(result);
 		}
 	}
@@ -464,5 +464,10 @@ public class SimpleCalculatorBl {
 
 	private static Result resultNegateExpression(BigDecimal value) {
 		return Result.of(value.negate());
+	}
+	
+	
+	private static BigDecimal normalize(BigDecimal bd) {
+		return new BigDecimal(bd.stripTrailingZeros().toPlainString());
 	}
 }
