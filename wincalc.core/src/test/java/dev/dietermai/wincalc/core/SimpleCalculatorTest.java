@@ -312,9 +312,9 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyInput("");
 		verifyExpression("0", BiOperator.plus);
-		verifyEquation(plus("5", negate("5")), "0");
+		verifyEquation(binary("5", BiOperator.plus, negate("5")), "0");
 	}
-	
+
 	@Test
 	void testPlusOnCompletedBinaryWithTwoNumbers() {
 		// Arrange
@@ -328,8 +328,8 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verifyInput("");
-		verifyExpression(plus("21"));
-		verifyEquation(plus("20", "1"), "21");
+		verifyExpression(binary("21", BiOperator.plus));
+		verifyEquation(binary("20", BiOperator.plus, "1"), "21");
 	}
 
 	/* ***********************/
@@ -541,9 +541,9 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyInput("");
 		verifyExpression("0", BiOperator.minus);
-		verifyEquation(plus("5", negate("5")), "0");
+		verifyEquation(binary("5", BiOperator.plus, negate("5")), "0");
 	}
-	
+
 	@Test
 	void testMinusOnCompletedBinaryWithTwoNumbers() {
 		// Arrange
@@ -557,8 +557,8 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verifyInput("");
-		verifyExpression(minus("19"));
-		verifyEquation(minus("20", "1"), "19");
+		verifyExpression(binary("19", BiOperator.minus));
+		verifyEquation(binary("20", BiOperator.minus, "1"), "19");
 	}
 
 	/* **************************/
@@ -770,9 +770,9 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyInput("");
 		verifyExpression("0", BiOperator.multiply);
-		verifyEquation(plus("5", negate("5")), "0");
+		verifyEquation(binary("5", BiOperator.plus, negate("5")), "0");
 	}
-	
+
 	@Test
 	void testMultiplyOnCompletedBinaryWithTwoNumbers() {
 		// Arrange
@@ -786,8 +786,8 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verifyInput("");
-		verifyExpression(multiply("1"));
-		verifyEquation(multiply("20", "0.05"), "1");
+		verifyExpression(binary("1", BiOperator.multiply));
+		verifyEquation(binary("20", BiOperator.multiply, "0.05"), "1");
 	}
 
 	/* ************************/
@@ -1033,7 +1033,7 @@ class SimpleCalculatorTest {
 //		verifyExpression("0", BiOperator.divide);
 //		verifyEquation(plus("5", negate("5")), "0");
 //	}
-	
+
 	@Test
 	void testDivideOnCompletedBinaryWithTwoNumbers() {
 		// Arrange
@@ -1047,8 +1047,8 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verifyInput("");
-		verifyExpression(divide("400"));
-		verifyEquation(divide("20", "0.05"), "400");
+		verifyExpression(binary("400", BiOperator.divide));
+		verifyEquation(binary("20", BiOperator.divide, "0.05"), "400");
 	}
 
 	/* ************************/
@@ -1299,7 +1299,7 @@ class SimpleCalculatorTest {
 		verifyExpression(binary("5", BiOperator.plus, "-0.25"));
 		verifyNoEquation();
 	}
-	
+
 	@Test
 	void testPercentOfPlusRightNumber() {
 		// Act
@@ -1313,7 +1313,7 @@ class SimpleCalculatorTest {
 		verifyExpression(binary("20", BiOperator.plus, "1"));
 		verifyNoEquation();
 	}
-	
+
 	@Test
 	void testPercentOfMinusRightNumber() {
 		// Act
@@ -1327,7 +1327,7 @@ class SimpleCalculatorTest {
 		verifyExpression(binary("20", BiOperator.minus, "1"));
 		verifyNoEquation();
 	}
-	
+
 	@Test
 	void testPercentOfMultiplyRightNumber() {
 		// Act
@@ -1341,7 +1341,7 @@ class SimpleCalculatorTest {
 		verifyExpression(binary("20", BiOperator.multiply, "0.05"));
 		verifyNoEquation();
 	}
-	
+
 	@Test
 	void testPercentOfDivideRightNumber() {
 		// Act
@@ -1381,7 +1381,7 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verifyInput("");
-		verifyExpression(plus("20", "1"));
+		verifyExpression(binary("20", BiOperator.plus, "1"));
 		verifyNoEquation();
 	}
 
@@ -1429,6 +1429,10 @@ class SimpleCalculatorTest {
 		return BinaryExpression.of(bd(left), operator, right);
 	}
 
+	private BinaryExpression binary(String left, BiOperator operator) {
+		return BinaryExpression.of(bd(left), operator);
+	}
+
 	private BinaryExpression binary(String left, BiOperator operator, String right) {
 		return BinaryExpression.of(bd(left), operator, bd(right));
 	}
@@ -1457,57 +1461,7 @@ class SimpleCalculatorTest {
 		return calculator.getState().equation();
 	}
 
-	
-	private BinaryExpression plus(String left, Expression right) {
-		return BinaryExpression.of(bd(left), BiOperator.plus, right);
-	}
-
-	private BinaryExpression plus(String left, String right) {
-		return BinaryExpression.of(bd(left), BiOperator.plus, bd(right));
-	}
-
-	private BinaryExpression plus(String left) {
-		return BinaryExpression.of(bd(left), BiOperator.plus);
-	}
-	
-	private BinaryExpression minus(String left, Expression right) {
-		return BinaryExpression.of(bd(left), BiOperator.minus, right);
-	}
-
-	private BinaryExpression minus(String left, String right) {
-		return BinaryExpression.of(bd(left), BiOperator.minus, bd(right));
-	}
-
-	private BinaryExpression minus(String left) {
-		return BinaryExpression.of(bd(left), BiOperator.minus);
-	}
-	
-	private BinaryExpression multiply(String left, Expression right) {
-		return BinaryExpression.of(bd(left), BiOperator.multiply, right);
-	}
-
-	private BinaryExpression multiply(String left, String right) {
-		return BinaryExpression.of(bd(left), BiOperator.multiply, bd(right));
-	}
-
-	private BinaryExpression multiply(String left) {
-		return BinaryExpression.of(bd(left), BiOperator.multiply);
-	}
-	
-	private BinaryExpression divide(String left, Expression right) {
-		return BinaryExpression.of(bd(left), BiOperator.divide, right);
-	}
-
-	private BinaryExpression divide(String left, String right) {
-		return BinaryExpression.of(bd(left), BiOperator.divide, bd(right));
-	}
-
-	private BinaryExpression divide(String left) {
-		return BinaryExpression.of(bd(left), BiOperator.divide);
-	}
-
 	private UnaryExpression negate(String number) {
 		return UnaryExpression.of(UnaryOperator.negate, number);
 	}
-
 }

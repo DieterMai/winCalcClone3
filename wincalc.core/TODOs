@@ -1,12 +1,10 @@
 - Change implementation of SimpleCalculatorBl so that never BigDecimal is returned but Result
 
-Implement History
-Implement negate
-Implement percent
 Implement div by x
 Implement square root
 Implement C
 Implement CE
+Implement History
 Implement MS
 Implement MR
 Implement MC
