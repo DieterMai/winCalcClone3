@@ -183,7 +183,7 @@ public class SimpleCalculatorBl {
 			return state.with(UnaryExpression.of(UnaryOperator.negate, equation.value()));
 		}
 	}
-
+	
 	public static SimpleCalculatorRecord percent(final SimpleCalculatorRecord state) {
 		if (state.equation() != null && state.equation().type().isError()) {
 			throw new IllegalStateException("Can not operatoe on error result");
@@ -225,6 +225,34 @@ public class SimpleCalculatorBl {
 		}
 	}
 
+	public static SimpleCalculatorRecord square(SimpleCalculatorRecord state) {
+		String input = state.input();
+		if (!input.isBlank()) {
+			return state.with("").with(UnaryExpression.of(UnaryOperator.square, input));
+		}
+
+		Expression expression = state.expression();
+		if (expression instanceof UnaryExpression unary) {
+			return state.with(UnaryExpression.of(UnaryOperator.square, unary));
+		}
+		if (expression instanceof BinaryExpression binary) {
+			if (binary.right() != null) {
+				return state.with(binary.withRight(UnaryExpression.of(UnaryOperator.square, binary.right())));
+			} else {
+				return state.with(binary.withRight(UnaryExpression.of(UnaryOperator.square, binary.left())));
+			}
+		}
+
+		Equation equation = state.equation();
+		if (equation == null) {
+			return state.with(UnaryExpression.of(UnaryOperator.square, "0"));
+		} else if (equation.type().isError()) {
+			throw new IllegalStateException("Can not operatoe on error result");
+		} else {
+			return state.with(UnaryExpression.of(UnaryOperator.square, equation.value()));
+		}
+	}
+	
 	private static Equation resolvePlusExpression(BigDecimal left, BigDecimal right) {
 		BigDecimal result = left.add(right);
 		Expression expression = BinaryExpression.of(left, BiOperator.plus, right);
@@ -335,7 +363,7 @@ public class SimpleCalculatorBl {
 		case divByX -> throw new IllegalStateException("Not implemented yet!");
 		case percent -> throw new IllegalStateException("Not implemented yet!");
 		case root -> throw new IllegalStateException("Not implemented yet!");
-		case sqrt -> throw new IllegalStateException("Not implemented yet!");
+		case square -> throw new IllegalStateException("Not implemented yet!");
 		default -> null;
 		};
 	}
@@ -347,4 +375,6 @@ public class SimpleCalculatorBl {
 	private static BigDecimal normalize(BigDecimal bd) {
 		return new BigDecimal(bd.stripTrailingZeros().toPlainString());
 	}
+
+
 }

@@ -1384,6 +1384,145 @@ class SimpleCalculatorTest {
 		verifyExpression(binary("20", BiOperator.plus, "1"));
 		verifyNoEquation();
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	/* ************************/
+	/* Square related methods */
+	/* ************************/
+	@Test
+	void testInitialSquare() {
+		// Act
+		calculator.square();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.square, "0");
+		verifyNoEquation();
+	}
+
+	@Test
+	void testSquareOfPositiveNumber() {
+		// Act
+		calculator.number("123"); 
+		calculator.square();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.square, "123");
+		verifyNoEquation();
+	}
+
+	@Test
+	void testSquareOfNegativeNumber() {
+		// Act
+		calculator.number("-123");
+		calculator.square();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.square, "-123");
+		verifyNoEquation();
+	}
+
+	@Test
+	void testSquareOfZero() {
+		// Act
+		calculator.number("0");
+		calculator.square();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.square, "0");
+		verifyNoEquation();
+	}
+
+	@Test
+	void testSquareOfZeroResult() {
+		// Act
+		calculator.number("0");
+		calculator.resolve();
+		calculator.square();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.square, "0");
+		verifyEquation("0", "0");
+	}
+
+	@Test
+	void testSquareOfResult() {
+		// Act
+		calculator.number("5");
+		calculator.resolve();
+		calculator.square();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.square, "5");
+		verifyEquation("5", "5");
+	}
+
+	@Test
+	void testSquareOfUnaryExpression() {
+		// Act
+		calculator.number("5");
+		calculator.resolve();
+		calculator.square();
+		calculator.square();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(unary(UnaryOperator.square, unary(UnaryOperator.square, "5")));
+		verifyEquation("5", "5");
+	}
+
+	@Test
+	void testSquareOfBinaryLeft() {
+		// Act
+		calculator.number("5");
+		calculator.plus();
+		calculator.square();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(binary("5", BiOperator.plus, unary(UnaryOperator.square, "5")));
+		verifyNoEquation();
+	}
+
+	@Test
+	void testSquareOfBinaryRight() {
+		// Act
+		calculator.number("5");
+		calculator.plus();
+		calculator.square();
+		calculator.square();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(binary("5", BiOperator.plus, unary(UnaryOperator.square, unary(UnaryOperator.square, "5"))));
+		verifyNoEquation();
+	}
+
+	@Test
+	void testSquareOfError() {
+		// Act
+		calculator.number("5");
+		calculator.divide();
+		calculator.number("0");
+		calculator.resolve();
+		assertThrowsExactly(IllegalStateException.class, () -> calculator.square());
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("5", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
+	}
 
 	private void verifyInput(String expected) {
 		assertEquals(expected, calculator.getState().input());

@@ -39,5 +39,7 @@ public class SimpleCalculator {
 		state = SimpleCalculatorBl.percent(state);
 	}
 
-
+	public void square() {
+		state = SimpleCalculatorBl.square(state);
+	}
 }
