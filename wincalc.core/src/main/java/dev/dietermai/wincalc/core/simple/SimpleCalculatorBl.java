@@ -288,6 +288,40 @@ public class SimpleCalculatorBl {
 		}
 	}
 
+	public static SimpleCalculatorRecord oneDivX(SimpleCalculatorRecord state) {
+		String input = state.input();
+		if (!input.isBlank()) {
+			Expression newExpression = UnaryExpression.of(UnaryOperator.oneDivX, input);
+			Result result = resultOf(newExpression);
+			if (result.isSuccess()) {
+				return state.with("").with(newExpression);
+			} else {
+				return state.with("", newExpression, Equation.of(newExpression, result));
+			}
+		}
+
+		Expression expression = state.expression();
+		if (expression instanceof UnaryExpression unary) {
+			return state.with(UnaryExpression.of(UnaryOperator.oneDivX, unary));
+		}
+		if (expression instanceof BinaryExpression binary) {
+			if (binary.right() != null) {
+				return state.with(binary.withRight(UnaryExpression.of(UnaryOperator.oneDivX, binary.right())));
+			} else {
+				return state.with(binary.withRight(UnaryExpression.of(UnaryOperator.oneDivX, binary.left())));
+			}
+		}
+
+		Equation equation = state.equation();
+		if (equation == null) {
+			return state.with(UnaryExpression.of(UnaryOperator.oneDivX, "0"));
+		} else if (equation.type().isError()) {
+			throw new IllegalStateException("Can not operatoe on error result");
+		} else {
+			return state.with(UnaryExpression.of(UnaryOperator.oneDivX, equation.value()));
+		}
+	}
+
 	private static Equation resolvePlusExpression(BigDecimal left, BigDecimal right) {
 		BigDecimal result = left.add(right);
 		Expression expression = BinaryExpression.of(left, BiOperator.plus, right);
@@ -395,7 +429,7 @@ public class SimpleCalculatorBl {
 
 		return switch (unary.operator()) {
 		case negate -> resultNegateExpression(nestedResult.value());
-		case divByX -> throw new IllegalStateException("Not implemented yet!");
+		case oneDivX -> resultOneDivX(nestedResult.value());
 		case percent -> throw new IllegalStateException("Not implemented yet!");
 		case root -> resultRoot(nestedResult.value());
 		case square -> resultSquare(nestedResult.value());
@@ -416,6 +450,14 @@ public class SimpleCalculatorBl {
 			return Result.of(ResolveType.INVALID_INPUT);
 		} else {
 			return Result.of(value.sqrt(MathContext.DECIMAL64));
+		}
+	}
+
+	private static Result resultOneDivX(BigDecimal value) {
+		if (value.equals(BigDecimal.ZERO)) {
+			return Result.of(ResolveType.DIVIDE_BY_ZERO);
+		} else {
+			return Result.of(BigDecimal.ONE.divide(value, MathContext.DECIMAL64));
 		}
 	}
 

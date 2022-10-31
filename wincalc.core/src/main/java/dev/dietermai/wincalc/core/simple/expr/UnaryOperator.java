@@ -1,5 +1,5 @@
 package dev.dietermai.wincalc.core.simple.expr;
 
 public enum UnaryOperator {
-	negate, percent, divByX, square, root;
+	negate, percent, oneDivX, square, root;
 }

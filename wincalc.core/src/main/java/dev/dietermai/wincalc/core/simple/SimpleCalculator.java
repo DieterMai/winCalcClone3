@@ -46,4 +46,8 @@ public class SimpleCalculator {
 	public void root() {
 		state = SimpleCalculatorBl.root(state);
 	}
+
+	public void oneDivX() {
+		state = SimpleCalculatorBl.oneDivX(state);
+	}
 }

@@ -1734,6 +1734,192 @@ class SimpleCalculatorTest {
 //		verifyEquation("5", BiOperator.divide, "0", ResolveType.INVALID_INPUT);
 //	}
 
+	/* **********************/
+	/* OneDivX related methods */
+	/* **********************/
+	@Test
+	void testInitialOneDivX() {
+		// Act
+		calculator.oneDivX();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.oneDivX, "0");
+		verifyNoEquation();
+	}
+
+	@Test
+	void testOneDivXOfPositiveNumber() {
+		// Act
+		calculator.number("123");
+		calculator.oneDivX();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.oneDivX, "123");
+		verifyNoEquation();
+	}
+
+	@Test
+	void testOneDivXOfNegativeNumber() {
+		// Act
+		calculator.number("123");
+		calculator.negate();
+		calculator.oneDivX();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.oneDivX, "-123");
+		verifyNoEquation();
+	}
+
+	@Test
+	void testOneDivXOfZero() {
+		// Act
+		calculator.number("0");
+		calculator.oneDivX();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.oneDivX, "0");
+		verifyEquation(unary(UnaryOperator.oneDivX, "0"), ResolveType.DIVIDE_BY_ZERO);
+	}
+
+	@Test
+	void testOneDivXOfZeroResult() {
+		// Act
+		calculator.number("0");
+		calculator.resolve();
+		calculator.oneDivX();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.oneDivX, "0");
+		verifyEquation("0", "0");
+	}
+
+	@Test
+	void testOneDivXOfResult() {
+		// Act
+		calculator.number("5");
+		calculator.resolve();
+		calculator.oneDivX();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.oneDivX, "5");
+		verifyEquation("5", "5");
+	}
+
+	@Test
+	void testOneDivXOfUnaryExpression() {
+		// Act
+		calculator.number("5");
+		calculator.resolve();
+		calculator.oneDivX();
+		calculator.oneDivX();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(unary(UnaryOperator.oneDivX, unary(UnaryOperator.oneDivX, "5")));
+		verifyEquation("5", "5");
+	}
+
+	@Test
+	void testOneDivXOfBinaryLeft() {
+		// Act
+		calculator.number("5");
+		calculator.plus();
+		calculator.oneDivX();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(binary("5", BiOperator.plus, unary(UnaryOperator.oneDivX, "5")));
+		verifyNoEquation();
+	}
+
+	@Test
+	void testOneDivXOfBinaryRight() {
+		// Act
+		calculator.number("5");
+		calculator.plus();
+		calculator.oneDivX();
+		calculator.oneDivX();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(binary("5", BiOperator.plus, unary(UnaryOperator.oneDivX, unary(UnaryOperator.oneDivX, "5"))));
+		verifyNoEquation();
+	}
+
+	@Test
+	void testOneDivXOfError() {
+		// Act
+		calculator.number("5");
+		calculator.divide();
+		calculator.number("0");
+		calculator.resolve();
+		assertThrowsExactly(IllegalStateException.class, () -> calculator.oneDivX());
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("5", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
+	}
+
+	@Test
+	void testResolveOfOneDivX() {
+		// Act
+		calculator.number("25");
+		calculator.oneDivX();
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation(unary(UnaryOperator.oneDivX, "25"), "0.04");
+	}
+
+	@Test
+	void testResolveOfNestedOneDivX() {
+		// Act
+		calculator.number("625");
+		calculator.oneDivX();
+		calculator.oneDivX();
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation(unary(UnaryOperator.oneDivX, unary(UnaryOperator.oneDivX, "625")), "625");
+	}
+
+	@Test
+	void testResolveOfOneDivXIrrationalResult() {
+		// Act
+		calculator.number("3");
+		calculator.oneDivX();
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation(unary(UnaryOperator.oneDivX, "3"), "0.3333333333333333");
+	}
+
+	@Test
+	void testResolveOfOneDivXIrrationalResult2() {
+		// Act
+		calculator.number("6");
+		calculator.oneDivX();
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation(unary(UnaryOperator.oneDivX, "6"), "0.1666666666666667");
+	}
+
 	private void verifyInput(String expected) {
 		assertEquals(expected, calculator.getState().input());
 	}
