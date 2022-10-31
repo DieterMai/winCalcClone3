@@ -1,7 +1,7 @@
 - Change implementation of SimpleCalculatorBl so that never BigDecimal is returned but Result
 
 Implement div by x
-Implement square root
+Implement error state of calculator
 Implement C
 Implement CE
 Implement History

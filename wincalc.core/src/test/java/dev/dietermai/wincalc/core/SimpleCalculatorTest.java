@@ -953,8 +953,8 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verifyInput("");
-		verifyEquation("100", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
 		verifyIdleExpression();
+		verifyEquation("100", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
 	}
 
 	@Test
@@ -1384,14 +1384,7 @@ class SimpleCalculatorTest {
 		verifyExpression(binary("20", BiOperator.plus, "1"));
 		verifyNoEquation();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
 	/* ************************/
 	/* Square related methods */
 	/* ************************/
@@ -1409,7 +1402,7 @@ class SimpleCalculatorTest {
 	@Test
 	void testSquareOfPositiveNumber() {
 		// Act
-		calculator.number("123"); 
+		calculator.number("123");
 		calculator.square();
 
 		// Assert
@@ -1524,6 +1517,223 @@ class SimpleCalculatorTest {
 		verifyEquation("5", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
 	}
 
+	@Test
+	void testSquareOfRoot() {
+		// Act
+		calculator.number("5");
+		calculator.square();
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation(unary(UnaryOperator.square, "5"), "25");
+	}
+
+	@Test
+	void testSquareOfNestedRoot() {
+		// Act
+		calculator.number("5");
+		calculator.square();
+		calculator.square();
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation(unary(UnaryOperator.square, unary(UnaryOperator.square, "5")), "625");
+	}
+
+	/* **********************/
+	/* Root related methods */
+	/* **********************/
+	@Test
+	void testInitialRoot() {
+		// Act
+		calculator.root();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.root, "0");
+		verifyNoEquation();
+	}
+
+	@Test
+	void testRootOfPositiveNumber() {
+		// Act
+		calculator.number("123");
+		calculator.root();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.root, "123");
+		verifyNoEquation();
+	}
+
+	@Test
+	void testRootOfNegativeNumber() {
+		// Act
+		calculator.number("123");
+		calculator.negate();
+		calculator.root();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.root, "-123");
+		verifyEquation(unary(UnaryOperator.root, "-123"), ResolveType.INVALID_INPUT);
+		// TODO The error is not reflected anywhere. We should add an error flag in the
+		// calculator state itself instead
+		// of inferring the error from the equation
+	}
+
+	@Test
+	void testRootOfZero() {
+		// Act
+		calculator.number("0");
+		calculator.root();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.root, "0");
+		verifyNoEquation();
+	}
+
+	@Test
+	void testRootOfZeroResult() {
+		// Act
+		calculator.number("0");
+		calculator.resolve();
+		calculator.root();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.root, "0");
+		verifyEquation("0", "0");
+	}
+
+	@Test
+	void testRootOfResult() {
+		// Act
+		calculator.number("5");
+		calculator.resolve();
+		calculator.root();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.root, "5");
+		verifyEquation("5", "5");
+	}
+
+	@Test
+	void testRootOfUnaryExpression() {
+		// Act
+		calculator.number("5");
+		calculator.resolve();
+		calculator.root();
+		calculator.root();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(unary(UnaryOperator.root, unary(UnaryOperator.root, "5")));
+		verifyEquation("5", "5");
+	}
+
+	@Test
+	void testRootOfBinaryLeft() {
+		// Act
+		calculator.number("5");
+		calculator.plus();
+		calculator.root();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(binary("5", BiOperator.plus, unary(UnaryOperator.root, "5")));
+		verifyNoEquation();
+	}
+
+	@Test
+	void testRootOfBinaryRight() {
+		// Act
+		calculator.number("5");
+		calculator.plus();
+		calculator.root();
+		calculator.root();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(binary("5", BiOperator.plus, unary(UnaryOperator.root, unary(UnaryOperator.root, "5"))));
+		verifyNoEquation();
+	}
+
+	@Test
+	void testRootOfError() {
+		// Act
+		calculator.number("5");
+		calculator.divide();
+		calculator.number("0");
+		calculator.resolve();
+		assertThrowsExactly(IllegalStateException.class, () -> calculator.root());
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation("5", BiOperator.divide, "0", ResolveType.DIVIDE_BY_ZERO);
+	}
+
+	@Test
+	void testResolveOfRoot() {
+		// Act
+		calculator.number("25");
+		calculator.root();
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation(unary(UnaryOperator.root, "25"), "5");
+	}
+
+	@Test
+	void testResolveOfNestedRoot() {
+		// Act
+		calculator.number("625");
+		calculator.root();
+		calculator.root();
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation(unary(UnaryOperator.root, unary(UnaryOperator.root, "625")), "5");
+	}
+
+	@Test
+	void testResolveOfRootIrrationalResult() {
+		// Act
+		calculator.number("2");
+		calculator.root();
+		calculator.resolve();
+
+		// Assert
+		verifyInput("");
+		verifyIdleExpression();
+		verifyEquation(unary(UnaryOperator.root, "2"), "1.414213562373095");
+	}
+
+//	@Test
+//	void testRootOfRootWithNegativeNumber() {
+//		// Act
+//		calculator.number("5");
+//		calculator.negate();
+//		calculator.root();
+//		assertThrowsExactly(IllegalStateException.class, () -> calculator.root()); // TODO implement error state into calculator state
+//
+//		// Assert
+//		verifyInput("");
+//		verifyIdleExpression();
+//		verifyEquation("5", BiOperator.divide, "0", ResolveType.INVALID_INPUT);
+//	}
+
 	private void verifyInput(String expected) {
 		assertEquals(expected, calculator.getState().input());
 	}
@@ -1562,6 +1772,10 @@ class SimpleCalculatorTest {
 
 	private void verifyEquation(Expression expression, String value) {
 		assertEquals(Equation.of(expression, Result.of(bd(value))), getEquation());
+	}
+
+	private void verifyEquation(Expression expression, ResolveType type) {
+		assertEquals(Equation.of(expression, Result.of(type)), getEquation());
 	}
 
 	private BinaryExpression binary(String left, BiOperator operator, Expression right) {

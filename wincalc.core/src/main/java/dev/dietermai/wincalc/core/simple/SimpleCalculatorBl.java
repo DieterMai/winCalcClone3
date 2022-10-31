@@ -1,6 +1,7 @@
 package dev.dietermai.wincalc.core.simple;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 
 import dev.dietermai.wincalc.core.simple.expr.Expression;
@@ -183,7 +184,7 @@ public class SimpleCalculatorBl {
 			return state.with(UnaryExpression.of(UnaryOperator.negate, equation.value()));
 		}
 	}
-	
+
 	public static SimpleCalculatorRecord percent(final SimpleCalculatorRecord state) {
 		if (state.equation() != null && state.equation().type().isError()) {
 			throw new IllegalStateException("Can not operatoe on error result");
@@ -252,7 +253,41 @@ public class SimpleCalculatorBl {
 			return state.with(UnaryExpression.of(UnaryOperator.square, equation.value()));
 		}
 	}
-	
+
+	public static SimpleCalculatorRecord root(SimpleCalculatorRecord state) {
+		String input = state.input();
+		if (!input.isBlank()) {
+			Expression newExpression = UnaryExpression.of(UnaryOperator.root, input);
+			Result result = resultOf(newExpression);
+			if (result.isSuccess()) {
+				return state.with("").with(newExpression);
+			} else {
+				return state.with("", newExpression, Equation.of(newExpression, result));
+			}
+		}
+
+		Expression expression = state.expression();
+		if (expression instanceof UnaryExpression unary) {
+			return state.with(UnaryExpression.of(UnaryOperator.root, unary));
+		}
+		if (expression instanceof BinaryExpression binary) {
+			if (binary.right() != null) {
+				return state.with(binary.withRight(UnaryExpression.of(UnaryOperator.root, binary.right())));
+			} else {
+				return state.with(binary.withRight(UnaryExpression.of(UnaryOperator.root, binary.left())));
+			}
+		}
+
+		Equation equation = state.equation();
+		if (equation == null) {
+			return state.with(UnaryExpression.of(UnaryOperator.root, "0"));
+		} else if (equation.type().isError()) {
+			throw new IllegalStateException("Can not operatoe on error result");
+		} else {
+			return state.with(UnaryExpression.of(UnaryOperator.root, equation.value()));
+		}
+	}
+
 	private static Equation resolvePlusExpression(BigDecimal left, BigDecimal right) {
 		BigDecimal result = left.add(right);
 		Expression expression = BinaryExpression.of(left, BiOperator.plus, right);
@@ -362,8 +397,8 @@ public class SimpleCalculatorBl {
 		case negate -> resultNegateExpression(nestedResult.value());
 		case divByX -> throw new IllegalStateException("Not implemented yet!");
 		case percent -> throw new IllegalStateException("Not implemented yet!");
-		case root -> throw new IllegalStateException("Not implemented yet!");
-		case square -> throw new IllegalStateException("Not implemented yet!");
+		case root -> resultRoot(nestedResult.value());
+		case square -> resultSquare(nestedResult.value());
 		default -> null;
 		};
 	}
@@ -372,9 +407,19 @@ public class SimpleCalculatorBl {
 		return Result.of(value.negate());
 	}
 
+	private static Result resultSquare(BigDecimal value) {
+		return Result.of(value.multiply(value, MathContext.DECIMAL64));
+	}
+
+	private static Result resultRoot(BigDecimal value) {
+		if (value.compareTo(BigDecimal.ZERO) == -1) {
+			return Result.of(ResolveType.INVALID_INPUT);
+		} else {
+			return Result.of(value.sqrt(MathContext.DECIMAL64));
+		}
+	}
+
 	private static BigDecimal normalize(BigDecimal bd) {
 		return new BigDecimal(bd.stripTrailingZeros().toPlainString());
 	}
-
-
 }

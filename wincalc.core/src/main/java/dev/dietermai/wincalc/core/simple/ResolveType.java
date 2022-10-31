@@ -3,7 +3,8 @@ package dev.dietermai.wincalc.core.simple;
 public enum ResolveType {
 	SUCCESS,
 	DIVIDE_BY_ZERO,
-	UNDEFINED;
+	UNDEFINED,
+	INVALID_INPUT;
 	
 	public boolean isSuccess() {
 		return this == SUCCESS;

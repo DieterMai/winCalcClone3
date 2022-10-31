@@ -35,4 +35,8 @@ public record SimpleCalculatorRecord(String input, Expression expression, Equati
 	public SimpleCalculatorRecord with(String input) {
 		return of(input, expression(), equation());
 	}
+	
+	public SimpleCalculatorRecord with(String input, Expression expression, Equation equation) {
+		return of(input, expression, equation);
+	}
 }
