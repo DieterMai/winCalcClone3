@@ -32,59 +32,36 @@ class SimpleCalculatorTest {
 
 	@Test
 	void testInitialState() {
-		verifyInput("");
-		verifyIdleExpression();
-		assertNull(calculator.getState().equation());
+		verify(IdleExpression.of());
 	}
 
 	@Test
 	void testResolveOfInitialState() {
 		calculator.resolve();
-
-		verifyInput("");
-		verifyIdleExpression();
-		verifyEquation("0", "0");
+		verify(equation("0", "0"));
 	}
 
 	@Test
 	void testInitialNumberInput() {
-		String number = "123";
-
-		calculator.number(number);
-
-		verifyInput("123");
-		verifyIdleExpression();
-		assertNull(calculator.getState().equation());
+		calculator.number("123");
+		verify("123");
 	}
 
 	@Test
 	void testResolveOfInitialNumber() {
-		// Arrange
-		String number = "123";
-		calculator.number(number);
-
-		// Act
+		calculator.number("123");
 		calculator.resolve();
 
-		// Assert
-		verifyInput("");
-		verifyIdleExpression();
-		verifyEquation(number, number);
+		verify(equation("123", "123"));
 	}
 
 	@Test
 	void testNumberAfterResolvedNumber() {
-		// Arrange
 		calculator.number("123");
 		calculator.resolve();
-
-		// Act
 		calculator.number("456");
 
-		// Assert
-		verifyInput("456");
-		verifyIdleExpression();
-		verifyEquation("123", "123");
+		verify("456", equation("123", "123"));
 	}
 
 	@Test
@@ -98,9 +75,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 
 		// Assert
-		verifyInput("");
-		verifyIdleExpression();
-		verifyEquation("456", "456");
+		verify(equation("456","456"));
 	}
 
 	/* ******************** */
@@ -112,9 +87,7 @@ class SimpleCalculatorTest {
 		calculator.plus();
 
 		// Assert
-		verifyInput("");
-		verifyExpression("0", BiOperator.plus);
-		verifyNoEquation();
+		verify(expression("0", BiOperator.plus));
 	}
 
 	@Test
@@ -1137,7 +1110,7 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verifyInput("");
-		verifyExpression(unary(UnaryOperator.negate, unary(UnaryOperator.negate, "5")));
+		verifyExpression(expression(UnaryOperator.negate, unary(UnaryOperator.negate, "5")));
 		verifyEquation("5", "5");
 	}
 
@@ -1164,7 +1137,7 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verifyInput("");
-		verifyExpression(binary("5", BiOperator.plus, unary(UnaryOperator.negate, unary(UnaryOperator.negate, "5"))));
+		verifyExpression(binary("5", BiOperator.plus, expression(UnaryOperator.negate, unary(UnaryOperator.negate, "5"))));
 		verifyNoEquation();
 	}
 
@@ -1394,10 +1367,10 @@ class SimpleCalculatorTest {
 		calculator.square();
 
 		// Assert
-		verifyInput("");
-		verifyExpression(UnaryOperator.square, "0");
-		verifyNoEquation();
+		verify(expression(UnaryOperator.square, "0"));
 	}
+
+	
 
 	@Test
 	void testSquareOfPositiveNumber() {
@@ -1406,9 +1379,7 @@ class SimpleCalculatorTest {
 		calculator.square();
 
 		// Assert
-		verifyInput("");
-		verifyExpression(UnaryOperator.square, "123");
-		verifyNoEquation();
+		verify(expression(UnaryOperator.square, "123"));
 	}
 
 	@Test
@@ -1418,9 +1389,7 @@ class SimpleCalculatorTest {
 		calculator.square();
 
 		// Assert
-		verifyInput("");
-		verifyExpression(UnaryOperator.square, "-123");
-		verifyNoEquation();
+		verify(expression(UnaryOperator.square, "-123"));
 	}
 
 	@Test
@@ -1430,9 +1399,7 @@ class SimpleCalculatorTest {
 		calculator.square();
 
 		// Assert
-		verifyInput("");
-		verifyExpression(UnaryOperator.square, "0");
-		verifyNoEquation();
+		verify(expression(UnaryOperator.square, "0"));
 	}
 
 	@Test
@@ -1443,9 +1410,7 @@ class SimpleCalculatorTest {
 		calculator.square();
 
 		// Assert
-		verifyInput("");
-		verifyExpression(UnaryOperator.square, "0");
-		verifyNoEquation();
+		verify(expression(UnaryOperator.square, "0"));
 	}
 
 	@Test
@@ -1456,9 +1421,7 @@ class SimpleCalculatorTest {
 		calculator.square();
 
 		// Assert
-		verifyInput("");
-		verifyExpression(UnaryOperator.square, "5");
-		verifyNoEquation();
+		verify(expression(UnaryOperator.square, "5"));
 	}
 
 	@Test
@@ -1471,8 +1434,9 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verifyInput("");
-		verifyExpression(unary(UnaryOperator.square, unary(UnaryOperator.square, "5")));
+		verifyExpression(expression(UnaryOperator.square, unary(UnaryOperator.square, "5")));
 		verifyNoEquation();
+		verify(expression(UnaryOperator.square, unary(UnaryOperator.square, "5")));
 	}
 
 	@Test
@@ -1498,7 +1462,7 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verifyInput("");
-		verifyExpression(binary("5", BiOperator.plus, unary(UnaryOperator.square, unary(UnaryOperator.square, "5"))));
+		verifyExpression(binary("5", BiOperator.plus, expression(UnaryOperator.square, unary(UnaryOperator.square, "5"))));
 		verifyNoEquation();
 	}
 
@@ -1541,7 +1505,7 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyInput("");
 		verifyIdleExpression();
-		verifyEquation(unary(UnaryOperator.square, unary(UnaryOperator.square, "5")), "625");
+		verifyEquation(expression(UnaryOperator.square, unary(UnaryOperator.square, "5")), "625");
 	}
 
 	/* **********************/
@@ -1632,7 +1596,7 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verifyInput("");
-		verifyExpression(unary(UnaryOperator.root, unary(UnaryOperator.root, "5")));
+		verifyExpression(expression(UnaryOperator.root, unary(UnaryOperator.root, "5")));
 		verifyNoEquation();
 	}
 
@@ -1659,7 +1623,7 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verifyInput("");
-		verifyExpression(binary("5", BiOperator.plus, unary(UnaryOperator.root, unary(UnaryOperator.root, "5"))));
+		verifyExpression(binary("5", BiOperator.plus, expression(UnaryOperator.root, unary(UnaryOperator.root, "5"))));
 		verifyNoEquation();
 	}
 
@@ -1702,7 +1666,7 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyInput("");
 		verifyIdleExpression();
-		verifyEquation(unary(UnaryOperator.root, unary(UnaryOperator.root, "625")), "5");
+		verifyEquation(expression(UnaryOperator.root, unary(UnaryOperator.root, "625")), "5");
 	}
 
 	@Test
@@ -1809,7 +1773,7 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verifyInput("");
-		verifyExpression(unary(UnaryOperator.oneDivX, unary(UnaryOperator.oneDivX, "5")));
+		verifyExpression(expression(UnaryOperator.oneDivX, unary(UnaryOperator.oneDivX, "5")));
 		verifyNoEquation();
 	}
 
@@ -1836,7 +1800,7 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verifyInput("");
-		verifyExpression(binary("5", BiOperator.plus, unary(UnaryOperator.oneDivX, unary(UnaryOperator.oneDivX, "5"))));
+		verifyExpression(binary("5", BiOperator.plus, expression(UnaryOperator.oneDivX, unary(UnaryOperator.oneDivX, "5"))));
 		verifyNoEquation();
 	}
 
@@ -1879,7 +1843,7 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyInput("");
 		verifyIdleExpression();
-		verifyEquation(unary(UnaryOperator.oneDivX, unary(UnaryOperator.oneDivX, "625")), "625");
+		verifyEquation(expression(UnaryOperator.oneDivX, unary(UnaryOperator.oneDivX, "625")), "625");
 	}
 
 	@Test
@@ -1920,16 +1884,8 @@ class SimpleCalculatorTest {
 		verifyError(ResolveType.DIVIDE_BY_ZERO);
 	}
 
-	private void verifyInput(String expected) {
-		assertEquals(expected, calculator.getState().input());
-	}
-
 	private void verifyIdleExpression() {
 		assertEquals(IdleExpression.of(), getExpression());
-	}
-
-	private void verifyExpression(Expression expected) {
-		assertEquals(expected, getExpression());
 	}
 
 	private void verifyExpression(String number, BiOperator operator) {
@@ -1938,10 +1894,6 @@ class SimpleCalculatorTest {
 
 	private void verifyExpression(UnaryOperator operator, String number) {
 		assertEquals(UnaryExpression.of(operator, bd(number)), getExpression());
-	}
-
-	private void verifyNoEquation() {
-		assertNull(getEquation());
 	}
 
 	private void verifyEquation(String left, String right) {
@@ -1960,14 +1912,6 @@ class SimpleCalculatorTest {
 		assertEquals(Equation.of(expression, Result.of(bd(value))), getEquation());
 	}
 
-	private void verifyEquation(Expression expression, ResolveType type) {
-		assertEquals(Equation.of(expression, Result.of(type)), getEquation());
-	}
-
-	private void verifyError(ResolveType error) {
-		assertEquals(error, calculator.getState().lastResolve());
-	}
-
 	private BinaryExpression binary(String left, BiOperator operator, Expression right) {
 		return BinaryExpression.of(bd(left), operator, right);
 	}
@@ -1978,10 +1922,6 @@ class SimpleCalculatorTest {
 
 	private BinaryExpression binary(String left, BiOperator operator, String right) {
 		return BinaryExpression.of(bd(left), operator, bd(right));
-	}
-
-	private UnaryExpression unary(UnaryOperator operator, Expression nested) {
-		return UnaryExpression.of(operator, nested);
 	}
 
 	private UnaryExpression unary(UnaryOperator operator, String number) {
@@ -2006,5 +1946,75 @@ class SimpleCalculatorTest {
 
 	private UnaryExpression negate(String number) {
 		return UnaryExpression.of(UnaryOperator.negate, number);
+	}
+	
+	
+	
+	// NEW
+	
+	// Verify methods
+	private void verify(String input) {
+		verifyInput(input);
+		verifyExpression(IdleExpression.of());
+		verifyNoEquation();
+		verifyError(ResolveType.SUCCESS);
+	}
+	
+	private void verify(Expression expression) {
+		verifyInput("");
+		verifyExpression(expression);
+		verifyNoEquation();
+		verifyError(ResolveType.SUCCESS);
+	}
+	
+	private void verify(Equation equation) {
+		verifyInput("");
+		verifyExpression(IdleExpression.of());
+		verifyEquation(equation);
+		verifyError(equation.type());
+	}
+	
+	private void verify(String input, Equation equation) {
+		verifyInput(input);
+		verifyExpression(IdleExpression.of());
+		verifyEquation(equation);
+		verifyError(equation.type());
+	}
+	
+	private void verifyInput(String expected) {
+		assertEquals(expected, calculator.getState().input());
+	}
+	
+	private void verifyExpression(Expression expected) {
+		assertEquals(expected, getExpression());
+	}
+	
+	private void verifyEquation(Equation expected) {
+		assertEquals(expected, getEquation());
+	}
+	
+	private void verifyNoEquation() {
+		assertNull(getEquation());
+	}
+	
+	private void verifyError(ResolveType error) {
+		assertEquals(error, calculator.getState().lastResolve());
+	}
+	
+	// Util methods
+	private BinaryExpression expression(String number, BiOperator opreator) {
+		return BinaryExpression.of(number, opreator);
+	}
+	
+	private UnaryExpression expression(UnaryOperator opreator, String number) {
+		return UnaryExpression.of(opreator, number);
+	}
+	
+	private UnaryExpression expression(UnaryOperator operator, Expression nested) {
+		return UnaryExpression.of(operator, nested);
+	}
+	
+	private Equation equation(String left, String right) {
+		return Equation.of(number(left), Result.of(bd(right)));
 	}
 }
