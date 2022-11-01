@@ -1580,10 +1580,8 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyInput("");
 		verifyExpression(UnaryOperator.root, "-123");
-		verifyEquation(unary(UnaryOperator.root, "-123"), ResolveType.INVALID_INPUT);
-		// TODO The error is not reflected anywhere. We should add an error flag in the
-		// calculator state itself instead
-		// of inferring the error from the equation
+		verifyNoEquation();
+		verifyError(ResolveType.INVALID_INPUT);
 	}
 
 	@Test
@@ -1608,7 +1606,7 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyInput("");
 		verifyExpression(UnaryOperator.root, "0");
-		verifyEquation("0", "0");
+		verifyNoEquation();
 	}
 
 	@Test
@@ -1621,7 +1619,7 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyInput("");
 		verifyExpression(UnaryOperator.root, "5");
-		verifyEquation("5", "5");
+		verifyNoEquation();
 	}
 
 	@Test
@@ -1635,7 +1633,7 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyInput("");
 		verifyExpression(unary(UnaryOperator.root, unary(UnaryOperator.root, "5")));
-		verifyEquation("5", "5");
+		verifyNoEquation();
 	}
 
 	@Test
@@ -1909,7 +1907,7 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation(unary(UnaryOperator.oneDivX, "6"), "0.1666666666666667");
 	}
-	
+
 	@Test
 	void testInitialOneDivX() {
 		// Act
@@ -1965,7 +1963,7 @@ class SimpleCalculatorTest {
 	private void verifyEquation(Expression expression, ResolveType type) {
 		assertEquals(Equation.of(expression, Result.of(type)), getEquation());
 	}
-	
+
 	private void verifyError(ResolveType error) {
 		assertEquals(error, calculator.getState().lastResolve());
 	}

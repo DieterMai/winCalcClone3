@@ -260,34 +260,12 @@ public class SimpleCalculatorBl {
 			throw new IllegalStateException("Can't operate on an error");
 		}
 		
-		String input = state.input();
-		if (!input.isBlank()) {
-			Expression newExpression = UnaryExpression.of(UnaryOperator.root, input);
-			Result result = resultOf(newExpression);
-			if (result.isSuccess()) {
-				return state.with("").with(newExpression);
-			} else {
-				return state.with("", newExpression, Equation.of(newExpression, result));
-			}
-		}
-
-		Expression expression = state.expression();
-		if (expression instanceof UnaryExpression unary) {
-			return state.with(UnaryExpression.of(UnaryOperator.root, unary));
-		}
-		if (expression instanceof BinaryExpression binary) {
-			if (binary.right() != null) {
-				return state.with(binary.withRight(UnaryExpression.of(UnaryOperator.root, binary.right())));
-			} else {
-				return state.with(binary.withRight(UnaryExpression.of(UnaryOperator.root, binary.left())));
-			}
-		}
-
-		Equation equation = state.equation();
-		if (equation == null) {
-			return state.with(UnaryExpression.of(UnaryOperator.root, "0"));
-		} else {
-			return state.with(UnaryExpression.of(UnaryOperator.root, equation.value()));
+		Expression newExpression = appyUnaryOperator(state, UnaryOperator.root);
+		Result newExpressionResult = resultOf(newExpression);
+		if(newExpressionResult.error()) {
+			return SimpleCalculatorRecord.of(newExpression, newExpressionResult.type());
+		}else {
+			return SimpleCalculatorRecord.of(newExpression);
 		}
 	}
 
