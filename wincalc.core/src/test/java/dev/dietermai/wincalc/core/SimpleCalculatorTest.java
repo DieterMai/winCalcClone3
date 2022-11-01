@@ -1445,7 +1445,7 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyInput("");
 		verifyExpression(UnaryOperator.square, "0");
-		verifyEquation("0", "0");
+		verifyNoEquation();
 	}
 
 	@Test
@@ -1458,7 +1458,7 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyInput("");
 		verifyExpression(UnaryOperator.square, "5");
-		verifyEquation("5", "5");
+		verifyNoEquation();
 	}
 
 	@Test
@@ -1472,7 +1472,7 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyInput("");
 		verifyExpression(unary(UnaryOperator.square, unary(UnaryOperator.square, "5")));
-		verifyEquation("5", "5");
+		verifyNoEquation();
 	}
 
 	@Test
