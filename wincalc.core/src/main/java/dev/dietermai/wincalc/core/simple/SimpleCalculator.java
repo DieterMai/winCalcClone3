@@ -1,7 +1,7 @@
 package dev.dietermai.wincalc.core.simple;
 
 public class SimpleCalculator {
-	private SimpleCalculatorRecord state = SimpleCalculatorRecord.initial();
+	private SimpleCalculatorRecord state = SimpleCalculatorRecord.of();
 
 	public SimpleCalculatorRecord getState() {
 		return state;
