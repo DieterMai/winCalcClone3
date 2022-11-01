@@ -1738,17 +1738,6 @@ class SimpleCalculatorTest {
 	/* OneDivX related methods */
 	/* **********************/
 	@Test
-	void testInitialOneDivX() {
-		// Act
-		calculator.oneDivX();
-
-		// Assert
-		verifyInput("");
-		verifyExpression(UnaryOperator.oneDivX, "0");
-		verifyNoEquation();
-	}
-
-	@Test
 	void testOneDivXOfPositiveNumber() {
 		// Act
 		calculator.number("123");
@@ -1782,7 +1771,7 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyInput("");
 		verifyExpression(UnaryOperator.oneDivX, "0");
-		verifyEquation(unary(UnaryOperator.oneDivX, "0"), ResolveType.DIVIDE_BY_ZERO);
+		verifyNoEquation();
 	}
 
 	@Test
@@ -1795,7 +1784,8 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyInput("");
 		verifyExpression(UnaryOperator.oneDivX, "0");
-		verifyEquation("0", "0");
+		verifyNoEquation();
+		verifyError(ResolveType.DIVIDE_BY_ZERO);
 	}
 
 	@Test
@@ -1808,7 +1798,7 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyInput("");
 		verifyExpression(UnaryOperator.oneDivX, "5");
-		verifyEquation("5", "5");
+		verifyNoEquation();
 	}
 
 	@Test
@@ -1822,7 +1812,7 @@ class SimpleCalculatorTest {
 		// Assert
 		verifyInput("");
 		verifyExpression(unary(UnaryOperator.oneDivX, unary(UnaryOperator.oneDivX, "5")));
-		verifyEquation("5", "5");
+		verifyNoEquation();
 	}
 
 	@Test
@@ -1919,6 +1909,18 @@ class SimpleCalculatorTest {
 		verifyIdleExpression();
 		verifyEquation(unary(UnaryOperator.oneDivX, "6"), "0.1666666666666667");
 	}
+	
+	@Test
+	void testInitialOneDivX() {
+		// Act
+		calculator.oneDivX();
+
+		// Assert
+		verifyInput("");
+		verifyExpression(UnaryOperator.oneDivX, "0");
+		verifyNoEquation();
+		verifyError(ResolveType.DIVIDE_BY_ZERO);
+	}
 
 	private void verifyInput(String expected) {
 		assertEquals(expected, calculator.getState().input());
@@ -1962,6 +1964,10 @@ class SimpleCalculatorTest {
 
 	private void verifyEquation(Expression expression, ResolveType type) {
 		assertEquals(Equation.of(expression, Result.of(type)), getEquation());
+	}
+	
+	private void verifyError(ResolveType error) {
+		assertEquals(error, calculator.getState().lastResolve());
 	}
 
 	private BinaryExpression binary(String left, BiOperator operator, Expression right) {
