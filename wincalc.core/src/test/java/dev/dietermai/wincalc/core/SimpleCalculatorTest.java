@@ -1069,7 +1069,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 		calculator.percent();
 
-		verify(NumberExpression.ZERO);
+		verify(NumberExpression.ZERO, equation("0", "0"));
 	}
 
 	@Test
@@ -1078,7 +1078,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 		calculator.percent();
 
-		verify(NumberExpression.ZERO, equation("0", "0"));
+		verify(NumberExpression.ZERO, equation("5", "5"));
 	}
 
 	@Test

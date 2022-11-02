@@ -106,7 +106,7 @@ public class SimpleCalculatorBl {
 	}
 
 	private static SimpleCalculatorRecord binaryOperation(final SimpleCalculatorRecord state, final BiOperator operator) {
-		if(state.lastResolve().isError()) {
+		if (state.lastResolve().isError()) {
 			throw new IllegalStateException("Can't operate on an error");
 		}
 		final Expression expression = state.expression();
@@ -151,7 +151,7 @@ public class SimpleCalculatorBl {
 	}
 
 	public static SimpleCalculatorRecord negate(final SimpleCalculatorRecord state) {
-		if(state.lastResolve().isError()) {
+		if (state.lastResolve().isError()) {
 			throw new IllegalStateException("Can't operate on an error");
 		}
 		String input = state.input();
@@ -186,7 +186,7 @@ public class SimpleCalculatorBl {
 	}
 
 	public static SimpleCalculatorRecord percent(final SimpleCalculatorRecord state) {
-		if(state.lastResolve().isError()) {
+		if (state.lastResolve().isError()) {
 			throw new IllegalStateException("Can't operate on an error");
 		}
 
@@ -221,64 +221,66 @@ public class SimpleCalculatorBl {
 			};
 
 			return state.with(be.withLeft(leftValue).withRight(rightValue)).with("");
+		} else if (expression instanceof UnaryExpression unary) {
+			return SimpleCalculatorRecord.of(NumberExpression.ZERO, Equation.of(unary, Result.of(BigDecimal.ZERO))); // For some reason the windows calculator does it like this
 		} else {
-			return SimpleCalculatorRecord.of(NumberExpression.ZERO);
+			return SimpleCalculatorRecord.of(NumberExpression.ZERO, state.equation());
 		}
 	}
 
 	public static SimpleCalculatorRecord square(SimpleCalculatorRecord state) {
-		if(state.lastResolve().isError()) {
+		if (state.lastResolve().isError()) {
 			throw new IllegalStateException("Can't operate on an error");
 		}
-		
+
 		Expression newExpression = appyUnaryOperator(state, UnaryOperator.square);
 		Result newExpressionResult = resultOf(newExpression);
-		if(newExpressionResult.error()) {
+		if (newExpressionResult.error()) {
 			return SimpleCalculatorRecord.of(newExpression, newExpressionResult.type());
-		}else {
+		} else {
 			return SimpleCalculatorRecord.of(newExpression);
 		}
 	}
 
 	public static SimpleCalculatorRecord root(SimpleCalculatorRecord state) {
-		if(state.lastResolve().isError()) {
+		if (state.lastResolve().isError()) {
 			throw new IllegalStateException("Can't operate on an error");
 		}
-		
+
 		Expression newExpression = appyUnaryOperator(state, UnaryOperator.root);
 		Result newExpressionResult = resultOf(newExpression);
-		if(newExpressionResult.error()) {
+		if (newExpressionResult.error()) {
 			return SimpleCalculatorRecord.of(newExpression, newExpressionResult.type());
-		}else {
+		} else {
 			return SimpleCalculatorRecord.of(newExpression);
 		}
 	}
 
 	public static SimpleCalculatorRecord oneDivX(SimpleCalculatorRecord state) {
-		if(state.lastResolve().isError()) {
+		if (state.lastResolve().isError()) {
 			throw new IllegalStateException("Can't operate on an error");
 		}
-		
+
 		Expression newExpression = appyUnaryOperator(state, UnaryOperator.oneDivX);
 		Result newExpressionResult = resultOf(newExpression);
-		if(newExpressionResult.error()) {
+		if (newExpressionResult.error()) {
 			return SimpleCalculatorRecord.of(newExpression, newExpressionResult.type());
-		}else {
+		} else {
 			return SimpleCalculatorRecord.of(newExpression);
 		}
 	}
-	
+
 	private static Expression appyUnaryOperator(SimpleCalculatorRecord state, UnaryOperator operator) {
 		String input = state.input();
-		if(!input.isBlank()) {
+		if (!input.isBlank()) {
 			return UnaryExpression.of(operator, input);
 		}
-		
+
 		Expression expression = state.expression();
 		if (expression instanceof UnaryExpression unary) {
 			return UnaryExpression.of(operator, unary);
 		}
-		
+
 		if (expression instanceof BinaryExpression binary) {
 			if (binary.right() != null) {
 				return binary.withRight(UnaryExpression.of(operator, binary.right()));
@@ -286,7 +288,7 @@ public class SimpleCalculatorBl {
 				return binary.withRight(UnaryExpression.of(operator, resultOf(binary.left()).value()));
 			}
 		}
-		
+
 		Equation equation = state.equation();
 		if (equation == null) {
 			return UnaryExpression.of(operator, BigDecimal.ZERO);
@@ -294,7 +296,7 @@ public class SimpleCalculatorBl {
 			return UnaryExpression.of(operator, equation.value());
 		}
 	}
-	
+
 //	private static BigDecimal getUnaryValueToOperateOn(SimpleCalculatorRecord state) {
 //		String input = state.input();
 //		if(!input.isBlank()) {
