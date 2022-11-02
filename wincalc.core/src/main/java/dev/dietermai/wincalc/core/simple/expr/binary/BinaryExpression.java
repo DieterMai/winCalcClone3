@@ -18,11 +18,19 @@ public record BinaryExpression(Expression left, BiOperator operator, Expression 
 		return new BinaryExpression(NumberExpression.of(left), operator, NumberExpression.of(right));
 	}
 	
+	public static BinaryExpression of(String left, BiOperator operator, String right) {
+		return new BinaryExpression(NumberExpression.of(left), operator, NumberExpression.of(right));
+	}
+	
 	public static BinaryExpression of(Expression left, BiOperator operator, BigDecimal right) {
 		return new BinaryExpression(left, operator, NumberExpression.of(right));
 	}
 	
 	public static BinaryExpression of(BigDecimal left, BiOperator operator, Expression right) {
+		return new BinaryExpression(NumberExpression.of(left), operator, right);
+	}
+	
+	public static BinaryExpression of(String left, BiOperator operator, Expression right) {
 		return new BinaryExpression(NumberExpression.of(left), operator, right);
 	}
 

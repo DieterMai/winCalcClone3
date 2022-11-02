@@ -222,7 +222,7 @@ public class SimpleCalculatorBl {
 
 			return state.with(be.withLeft(leftValue).withRight(rightValue)).with("");
 		} else {
-			return SimpleCalculatorRecord.of(Equation.of(BigDecimal.ZERO));
+			return SimpleCalculatorRecord.of(NumberExpression.ZERO);
 		}
 	}
 
