@@ -1,13 +1,13 @@
 package dev.dietermai.wincalc.core.simple.model;
 
-public record SimpleCalculatorRecord(String input, Expression expression, Equation equation, ResolveType lastResolve) {
+public record SimpleCalculatorRecord(String input, Expression expression, Equation equation, ErrorType lastResolve) {
 
 	private static final Expression DEFAULT_EXPRESSION = IdleExpression.of();
 	private static final String DEFAULT_INPUT = "";
 	private static final Equation DEFAULT_EQUATION = null;
-	private static final ResolveType DEFAULT_STATE = ResolveType.SUCCESS;
+	private static final ErrorType DEFAULT_STATE = ErrorType.NONE;
 
-	public static SimpleCalculatorRecord of(String input, Expression expression, Equation equation, ResolveType lastResolve) {
+	public static SimpleCalculatorRecord of(String input, Expression expression, Equation equation, ErrorType lastResolve) {
 		return new SimpleCalculatorRecord(input, expression, equation, lastResolve);
 	}
 
@@ -15,15 +15,15 @@ public record SimpleCalculatorRecord(String input, Expression expression, Equati
 		return new SimpleCalculatorRecord(input, expression, equation, DEFAULT_STATE);
 	}
 
-	public static SimpleCalculatorRecord of(String input, Expression expression, ResolveType lastResolve) {
+	public static SimpleCalculatorRecord of(String input, Expression expression, ErrorType lastResolve) {
 		return new SimpleCalculatorRecord(input, expression, DEFAULT_EQUATION, lastResolve);
 	}
 
-	public static SimpleCalculatorRecord of(String input, Equation equation, ResolveType lastResolve) {
+	public static SimpleCalculatorRecord of(String input, Equation equation, ErrorType lastResolve) {
 		return new SimpleCalculatorRecord(input, DEFAULT_EXPRESSION, equation, lastResolve);
 	}
 
-	public static SimpleCalculatorRecord of(Expression expression, Equation equation, ResolveType lastResolve) {
+	public static SimpleCalculatorRecord of(Expression expression, Equation equation, ErrorType lastResolve) {
 		return new SimpleCalculatorRecord(DEFAULT_INPUT, expression, equation, lastResolve);
 	}
 
@@ -39,15 +39,15 @@ public record SimpleCalculatorRecord(String input, Expression expression, Equati
 		return new SimpleCalculatorRecord(DEFAULT_INPUT, expression, equation, DEFAULT_STATE);
 	}
 
-	public static SimpleCalculatorRecord of(String input, ResolveType lastResolve) {
+	public static SimpleCalculatorRecord of(String input, ErrorType lastResolve) {
 		return new SimpleCalculatorRecord(input, DEFAULT_EXPRESSION, DEFAULT_EQUATION, lastResolve);
 	}
 
-	public static SimpleCalculatorRecord of(Expression expression, ResolveType lastResolve) {
+	public static SimpleCalculatorRecord of(Expression expression, ErrorType lastResolve) {
 		return new SimpleCalculatorRecord(DEFAULT_INPUT, expression, DEFAULT_EQUATION, lastResolve);
 	}
 
-	public static SimpleCalculatorRecord of(Equation equation, ResolveType lastResolve) {
+	public static SimpleCalculatorRecord of(Equation equation, ErrorType lastResolve) {
 		return new SimpleCalculatorRecord(DEFAULT_INPUT, DEFAULT_EXPRESSION, equation, lastResolve);
 	}
 
@@ -71,7 +71,7 @@ public record SimpleCalculatorRecord(String input, Expression expression, Equati
 		return of(input(), expression, equation());
 	}
 
-	public SimpleCalculatorRecord with(Expression expression, ResolveType lastResolve) {
+	public SimpleCalculatorRecord with(Expression expression, ErrorType lastResolve) {
 		return of(input(), expression, equation(), lastResolve);
 	}
 

@@ -10,7 +10,7 @@ import dev.dietermai.wincalc.core.simple.model.Equation;
 import dev.dietermai.wincalc.core.simple.model.Expression;
 import dev.dietermai.wincalc.core.simple.model.IdleExpression;
 import dev.dietermai.wincalc.core.simple.model.NumberExpression;
-import dev.dietermai.wincalc.core.simple.model.ResolveType;
+import dev.dietermai.wincalc.core.simple.model.ErrorType;
 import dev.dietermai.wincalc.core.simple.model.Result;
 import dev.dietermai.wincalc.core.simple.model.SimpleCalculatorRecord;
 import dev.dietermai.wincalc.core.simple.model.UnaryExpression;
@@ -351,9 +351,9 @@ public class SimpleCalculatorBl {
 		Expression expression = BinaryExpression.of(left, BiOperator.divide, right);
 		if (right.equals(BigDecimal.ZERO)) {
 			if (left.equals(BigDecimal.ZERO)) {
-				return Equation.of(expression, Result.of(ResolveType.UNDEFINED));
+				return Equation.of(expression, Result.of(ErrorType.UNDEFINED));
 			} else {
-				return Equation.of(expression, Result.of(ResolveType.DIVIDE_BY_ZERO));
+				return Equation.of(expression, Result.of(ErrorType.DIVIDE_BY_ZERO));
 			}
 		} else {
 			BigDecimal result = left.divide(right, 16, RoundingMode.HALF_UP).stripTrailingZeros();
@@ -412,9 +412,9 @@ public class SimpleCalculatorBl {
 	private static Result resultDivideExpression(BigDecimal left, BigDecimal right) {
 		if (right.equals(BigDecimal.ZERO)) {
 			if (left.equals(BigDecimal.ZERO)) {
-				return Result.of(ResolveType.UNDEFINED);
+				return Result.of(ErrorType.UNDEFINED);
 			} else {
-				return Result.of(ResolveType.DIVIDE_BY_ZERO);
+				return Result.of(ErrorType.DIVIDE_BY_ZERO);
 			}
 		} else {
 			BigDecimal result = normalize(left.divide(right, 16, RoundingMode.HALF_UP));
@@ -454,7 +454,7 @@ public class SimpleCalculatorBl {
 
 	private static Result resultRoot(BigDecimal value) {
 		if (value.compareTo(BigDecimal.ZERO) == -1) {
-			return Result.of(ResolveType.INVALID_INPUT);
+			return Result.of(ErrorType.INVALID_INPUT);
 		} else {
 			return Result.of(value.sqrt(MathContext.DECIMAL64));
 		}
@@ -462,7 +462,7 @@ public class SimpleCalculatorBl {
 
 	private static Result resultOneDivX(BigDecimal value) {
 		if (value.equals(BigDecimal.ZERO)) {
-			return Result.of(ResolveType.DIVIDE_BY_ZERO);
+			return Result.of(ErrorType.DIVIDE_BY_ZERO);
 		} else {
 			return Result.of(BigDecimal.ONE.divide(value, MathContext.DECIMAL64));
 		}
