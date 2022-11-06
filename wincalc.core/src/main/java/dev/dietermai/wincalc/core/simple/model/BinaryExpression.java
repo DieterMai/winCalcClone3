@@ -1,9 +1,6 @@
-package dev.dietermai.wincalc.core.simple.expr.binary;
+package dev.dietermai.wincalc.core.simple.model;
 
 import java.math.BigDecimal;
-
-import dev.dietermai.wincalc.core.simple.expr.Expression;
-import dev.dietermai.wincalc.core.simple.expr.NumberExpression;
 
 public record BinaryExpression(Expression left, BiOperator operator, Expression right) implements Expression {
 	public static BinaryExpression of(BigDecimal left, BiOperator operator) {

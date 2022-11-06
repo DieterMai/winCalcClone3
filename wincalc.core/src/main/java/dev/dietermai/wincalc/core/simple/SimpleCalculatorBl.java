@@ -4,13 +4,17 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-import dev.dietermai.wincalc.core.simple.expr.Expression;
-import dev.dietermai.wincalc.core.simple.expr.IdleExpression;
-import dev.dietermai.wincalc.core.simple.expr.NumberExpression;
-import dev.dietermai.wincalc.core.simple.expr.UnaryExpression;
-import dev.dietermai.wincalc.core.simple.expr.UnaryOperator;
-import dev.dietermai.wincalc.core.simple.expr.binary.BiOperator;
-import dev.dietermai.wincalc.core.simple.expr.binary.BinaryExpression;
+import dev.dietermai.wincalc.core.simple.model.BiOperator;
+import dev.dietermai.wincalc.core.simple.model.BinaryExpression;
+import dev.dietermai.wincalc.core.simple.model.Equation;
+import dev.dietermai.wincalc.core.simple.model.Expression;
+import dev.dietermai.wincalc.core.simple.model.IdleExpression;
+import dev.dietermai.wincalc.core.simple.model.NumberExpression;
+import dev.dietermai.wincalc.core.simple.model.ResolveType;
+import dev.dietermai.wincalc.core.simple.model.Result;
+import dev.dietermai.wincalc.core.simple.model.SimpleCalculatorRecord;
+import dev.dietermai.wincalc.core.simple.model.UnaryExpression;
+import dev.dietermai.wincalc.core.simple.model.UnaryOperator;
 
 /*
  * resolve* -> creates an equation out of the current expression

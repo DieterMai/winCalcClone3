@@ -1,4 +1,4 @@
-package dev.dietermai.wincalc.core.simple;
+package dev.dietermai.wincalc.core.simple.model;
 
 import java.math.BigDecimal;
 

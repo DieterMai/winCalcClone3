@@ -1,7 +1,4 @@
-package dev.dietermai.wincalc.core.simple;
-
-import dev.dietermai.wincalc.core.simple.expr.Expression;
-import dev.dietermai.wincalc.core.simple.expr.IdleExpression;
+package dev.dietermai.wincalc.core.simple.model;
 
 public record SimpleCalculatorRecord(String input, Expression expression, Equation equation, ResolveType lastResolve) {
 

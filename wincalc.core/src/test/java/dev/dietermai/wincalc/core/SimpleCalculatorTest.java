@@ -9,17 +9,17 @@ import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import dev.dietermai.wincalc.core.simple.Equation;
-import dev.dietermai.wincalc.core.simple.ResolveType;
-import dev.dietermai.wincalc.core.simple.Result;
 import dev.dietermai.wincalc.core.simple.SimpleCalculator;
-import dev.dietermai.wincalc.core.simple.expr.Expression;
-import dev.dietermai.wincalc.core.simple.expr.IdleExpression;
-import dev.dietermai.wincalc.core.simple.expr.NumberExpression;
-import dev.dietermai.wincalc.core.simple.expr.UnaryExpression;
-import dev.dietermai.wincalc.core.simple.expr.UnaryOperator;
-import dev.dietermai.wincalc.core.simple.expr.binary.BiOperator;
-import dev.dietermai.wincalc.core.simple.expr.binary.BinaryExpression;
+import dev.dietermai.wincalc.core.simple.model.BiOperator;
+import dev.dietermai.wincalc.core.simple.model.BinaryExpression;
+import dev.dietermai.wincalc.core.simple.model.Equation;
+import dev.dietermai.wincalc.core.simple.model.Expression;
+import dev.dietermai.wincalc.core.simple.model.IdleExpression;
+import dev.dietermai.wincalc.core.simple.model.NumberExpression;
+import dev.dietermai.wincalc.core.simple.model.ResolveType;
+import dev.dietermai.wincalc.core.simple.model.Result;
+import dev.dietermai.wincalc.core.simple.model.UnaryExpression;
+import dev.dietermai.wincalc.core.simple.model.UnaryOperator;
 
 class SimpleCalculatorTest {
 
