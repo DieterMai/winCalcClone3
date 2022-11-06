@@ -2,14 +2,14 @@ package dev.dietermai.wincalc.core.simple.model;
 
 import java.math.BigDecimal;
 
-public record Result(BigDecimal value, ErrorType type) {
+public record Result(BigDecimal value, Error type) {
 	public static final Result ZERO = of(BigDecimal.ZERO);
 	
 	public static Result of(BigDecimal value) {
-		return new Result(value, ErrorType.NONE);
+		return new Result(value, Error.NONE);
 	}
 	
-	public static Result of(ErrorType type) {
+	public static Result of(Error type) {
 		return new Result(null, type);
 	}
 	

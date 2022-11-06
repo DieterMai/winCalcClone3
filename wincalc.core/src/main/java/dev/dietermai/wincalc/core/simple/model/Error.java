@@ -1,6 +1,6 @@
 package dev.dietermai.wincalc.core.simple.model;
 
-public enum ErrorType {
+public enum Error {
 	NONE,
 	DIVIDE_BY_ZERO,
 	UNDEFINED,
