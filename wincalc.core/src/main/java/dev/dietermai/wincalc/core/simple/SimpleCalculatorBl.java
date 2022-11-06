@@ -23,24 +23,29 @@ import dev.dietermai.wincalc.core.simple.model.UnaryOperator;
 
 public class SimpleCalculatorBl {
 
+	/**
+	 * Resolves the given state of the calculator
+	 * @param before The calculator state before resolving
+	 * @return The calculator state after resolving
+	 */
 	public static SimpleCalculatorRecord resolve(final SimpleCalculatorRecord before) {
-		return SimpleCalculatorRecord.of(resolveEquation(before));
+		return SimpleCalculatorRecord.of(resolveExpression(before));
 	}
 
-	private static Equation resolveEquation(final SimpleCalculatorRecord state) {
+	private static Equation resolveExpression(final SimpleCalculatorRecord state) {
 		return switch (state.expression()) {
 		case IdleExpression i -> resolveOfIdle(state);
 		case UnaryExpression unary -> resolveOfUnary(unary);
 		case BinaryExpression binary -> resolveBinaryExpression(state);
 		case NumberExpression number -> Equation.of(number, Result.of(number.value()));
-		default -> throw new IllegalStateException("Not yet implemented!");
+		default -> throw new IllegalStateException("Not yet implemented: "+state.expression());
 		};
 	}
 
 	private static Equation resolveOfIdle(final SimpleCalculatorRecord state) {
 		if (state.input().isBlank()) {
 			Equation previousEquation = state.equation();
-			Expression previousExpression = previousEquation != null ? previousEquation.expression() : NumberExpression.of(BigDecimal.ZERO);
+			Expression previousExpression = getPreviousExpression(previousEquation);
 			return switch (previousExpression) {
 			case NumberExpression ne -> equationOf(ne);
 			case BinaryExpression be -> equationOf(BinaryExpression.of(previousEquation.value(), be.operator(), be.right()));
@@ -50,12 +55,16 @@ public class SimpleCalculatorBl {
 			return equationOf(NumberExpression.of(state.input()));
 		}
 	}
+	
+	private static Expression getPreviousExpression(final Equation previousEquation) {
+		return previousEquation != null ? previousEquation.expression() : NumberExpression.ZERO;
+	}
 
-	private static Equation resolveOfUnary(UnaryExpression unary) {
+	private static Equation resolveOfUnary(final UnaryExpression unary) {
 		return equationOf(unary);
 	}
 
-	private static Equation equationOf(Expression expression) {
+	private static Equation equationOf(final Expression expression) {
 		return Equation.of(expression, resultOf(expression));
 	}
 
@@ -89,22 +98,48 @@ public class SimpleCalculatorBl {
 		}
 	}
 
+	/**
+	 * Sets the input number of the Calculator state to the given input
+	 * @param before The state before change the input number
+	 * @param input The new input number
+	 * @return The state after changing the input number
+	 */
 	public static SimpleCalculatorRecord number(final SimpleCalculatorRecord before, final String input) {
 		return before.with(input);
 	}
 
+	/**
+	 * Executes the plus operation on the given state
+	 * @param state The state before the operation
+	 * @return The state after the operation
+	 */
 	public static SimpleCalculatorRecord plus(final SimpleCalculatorRecord state) {
 		return binaryOperation(state, BiOperator.plus);
 	}
 
+	/**
+	 * Executes the minus operation on the given state
+	 * @param state The state before the operation
+	 * @return The state after the operation
+	 */
 	public static SimpleCalculatorRecord minus(final SimpleCalculatorRecord state) {
 		return binaryOperation(state, BiOperator.minus);
 	}
 
+	/**
+	 * Executes the multiply operation on the given state
+	 * @param state The state before the operation
+	 * @return The state after the operation
+	 */
 	public static SimpleCalculatorRecord multiply(final SimpleCalculatorRecord state) {
 		return binaryOperation(state, BiOperator.multiply);
 	}
 
+	/**
+	 * Executes the divide operation on the given state
+	 * @param state The state before the operation
+	 * @return The state after the operation
+	 */
 	public static SimpleCalculatorRecord divide(final SimpleCalculatorRecord state) {
 		return binaryOperation(state, BiOperator.divide);
 	}
@@ -137,7 +172,7 @@ public class SimpleCalculatorBl {
 				}
 			} else if (be.isComplete()) {
 				if (be.right() instanceof UnaryExpression unaryRight) {
-					be = be.withRight(unaryRight); // WHY?
+					be = be.withRight(unaryRight);
 					Result result = resultOf(be);
 					Equation newEquation = Equation.of(be, result);
 					return SimpleCalculatorRecord.of(BinaryExpression.of(result.value(), operator), newEquation);
@@ -154,6 +189,11 @@ public class SimpleCalculatorBl {
 		throw new IllegalStateException("Not implemented yet");
 	}
 
+	/**
+	 * Executes the negate operation on the given state
+	 * @param state The state before the operation
+	 * @return The state after the operation
+	 */
 	public static SimpleCalculatorRecord negate(final SimpleCalculatorRecord state) {
 		if (state.lastResolve().error()) {
 			throw new IllegalStateException("Can't operate on an error");
@@ -189,6 +229,11 @@ public class SimpleCalculatorBl {
 		}
 	}
 
+	/**
+	 * Executes the percent operation on the given state
+	 * @param state The state before the operation
+	 * @return The state after the operation
+	 */
 	public static SimpleCalculatorRecord percent(final SimpleCalculatorRecord state) {
 		if (state.lastResolve().error()) {
 			throw new IllegalStateException("Can't operate on an error");
@@ -232,6 +277,11 @@ public class SimpleCalculatorBl {
 		}
 	}
 
+	/**
+	 * Executes the square operation on the given state
+	 * @param state The state before the operation
+	 * @return The state after the operation
+	 */
 	public static SimpleCalculatorRecord square(SimpleCalculatorRecord state) {
 		if (state.lastResolve().error()) {
 			throw new IllegalStateException("Can't operate on an error");
@@ -246,6 +296,11 @@ public class SimpleCalculatorBl {
 		}
 	}
 
+	/**
+	 * Executes the root operation on the given state
+	 * @param state The state before the operation
+	 * @return The state after the operation
+	 */
 	public static SimpleCalculatorRecord root(SimpleCalculatorRecord state) {
 		if (state.lastResolve().error()) {
 			throw new IllegalStateException("Can't operate on an error");
@@ -260,6 +315,11 @@ public class SimpleCalculatorBl {
 		}
 	}
 
+	/**
+	 * Executes the 1/x operation on the given state
+	 * @param state The state before the operation
+	 * @return The state after the operation
+	 */
 	public static SimpleCalculatorRecord oneDivX(SimpleCalculatorRecord state) {
 		if (state.lastResolve().error()) {
 			throw new IllegalStateException("Can't operate on an error");
