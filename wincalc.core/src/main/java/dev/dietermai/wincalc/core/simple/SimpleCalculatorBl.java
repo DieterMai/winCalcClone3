@@ -10,7 +10,7 @@ import dev.dietermai.wincalc.core.simple.model.Equation;
 import dev.dietermai.wincalc.core.simple.model.Expression;
 import dev.dietermai.wincalc.core.simple.model.IdleExpression;
 import dev.dietermai.wincalc.core.simple.model.NumberExpression;
-import dev.dietermai.wincalc.core.simple.model.Error;
+import dev.dietermai.wincalc.core.simple.model.ResultType;
 import dev.dietermai.wincalc.core.simple.model.Result;
 import dev.dietermai.wincalc.core.simple.model.SimpleCalculatorRecord;
 import dev.dietermai.wincalc.core.simple.model.UnaryExpression;
@@ -110,7 +110,7 @@ public class SimpleCalculatorBl {
 	}
 
 	private static SimpleCalculatorRecord binaryOperation(final SimpleCalculatorRecord state, final BiOperator operator) {
-		if (state.lastResolve().isError()) {
+		if (state.lastResolve().error()) {
 			throw new IllegalStateException("Can't operate on an error");
 		}
 		final Expression expression = state.expression();
@@ -155,7 +155,7 @@ public class SimpleCalculatorBl {
 	}
 
 	public static SimpleCalculatorRecord negate(final SimpleCalculatorRecord state) {
-		if (state.lastResolve().isError()) {
+		if (state.lastResolve().error()) {
 			throw new IllegalStateException("Can't operate on an error");
 		}
 		String input = state.input();
@@ -190,7 +190,7 @@ public class SimpleCalculatorBl {
 	}
 
 	public static SimpleCalculatorRecord percent(final SimpleCalculatorRecord state) {
-		if (state.lastResolve().isError()) {
+		if (state.lastResolve().error()) {
 			throw new IllegalStateException("Can't operate on an error");
 		}
 
@@ -233,7 +233,7 @@ public class SimpleCalculatorBl {
 	}
 
 	public static SimpleCalculatorRecord square(SimpleCalculatorRecord state) {
-		if (state.lastResolve().isError()) {
+		if (state.lastResolve().error()) {
 			throw new IllegalStateException("Can't operate on an error");
 		}
 
@@ -247,7 +247,7 @@ public class SimpleCalculatorBl {
 	}
 
 	public static SimpleCalculatorRecord root(SimpleCalculatorRecord state) {
-		if (state.lastResolve().isError()) {
+		if (state.lastResolve().error()) {
 			throw new IllegalStateException("Can't operate on an error");
 		}
 
@@ -261,7 +261,7 @@ public class SimpleCalculatorBl {
 	}
 
 	public static SimpleCalculatorRecord oneDivX(SimpleCalculatorRecord state) {
-		if (state.lastResolve().isError()) {
+		if (state.lastResolve().error()) {
 			throw new IllegalStateException("Can't operate on an error");
 		}
 
@@ -351,9 +351,9 @@ public class SimpleCalculatorBl {
 		Expression expression = BinaryExpression.of(left, BiOperator.divide, right);
 		if (right.equals(BigDecimal.ZERO)) {
 			if (left.equals(BigDecimal.ZERO)) {
-				return Equation.of(expression, Result.of(Error.UNDEFINED));
+				return Equation.of(expression, Result.of(ResultType.UNDEFINED));
 			} else {
-				return Equation.of(expression, Result.of(Error.DIVIDE_BY_ZERO));
+				return Equation.of(expression, Result.of(ResultType.DIVIDE_BY_ZERO));
 			}
 		} else {
 			BigDecimal result = left.divide(right, 16, RoundingMode.HALF_UP).stripTrailingZeros();
@@ -412,9 +412,9 @@ public class SimpleCalculatorBl {
 	private static Result resultDivideExpression(BigDecimal left, BigDecimal right) {
 		if (right.equals(BigDecimal.ZERO)) {
 			if (left.equals(BigDecimal.ZERO)) {
-				return Result.of(Error.UNDEFINED);
+				return Result.of(ResultType.UNDEFINED);
 			} else {
-				return Result.of(Error.DIVIDE_BY_ZERO);
+				return Result.of(ResultType.DIVIDE_BY_ZERO);
 			}
 		} else {
 			BigDecimal result = normalize(left.divide(right, 16, RoundingMode.HALF_UP));
@@ -454,7 +454,7 @@ public class SimpleCalculatorBl {
 
 	private static Result resultRoot(BigDecimal value) {
 		if (value.compareTo(BigDecimal.ZERO) == -1) {
-			return Result.of(Error.INVALID_INPUT);
+			return Result.of(ResultType.INVALID_INPUT);
 		} else {
 			return Result.of(value.sqrt(MathContext.DECIMAL64));
 		}
@@ -462,7 +462,7 @@ public class SimpleCalculatorBl {
 
 	private static Result resultOneDivX(BigDecimal value) {
 		if (value.equals(BigDecimal.ZERO)) {
-			return Result.of(Error.DIVIDE_BY_ZERO);
+			return Result.of(ResultType.DIVIDE_BY_ZERO);
 		} else {
 			return Result.of(BigDecimal.ONE.divide(value, MathContext.DECIMAL64));
 		}
