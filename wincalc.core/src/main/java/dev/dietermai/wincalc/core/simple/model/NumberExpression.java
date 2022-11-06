@@ -2,6 +2,9 @@ package dev.dietermai.wincalc.core.simple.model;
 
 import java.math.BigDecimal;
 
+/**
+ * Represents an Expression that is basically just a number.
+ */
 public record NumberExpression(BigDecimal value) implements Expression {
 	public static final NumberExpression ZERO = of(BigDecimal.ZERO);
 	
@@ -12,5 +15,4 @@ public record NumberExpression(BigDecimal value) implements Expression {
 	public static NumberExpression of(String value) {
 		return of(new BigDecimal(value));
 	}
-	
 }
