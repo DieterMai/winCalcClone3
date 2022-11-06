@@ -10,8 +10,8 @@ import dev.dietermai.wincalc.core.simple.model.Equation;
 import dev.dietermai.wincalc.core.simple.model.Expression;
 import dev.dietermai.wincalc.core.simple.model.IdleExpression;
 import dev.dietermai.wincalc.core.simple.model.NumberExpression;
-import dev.dietermai.wincalc.core.simple.model.ResultType;
 import dev.dietermai.wincalc.core.simple.model.Result;
+import dev.dietermai.wincalc.core.simple.model.ResultType;
 import dev.dietermai.wincalc.core.simple.model.SimpleCalculatorRecord;
 import dev.dietermai.wincalc.core.simple.model.UnaryExpression;
 import dev.dietermai.wincalc.core.simple.model.UnaryOperator;
@@ -29,6 +29,7 @@ public class SimpleCalculatorBl {
 
 	/**
 	 * Resolves the given state of the calculator
+	 * 
 	 * @param before The calculator state before resolving
 	 * @return The calculator state after resolving
 	 */
@@ -42,7 +43,7 @@ public class SimpleCalculatorBl {
 		case UnaryExpression unary -> resolveOfUnary(unary);
 		case BinaryExpression binary -> resolveBinaryExpression(state);
 		case NumberExpression number -> Equation.of(number, Result.of(number.value()));
-		default -> throw new IllegalStateException("Not yet implemented: "+state.expression());
+		default -> throw new IllegalStateException("Not yet implemented: " + state.expression());
 		};
 	}
 
@@ -59,7 +60,7 @@ public class SimpleCalculatorBl {
 			return equationOf(NumberExpression.of(state.input()));
 		}
 	}
-	
+
 	private static Expression getPreviousExpression(final Equation previousEquation) {
 		return previousEquation != null ? previousEquation.expression() : NUMBER_ZERO;
 	}
@@ -104,8 +105,9 @@ public class SimpleCalculatorBl {
 
 	/**
 	 * Sets the input number of the Calculator state to the given input
+	 * 
 	 * @param before The state before change the input number
-	 * @param input The new input number
+	 * @param input  The new input number
 	 * @return The state after changing the input number
 	 */
 	public static SimpleCalculatorRecord number(final SimpleCalculatorRecord before, final String input) {
@@ -114,6 +116,7 @@ public class SimpleCalculatorBl {
 
 	/**
 	 * Executes the plus operation on the given state
+	 * 
 	 * @param state The state before the operation
 	 * @return The state after the operation
 	 */
@@ -123,6 +126,7 @@ public class SimpleCalculatorBl {
 
 	/**
 	 * Executes the minus operation on the given state
+	 * 
 	 * @param state The state before the operation
 	 * @return The state after the operation
 	 */
@@ -132,6 +136,7 @@ public class SimpleCalculatorBl {
 
 	/**
 	 * Executes the multiply operation on the given state
+	 * 
 	 * @param state The state before the operation
 	 * @return The state after the operation
 	 */
@@ -141,6 +146,7 @@ public class SimpleCalculatorBl {
 
 	/**
 	 * Executes the divide operation on the given state
+	 * 
 	 * @param state The state before the operation
 	 * @return The state after the operation
 	 */
@@ -195,6 +201,7 @@ public class SimpleCalculatorBl {
 
 	/**
 	 * Executes the negate operation on the given state
+	 * 
 	 * @param state The state before the operation
 	 * @return The state after the operation
 	 */
@@ -235,6 +242,7 @@ public class SimpleCalculatorBl {
 
 	/**
 	 * Executes the percent operation on the given state
+	 * 
 	 * @param state The state before the operation
 	 * @return The state after the operation
 	 */
@@ -283,6 +291,7 @@ public class SimpleCalculatorBl {
 
 	/**
 	 * Executes the square operation on the given state
+	 * 
 	 * @param state The state before the operation
 	 * @return The state after the operation
 	 */
@@ -302,6 +311,7 @@ public class SimpleCalculatorBl {
 
 	/**
 	 * Executes the root operation on the given state
+	 * 
 	 * @param state The state before the operation
 	 * @return The state after the operation
 	 */
@@ -321,6 +331,7 @@ public class SimpleCalculatorBl {
 
 	/**
 	 * Executes the 1/x operation on the given state
+	 * 
 	 * @param state The state before the operation
 	 * @return The state after the operation
 	 */
