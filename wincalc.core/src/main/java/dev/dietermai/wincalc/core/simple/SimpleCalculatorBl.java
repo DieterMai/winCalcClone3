@@ -301,34 +301,6 @@ public class SimpleCalculatorBl {
 		}
 	}
 
-//	private static BigDecimal getUnaryValueToOperateOn(SimpleCalculatorRecord state) {
-//		String input = state.input();
-//		if(!input.isBlank()) {
-//			return new BigDecimal(input);
-//		}
-//		
-//		Expression expression = state.expression();
-//		if (expression instanceof UnaryExpression unary) {
-//			return resultOf(unary).value();
-//		}
-//		
-//		if (expression instanceof BinaryExpression binary) {
-//			
-//			if (binary.right() != null) {
-//				return resultOf(binary.right()).value();
-//			} else {
-//				return resultOf(binary.left()).value();
-//			}
-//		}
-//		
-//		Equation equation = state.equation();
-//		if (equation == null) {
-//			return BigDecimal.ZERO;
-//		} else {
-//			return equation.value();
-//		}
-//	}
-
 	private static Equation resolvePlusExpression(BigDecimal left, BigDecimal right) {
 		BigDecimal result = left.add(right);
 		Expression expression = BinaryExpression.of(left, BiOperator.plus, right);
