@@ -2,6 +2,9 @@ package dev.dietermai.wincalc.core.simple;
 
 import dev.dietermai.wincalc.core.simple.model.SimpleCalculatorRecord;
 
+/**
+ * State-full simple calculator.
+ */
 public class SimpleCalculator {
 	private SimpleCalculatorRecord state = SimpleCalculatorRecord.of();
 
