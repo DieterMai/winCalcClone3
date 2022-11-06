@@ -1756,14 +1756,14 @@ class SimpleCalculatorTest {
 		verifyInput("");
 		verifyExpression(IdleExpression.of());
 		verifyEquation(equation);
-		verifyError(equation.type());
+		verifyError(equation.error());
 	}
 
 	private void verify(String input, Equation equation) {
 		verifyInput(input);
 		verifyExpression(IdleExpression.of());
 		verifyEquation(equation);
-		verifyError(equation.type());
+		verifyError(equation.error());
 	}
 
 	private void verifyInput(String expected) {

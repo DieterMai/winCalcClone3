@@ -60,7 +60,7 @@ public record SimpleCalculatorRecord(String input, Expression expression, Equati
 	}
 
 	public static SimpleCalculatorRecord of(Equation equation) {
-		return new SimpleCalculatorRecord(DEFAULT_INPUT, DEFAULT_EXPRESSION, equation, equation.type());
+		return new SimpleCalculatorRecord(DEFAULT_INPUT, DEFAULT_EXPRESSION, equation, equation.error());
 	}
 
 	public static SimpleCalculatorRecord of() {
