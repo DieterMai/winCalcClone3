@@ -20,8 +20,12 @@ import dev.dietermai.wincalc.core.simple.model.UnaryOperator;
  * resolve* -> creates an equation out of the current expression
  * valueOf* -> Calculates the BigDecimal result of the given expression
  */
-
+/**
+ * The business logic of the simple calculator
+ */
 public class SimpleCalculatorBl {
+	private static final BigDecimal ZERO = BigDecimal.ZERO;
+	private static final NumberExpression NUMBER_ZERO = NumberExpression.ZERO;
 
 	/**
 	 * Resolves the given state of the calculator
@@ -57,7 +61,7 @@ public class SimpleCalculatorBl {
 	}
 	
 	private static Expression getPreviousExpression(final Equation previousEquation) {
-		return previousEquation != null ? previousEquation.expression() : NumberExpression.ZERO;
+		return previousEquation != null ? previousEquation.expression() : NUMBER_ZERO;
 	}
 
 	private static Equation resolveOfUnary(final UnaryExpression unary) {
@@ -158,7 +162,7 @@ public class SimpleCalculatorBl {
 			} else if (equation != null) {
 				return SimpleCalculatorRecord.of(BinaryExpression.of(equation.value(), operator), equation);
 			} else {
-				return SimpleCalculatorRecord.of(BinaryExpression.of(BigDecimal.ZERO, operator), equation);
+				return SimpleCalculatorRecord.of(BinaryExpression.of(ZERO, operator), equation);
 			}
 		} else if (expression instanceof BinaryExpression be) {
 			if (!input.isBlank()) {
@@ -271,9 +275,9 @@ public class SimpleCalculatorBl {
 
 			return state.with(be.withLeft(leftValue).withRight(rightValue)).with("");
 		} else if (expression instanceof UnaryExpression unary) {
-			return SimpleCalculatorRecord.of(NumberExpression.ZERO, Equation.of(unary, Result.of(BigDecimal.ZERO))); // For some reason the windows calculator does it like this
+			return SimpleCalculatorRecord.of(NUMBER_ZERO, Equation.of(unary, Result.of(ZERO))); // For some reason the windows calculator does it like this
 		} else {
-			return SimpleCalculatorRecord.of(NumberExpression.ZERO, state.equation());
+			return SimpleCalculatorRecord.of(NUMBER_ZERO, state.equation());
 		}
 	}
 
@@ -355,7 +359,7 @@ public class SimpleCalculatorBl {
 
 		Equation equation = state.equation();
 		if (equation == null) {
-			return UnaryExpression.of(operator, BigDecimal.ZERO);
+			return UnaryExpression.of(operator, ZERO);
 		} else {
 			return UnaryExpression.of(operator, equation.value());
 		}
@@ -381,8 +385,8 @@ public class SimpleCalculatorBl {
 
 	private static Equation resolveDivideExpression(BigDecimal left, BigDecimal right) {
 		Expression expression = BinaryExpression.of(left, BiOperator.divide, right);
-		if (right.equals(BigDecimal.ZERO)) {
-			if (left.equals(BigDecimal.ZERO)) {
+		if (right.equals(ZERO)) {
+			if (left.equals(ZERO)) {
 				return Equation.of(expression, Result.of(ResultType.UNDEFINED));
 			} else {
 				return Equation.of(expression, Result.of(ResultType.DIVIDE_BY_ZERO));
@@ -403,7 +407,7 @@ public class SimpleCalculatorBl {
 	}
 
 	private static Result resultOfIdleExpression() {
-		return Result.of(BigDecimal.ZERO);
+		return Result.of(ZERO);
 	}
 
 	private static Result resultOfNumberExpression(NumberExpression number) {
@@ -442,8 +446,8 @@ public class SimpleCalculatorBl {
 	}
 
 	private static Result resultDivideExpression(BigDecimal left, BigDecimal right) {
-		if (right.equals(BigDecimal.ZERO)) {
-			if (left.equals(BigDecimal.ZERO)) {
+		if (right.equals(ZERO)) {
+			if (left.equals(ZERO)) {
 				return Result.of(ResultType.UNDEFINED);
 			} else {
 				return Result.of(ResultType.DIVIDE_BY_ZERO);
@@ -456,7 +460,7 @@ public class SimpleCalculatorBl {
 
 	private static Result resultOfUnaryExpression(UnaryExpression unary) {
 		Result nestedResult = switch (unary.nested()) {
-		case IdleExpression idle -> Result.of(BigDecimal.ZERO);
+		case IdleExpression idle -> Result.of(ZERO);
 		case NumberExpression ne -> Result.of(ne.value());
 		case UnaryExpression ue -> resultOfUnaryExpression(ue);
 		case BinaryExpression be -> throw new IllegalStateException("No binary expression in unary expression allowed");
@@ -485,7 +489,7 @@ public class SimpleCalculatorBl {
 	}
 
 	private static Result resultRoot(BigDecimal value) {
-		if (value.compareTo(BigDecimal.ZERO) == -1) {
+		if (value.compareTo(ZERO) == -1) {
 			return Result.of(ResultType.INVALID_INPUT);
 		} else {
 			return Result.of(value.sqrt(MathContext.DECIMAL64));
@@ -493,7 +497,7 @@ public class SimpleCalculatorBl {
 	}
 
 	private static Result resultOneDivX(BigDecimal value) {
-		if (value.equals(BigDecimal.ZERO)) {
+		if (value.equals(ZERO)) {
 			return Result.of(ResultType.DIVIDE_BY_ZERO);
 		} else {
 			return Result.of(BigDecimal.ONE.divide(value, MathContext.DECIMAL64));
