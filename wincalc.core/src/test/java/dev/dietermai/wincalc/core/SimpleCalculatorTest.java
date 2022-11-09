@@ -1761,6 +1761,67 @@ class SimpleCalculatorTest {
 		verify(IdleExpression.of());
 	}
 	
+	/* *******************/
+	/* C related methods */
+	/* *******************/
+
+	@Test
+	void testCOnInitialState() {
+		calculator.c();
+		
+		verify(IdleExpression.of());
+	}
+	
+	@Test
+	void testCOnInitialInput() {
+		calculator.number("123");
+		calculator.c();
+		
+		verify(IdleExpression.of());
+	}
+	
+	@Test
+	void testCOnStartedExpression() {
+		calculator.number("123");
+		calculator.plus();
+		calculator.c();
+		
+		verify(IdleExpression.of());
+	}
+	
+	@Test
+	void testCOnStartedExpressionWithNumberInput() {
+		calculator.number("123");
+		calculator.plus();
+		calculator.number("456");
+		calculator.c();
+		
+		verify(IdleExpression.of());
+	}
+	
+	@Test
+	void testCOnEquation() {
+		calculator.number("123");
+		calculator.plus();
+		calculator.number("456");
+		calculator.resolve();
+		calculator.c();
+		
+		verify(IdleExpression.of());
+	}
+	
+	@Test
+	void testCOnEquationWithNumberInput() {
+		calculator.number("123");
+		calculator.plus();
+		calculator.number("456");
+		calculator.resolve();
+		calculator.number("111");
+		calculator.c();
+		
+		verify(IdleExpression.of());
+	}
+	
 	private void verifyExpression(String number, BiOperator operator) {
 		assertEquals(BinaryExpression.of(bd(number), operator), getExpression());
 	}

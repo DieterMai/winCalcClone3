@@ -59,4 +59,8 @@ public class SimpleCalculator {
 	public void ce() {
 		state = SimpleCalculatorBl.ce(state);
 	}
+	
+	public void c() {
+		state = SimpleCalculatorRecord.of();
+	}
 }
