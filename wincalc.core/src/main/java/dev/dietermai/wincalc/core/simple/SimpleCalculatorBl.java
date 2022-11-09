@@ -111,7 +111,11 @@ public class SimpleCalculatorBl {
 	 * @return The state after changing the input number
 	 */
 	public static SimpleCalculatorRecord number(final SimpleCalculatorRecord before, final String input) {
-		return before.with(input);
+		if(before.equation() != null && before.equation().expression() instanceof BinaryExpression) {
+			return SimpleCalculatorRecord.of(input);
+		}else {
+			return before.with(input);
+		}
 	}
 
 	/**
@@ -517,5 +521,9 @@ public class SimpleCalculatorBl {
 
 	private static BigDecimal normalize(BigDecimal bd) {
 		return new BigDecimal(bd.stripTrailingZeros().toPlainString());
+	}
+
+	public static SimpleCalculatorRecord ce(SimpleCalculatorRecord state) {
+		return state.with("");
 	}
 }

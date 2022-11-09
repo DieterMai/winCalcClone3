@@ -46,6 +46,18 @@ class SimpleCalculatorTest {
 		calculator.number("123");
 		verify("123");
 	}
+	
+	@Test
+	void testNumberOnEquation() {
+		calculator.number("123");
+		calculator.plus();
+		calculator.number("456");
+		calculator.resolve();
+		calculator.number("111");
+		
+		verify("111");
+	}
+	
 
 	@Test
 	void testResolveOfInitialNumber() {
@@ -1536,9 +1548,9 @@ class SimpleCalculatorTest {
 //		verify(equation("5", BiOperator.divide, "0", ResolveType.INVALID_INPUT);
 //	}
 
-	/* **********************/
+	/* *************************/
 	/* OneDivX related methods */
-	/* **********************/
+	/* *************************/
 	@Test
 	void testOneDivXOfPositiveNumber() {
 		// Act
@@ -1687,7 +1699,68 @@ class SimpleCalculatorTest {
 		verifyNoEquation();
 		verifyError(ResultType.DIVIDE_BY_ZERO);
 	}
+	
+	/* ********************/
+	/* CE related methods */
+	/* ********************/
 
+	@Test
+	void testCeOnInitialState() {
+		calculator.ce();
+		
+		verify(IdleExpression.of());
+	}
+	
+	@Test
+	void testCeOnInitialInput() {
+		calculator.number("123");
+		calculator.ce();
+		
+		verify(IdleExpression.of());
+	}
+	
+	@Test
+	void testCeOnStartedExpression() {
+		calculator.number("123");
+		calculator.plus();
+		calculator.ce();
+		
+		verify(expression("123", BiOperator.plus));
+	}
+	
+	@Test
+	void testCeOnStartedExpressionWithNumberInput() {
+		calculator.number("123");
+		calculator.plus();
+		calculator.number("456");
+		calculator.ce();
+		
+		verify(expression("123", BiOperator.plus));
+	}
+	
+	@Test
+	void testCeOnEquation() {
+		calculator.number("123");
+		calculator.plus();
+		calculator.number("456");
+		calculator.resolve();
+		calculator.ce();
+		
+		verify(equation(expression("123", BiOperator.plus, "456"),  "579"));
+	}
+	
+	@Test
+	void testCeOnEquationWithNumberInput() {
+		calculator.number("123");
+		calculator.plus();
+		calculator.number("456");
+		calculator.resolve();
+		calculator.number("111");
+		calculator.ce();
+		
+		verify(IdleExpression.of());
+	}
+	
 	private void verifyExpression(String number, BiOperator operator) {
 		assertEquals(BinaryExpression.of(bd(number), operator), getExpression());
 	}

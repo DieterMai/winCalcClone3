@@ -55,4 +55,8 @@ public class SimpleCalculator {
 	public void oneDivX() {
 		state = SimpleCalculatorBl.oneDivX(state);
 	}
+
+	public void ce() {
+		state = SimpleCalculatorBl.ce(state);
+	}
 }
