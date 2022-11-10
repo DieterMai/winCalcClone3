@@ -1,5 +1,8 @@
 package dev.dietermai.wincalc.core.simple;
 
+import java.util.List;
+
+import dev.dietermai.wincalc.core.simple.model.Equation;
 import dev.dietermai.wincalc.core.simple.model.SimpleCalculatorRecord;
 
 /**
@@ -7,13 +10,18 @@ import dev.dietermai.wincalc.core.simple.model.SimpleCalculatorRecord;
  */
 public class SimpleCalculator {
 	private SimpleCalculatorRecord state = SimpleCalculatorRecord.of();
+	private EquationHistory equationHistory = new EquationHistory();
 
+	/* **********************************/
+	/* Calculator state related methods */
+	/* **********************************/
 	public SimpleCalculatorRecord getState() {
 		return state;
 	}
 
 	public void resolve() {
 		state = SimpleCalculatorBl.resolve(state);
+		equationHistory.addIfNewEquation(state.equation());
 	}
 
 	public void number(String number) {
@@ -62,5 +70,24 @@ public class SimpleCalculator {
 	
 	public void c() {
 		state = SimpleCalculatorRecord.of();
+	}
+	
+	/* ****************************************/
+	/* Equation History state related methods */
+	/* ****************************************/
+	public void add(Equation newEquation) {
+		equationHistory.add(newEquation);
+	}
+	
+	public List<Equation> getEquations(){
+		return equationHistory.getEquations();
+	}
+	
+	public void deleteEquation(int index) {
+		equationHistory.delete(index);
+	}
+	
+	public void clearEquationHistory() {
+		equationHistory.clear();
 	}
 }
