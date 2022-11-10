@@ -159,9 +159,8 @@ public class SimpleCalculatorBl {
 	}
 
 	private static SimpleCalculatorRecord binaryOperation(final SimpleCalculatorRecord state, final BiOperator operator) {
-		if (state.lastResolve().error()) {
-			throw new IllegalStateException("Can't operate on an error");
-		}
+		noOpOnError(state);
+		
 		final Expression expression = state.expression();
 		final String input = state.input();
 		final Equation equation = state.equation();
@@ -210,9 +209,8 @@ public class SimpleCalculatorBl {
 	 * @return The state after the operation
 	 */
 	public static SimpleCalculatorRecord negate(final SimpleCalculatorRecord state) {
-		if (state.lastResolve().error()) {
-			throw new IllegalStateException("Can't operate on an error");
-		}
+		noOpOnError(state);
+		
 		String input = state.input();
 		if (!input.isBlank()) {
 			if (input.equals("0")) {
@@ -251,9 +249,7 @@ public class SimpleCalculatorBl {
 	 * @return The state after the operation
 	 */
 	public static SimpleCalculatorRecord percent(final SimpleCalculatorRecord state) {
-		if (state.lastResolve().error()) {
-			throw new IllegalStateException("Can't operate on an error");
-		}
+		noOpOnError(state);
 
 		Expression expression = state.expression();
 
@@ -300,9 +296,7 @@ public class SimpleCalculatorBl {
 	 * @return The state after the operation
 	 */
 	public static SimpleCalculatorRecord square(SimpleCalculatorRecord state) {
-		if (state.lastResolve().error()) {
-			throw new IllegalStateException("Can't operate on an error");
-		}
+		noOpOnError(state);
 
 		Expression newExpression = appyUnaryOperator(state, UnaryOperator.square);
 		Result newExpressionResult = resultOf(newExpression);
@@ -320,9 +314,7 @@ public class SimpleCalculatorBl {
 	 * @return The state after the operation
 	 */
 	public static SimpleCalculatorRecord root(SimpleCalculatorRecord state) {
-		if (state.lastResolve().error()) {
-			throw new IllegalStateException("Can't operate on an error");
-		}
+		noOpOnError(state);
 
 		Expression newExpression = appyUnaryOperator(state, UnaryOperator.root);
 		Result newExpressionResult = resultOf(newExpression);
@@ -340,9 +332,7 @@ public class SimpleCalculatorBl {
 	 * @return The state after the operation
 	 */
 	public static SimpleCalculatorRecord oneDivX(SimpleCalculatorRecord state) {
-		if (state.lastResolve().error()) {
-			throw new IllegalStateException("Can't operate on an error");
-		}
+		noOpOnError(state);
 
 		Expression newExpression = appyUnaryOperator(state, UnaryOperator.oneDivX);
 		Result newExpressionResult = resultOf(newExpression);
@@ -525,5 +515,44 @@ public class SimpleCalculatorBl {
 
 	public static SimpleCalculatorRecord ce(SimpleCalculatorRecord state) {
 		return state.with("");
+	}
+
+	public static BigDecimal getCurrentValue(SimpleCalculatorRecord state) {
+		noOpOnError(state);
+		
+		String input = state.input();
+		if(!input.isBlank()) {
+			return new BigDecimal(input);
+		}
+		
+		Expression expression = state.expression();
+		if(expression instanceof UnaryExpression ue) {
+				return validResultOf(ue);
+		}
+		if(expression instanceof BinaryExpression be) {
+			return validResultOf(be.activeSide());
+		}
+
+		Equation equation = state.equation();
+		if(equation.error().ok()) {
+			return equation.value();
+		}
+		
+		throw new IllegalStateException("error: "+state);
+	}
+	
+	private static BigDecimal validResultOf(Expression expression) {
+		Result result = resultOf(expression);
+		if(result.isOK()) {
+			return result.value();
+		}else {
+			throw new IllegalStateException("error: "+expression);
+		}
+	}
+	
+	private static void noOpOnError(SimpleCalculatorRecord state) {
+		if (state.lastResolve().error()) {
+			throw new IllegalStateException("Can't operate on an error");
+		}
 	}
 }

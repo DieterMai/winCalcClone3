@@ -80,4 +80,8 @@ public record BinaryExpression(Expression left, BiOperator operator, Expression 
 	public boolean isComplete() {
 		return left != null && right != null;
 	}
+	
+	public Expression activeSide() {
+		return isComplete() ? right : left;
+	}
 }

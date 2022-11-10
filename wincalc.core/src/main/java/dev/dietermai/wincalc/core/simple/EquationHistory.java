@@ -9,7 +9,7 @@ public class EquationHistory {
 	private final LinkedList<Equation> equations = new LinkedList<>();
 	
 	public void add(Equation newEquation) {
-		equations.add(newEquation);
+		equations.addFirst(newEquation);
 	}
 	
 	public List<Equation> getEquations(){

@@ -1,9 +1,6 @@
 - Change implementation of SimpleCalculatorBl so that never BigDecimal is returned but Result
 
-Implement History
-Implement History clear
-Implement History delete
-Implement MS
+Implement MS tests
 Implement MR
 Implement MC
 Implement M+
