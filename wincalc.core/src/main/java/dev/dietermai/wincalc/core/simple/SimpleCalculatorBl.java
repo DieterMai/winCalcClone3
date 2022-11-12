@@ -534,6 +534,9 @@ public class SimpleCalculatorBl {
 		}
 
 		Equation equation = state.equation();
+		if(equation == null) {
+			return BigDecimal.ZERO;
+		}
 		if(equation.error().ok()) {
 			return equation.value();
 		}

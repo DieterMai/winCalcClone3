@@ -1,4 +1,3 @@
-- Change implementation of SimpleCalculatorBl so that never BigDecimal is returned but Result
 
 Implement MS tests
 Implement MR

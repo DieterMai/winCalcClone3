@@ -10,8 +10,10 @@ import dev.dietermai.wincalc.core.simple.model.SimpleCalculatorRecord;
  * State-full simple calculator.
  */
 public class SimpleCalculator {
+	private final EquationHistory equationHistory = new EquationHistory();
+	private final MemoryHistory memory = new MemoryHistory();
+	
 	private SimpleCalculatorRecord state = SimpleCalculatorRecord.of();
-	private EquationHistory equationHistory = new EquationHistory();
 
 	/* **********************************/
 	/* Calculator state related methods */
@@ -103,10 +105,17 @@ public class SimpleCalculator {
 	}
 	
 	/* *************************************/
-	/* Saved Value History related methods */
+	/* Memory related methods */
 	/* *************************************/
-	public void ms() {
-		BigDecimal value = SimpleCalculatorBl.getCurrentValue(state);
+	public List<BigDecimal> getAllMemoryValues(){
+		return memory.getValues();
 	}
 	
+	public BigDecimal getMemoryValue() {
+		return memory.getValue();
+	}
+	
+	public void ms() {
+		memory.add(SimpleCalculatorBl.getCurrentValue(state));
+	}
 }

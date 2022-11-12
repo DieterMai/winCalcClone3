@@ -33,18 +33,21 @@ class SimpleCalculatorTest {
 	@Test
 	void testInitialState() {
 		verify(IdleExpression.of());
+		assertNull(calculator.getMemoryValue());
 	}
 
 	@Test
 	void testResolveOfInitialState() {
 		calculator.resolve();
 		verify(equation("0", "0"));
+		verifyMemory("0");
 	}
 
 	@Test
 	void testInitialNumberInput() {
 		calculator.number("123");
 		verify("123");
+		verifyMemory("123");
 	}
 	
 	@Test
@@ -56,6 +59,7 @@ class SimpleCalculatorTest {
 		calculator.number("111");
 		
 		verify("111");
+		verifyMemory("111");
 	}
 	
 
@@ -65,6 +69,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 
 		verify(equation("123", "123"));
+		verifyMemory("123");
 	}
 
 	@Test
@@ -74,6 +79,7 @@ class SimpleCalculatorTest {
 		calculator.number("456");
 
 		verify("456", equation("123", "123"));
+		verifyMemory("456");
 	}
 
 	@Test
@@ -88,6 +94,7 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verify(equation("456", "456"));
+		verifyMemory("456");
 	}
 
 	/* ******************** */
@@ -100,6 +107,7 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verify(expression("0", BiOperator.plus));
+		verifyMemory("0");
 	}
 
 	@Test
@@ -113,7 +121,7 @@ class SimpleCalculatorTest {
 		// Assert
 
 		verify(equation(expression("0", BiOperator.plus, "0"), "0"));
-
+		verifyMemory("0");
 	}
 
 	@Test
@@ -128,7 +136,7 @@ class SimpleCalculatorTest {
 
 		verifyExpression("123", BiOperator.plus);
 		verifyNoEquation();
-
+		verifyMemory("123");
 	}
 
 	@Test
@@ -139,6 +147,7 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verify(expression("123", BiOperator.plus));
+		verifyMemory("123");
 	}
 
 	@Test
@@ -154,7 +163,7 @@ class SimpleCalculatorTest {
 
 		verifyExpression("123", BiOperator.plus);
 		verifyNoEquation();
-
+		verifyMemory("123");
 	}
 
 	@Test
@@ -169,7 +178,7 @@ class SimpleCalculatorTest {
 		// Assert
 
 		verify(equation(expression("123", BiOperator.plus, "123"), "246"));
-
+		verifyMemory("246");
 	}
 
 	@Test
@@ -185,7 +194,7 @@ class SimpleCalculatorTest {
 		verifyInput("456");
 		verifyExpression("123", BiOperator.plus);
 		verifyNoEquation();
-
+		verifyMemory("456");
 	}
 
 	@Test
@@ -196,6 +205,7 @@ class SimpleCalculatorTest {
 		calculator.plus();
 
 		verify(expression("579", BiOperator.plus), equation(expression("123", BiOperator.plus, "456"), "579"));
+		verifyMemory("579");
 	}
 
 	@Test
@@ -211,7 +221,7 @@ class SimpleCalculatorTest {
 		// Assert
 
 		verify(equation(expression("1", BiOperator.plus, "2"), "3"));
-
+		verifyMemory("3");
 	}
 
 	@Test
@@ -228,7 +238,7 @@ class SimpleCalculatorTest {
 		// Assert
 
 		verify(equation(expression("3", BiOperator.plus, "2"), "5"));
-
+		verifyMemory("5");
 	}
 
 	@Test
@@ -240,6 +250,7 @@ class SimpleCalculatorTest {
 		calculator.plus();
 
 		verify(expression("3", BiOperator.plus), equation(expression("1", BiOperator.plus, "2"), "3"));
+		verifyMemory("3");
 	}
 
 	@Test
@@ -267,7 +278,6 @@ class SimpleCalculatorTest {
 		// Assert
 
 		verify(equation(expression("1", BiOperator.divide, "0"), ResultType.DIVIDE_BY_ZERO));
-
 	}
 
 	@Test
@@ -278,6 +288,7 @@ class SimpleCalculatorTest {
 		calculator.plus();
 
 		verify(expression("0", BiOperator.plus), equation(binary("5", BiOperator.plus, negate("5")), "0"));
+		verifyMemory("0");
 	}
 
 	@Test
@@ -289,6 +300,7 @@ class SimpleCalculatorTest {
 		calculator.plus();
 
 		verify(expression("21", BiOperator.plus), equation(binary("20", BiOperator.plus, "1"), "21"));
+		verifyMemory("21");
 	}
 
 	/* ***********************/
@@ -301,6 +313,7 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verify(expression("0", BiOperator.minus));
+		verifyMemory("0");
 	}
 
 	@Test
@@ -314,7 +327,7 @@ class SimpleCalculatorTest {
 		// Assert
 
 		verify(equation(expression("0", BiOperator.minus, "0"), "0"));
-
+		verifyMemory("0");
 	}
 
 	@Test
@@ -323,6 +336,7 @@ class SimpleCalculatorTest {
 		calculator.minus();
 
 		verify(expression("123", BiOperator.minus));
+		verifyMemory("123");
 	}
 
 	@Test
@@ -336,6 +350,7 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verify(expression("123", BiOperator.minus));
+		verifyMemory("123");
 	}
 
 	@Test
@@ -351,7 +366,7 @@ class SimpleCalculatorTest {
 
 		verifyExpression("123", BiOperator.minus);
 		verifyNoEquation();
-
+		verifyMemory("123");
 	}
 
 	@Test
@@ -366,7 +381,7 @@ class SimpleCalculatorTest {
 		// Assert
 
 		verify(equation(expression("123", BiOperator.minus, "123"), "0"));
-
+		verifyMemory("0");
 	}
 
 	@Test
@@ -382,7 +397,7 @@ class SimpleCalculatorTest {
 		verifyInput("456");
 		verifyExpression("123", BiOperator.minus);
 		verifyNoEquation();
-
+		verifyMemory("456");
 	}
 
 	@Test
@@ -393,6 +408,7 @@ class SimpleCalculatorTest {
 		calculator.minus();
 
 		verify(expression("-333", BiOperator.minus), equation(expression("123", BiOperator.minus, "456"), "-333"));
+		verifyMemory("-333");
 	}
 
 	@Test
@@ -408,7 +424,7 @@ class SimpleCalculatorTest {
 		// Assert
 
 		verify(equation(expression("1", BiOperator.minus, "2"), "-1"));
-
+		verifyMemory("-1");
 	}
 
 	@Test
@@ -425,7 +441,7 @@ class SimpleCalculatorTest {
 		// Assert
 
 		verify(equation(expression("-1", BiOperator.minus, "2"), "-3"));
-
+		verifyMemory("-3");
 	}
 
 	@Test
@@ -437,6 +453,7 @@ class SimpleCalculatorTest {
 		calculator.minus();
 
 		verify(expression("3", BiOperator.minus), equation(expression("1", BiOperator.plus, "2"), "3"));
+		verifyMemory("3");
 	}
 
 	@Test
@@ -449,7 +466,6 @@ class SimpleCalculatorTest {
 
 		// Act
 		assertThrowsExactly(IllegalStateException.class, () -> calculator.minus());
-
 	}
 
 	@Test
@@ -465,7 +481,6 @@ class SimpleCalculatorTest {
 		// Assert
 
 		verify(equation(expression("1", BiOperator.divide, "0"), ResultType.DIVIDE_BY_ZERO));
-
 	}
 
 	@Test
@@ -476,6 +491,7 @@ class SimpleCalculatorTest {
 		calculator.minus();
 
 		verify(expression("0", BiOperator.minus),equation(binary("5", BiOperator.plus, negate("5")), "0"));
+		verifyMemory("0");
 	}
 
 	@Test
@@ -487,6 +503,7 @@ class SimpleCalculatorTest {
 		calculator.minus();
 
 		verify(expression("19", BiOperator.minus), equation(binary("20", BiOperator.minus, "1"), "19"));
+		verifyMemory("19");
 	}
 
 	/* **************************/
@@ -501,7 +518,7 @@ class SimpleCalculatorTest {
 
 		verifyExpression("0", BiOperator.multiply);
 		verifyNoEquation();
-
+		verifyMemory("0");
 	}
 
 	@Test
@@ -511,6 +528,7 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verify(equation(expression("0", BiOperator.multiply, "0"), "0"));
+		verifyMemory("0");
 	}
 
 	@Test
@@ -519,6 +537,7 @@ class SimpleCalculatorTest {
 		calculator.multiply();
 
 		verify(expression("123", BiOperator.multiply));
+		verifyMemory("123");
 	}
 
 	@Test
@@ -534,7 +553,7 @@ class SimpleCalculatorTest {
 
 		verifyExpression("123", BiOperator.multiply);
 		verifyNoEquation();
-
+		verifyMemory("123");
 	}
 
 	@Test
@@ -550,7 +569,7 @@ class SimpleCalculatorTest {
 
 		verifyExpression("123", BiOperator.multiply);
 		verifyNoEquation();
-
+		verifyMemory("123");
 	}
 
 	@Test
@@ -565,7 +584,7 @@ class SimpleCalculatorTest {
 		// Assert
 
 		verify(equation(expression("123", BiOperator.multiply, "123"), "15129"));
-
+		verifyMemory("15129");
 	}
 
 	@Test
@@ -581,7 +600,7 @@ class SimpleCalculatorTest {
 		verifyInput("456");
 		verifyExpression("123", BiOperator.multiply);
 		verifyNoEquation();
-
+		verifyMemory("456");
 	}
 
 	@Test
@@ -592,39 +611,30 @@ class SimpleCalculatorTest {
 		calculator.multiply();
 
 		verify(expression("56088", BiOperator.multiply), equation(expression("123", BiOperator.multiply, "456"), "56088"));
+		verifyMemory("56088");
 	}
 
 	@Test
 	void testResolveAfterCompleteMultiplyEquation() {
-		// Arrange
 		calculator.number("1");
 		calculator.multiply();
 		calculator.number("2");
-
-		// Act
 		calculator.resolve();
 
-		// Assert
-
 		verify(equation(expression("1", BiOperator.multiply, "2"), "2"));
-
+		verifyMemory("2");
 	}
 
 	@Test
 	void testResolveAfterResolvedMultiplyExpression() {
-		// Arrange
 		calculator.number("1");
 		calculator.multiply();
 		calculator.number("2");
 		calculator.resolve();
-
-		// Act
 		calculator.resolve();
 
-		// Assert
-
 		verify(equation(expression("2", BiOperator.multiply, "2"), "4"));
-
+		verifyMemory("4");
 	}
 
 	@Test
@@ -648,39 +658,29 @@ class SimpleCalculatorTest {
 
 		// Act
 		assertThrowsExactly(IllegalStateException.class, () -> calculator.multiply());
-
 	}
 
 	@Test
 	void testMultiplyCompletesErrorEquation() {
-		// Arrange
 		calculator.number("1");
 		calculator.divide();
 		calculator.number("0");
-
-		// Act
 		calculator.multiply();
 
-		// Assert
 
 		verify(equation(expression("1", BiOperator.divide, "0"), ResultType.DIVIDE_BY_ZERO));
-
 	}
 
 	@Test
 	void testMultiplyOnCompletedButPendingBinaryExpression() {
-		// Arrange
 		calculator.number("5");
 		calculator.plus();
 		calculator.negate();
 
-		// Act
 		calculator.multiply();
 
-		// Assert
-
 		verify(expression("0", BiOperator.multiply), equation(expression("5", BiOperator.plus, negate("5")), "0"));
-
+		verifyMemory("0");
 	}
 
 	@Test
@@ -692,6 +692,7 @@ class SimpleCalculatorTest {
 		calculator.multiply();
 
 		verify(expression("1", BiOperator.multiply), equation(binary("20", BiOperator.multiply, "0.05"), "1"));
+		verifyMemory("1");
 	}
 
 	/* ************************/
@@ -706,7 +707,7 @@ class SimpleCalculatorTest {
 
 		verifyExpression("0", BiOperator.divide);
 		verifyNoEquation();
-
+		verifyMemory("0");
 	}
 
 	@Test
@@ -720,7 +721,6 @@ class SimpleCalculatorTest {
 		// Assert
 
 		verify(equation(expression("0", BiOperator.divide, "0"), ResultType.UNDEFINED));
-
 	}
 
 	@Test
@@ -735,7 +735,7 @@ class SimpleCalculatorTest {
 
 		verifyExpression("123", BiOperator.divide);
 		verifyNoEquation();
-
+		verifyMemory("123");
 	}
 
 	@Test
@@ -751,7 +751,7 @@ class SimpleCalculatorTest {
 
 		verifyExpression("123", BiOperator.divide);
 		verifyNoEquation();
-
+		verifyMemory("123");
 	}
 
 	@Test
@@ -765,6 +765,7 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verify(expression("123", BiOperator.divide));
+		verifyMemory("123");
 	}
 
 	@Test
@@ -779,7 +780,7 @@ class SimpleCalculatorTest {
 		// Assert
 
 		verify(equation(expression("123", BiOperator.divide, "123"), "1"));
-
+		verifyMemory("1");
 	}
 
 	@Test
@@ -795,7 +796,7 @@ class SimpleCalculatorTest {
 		verifyInput("456");
 		verifyExpression("123", BiOperator.divide);
 		verifyNoEquation();
-
+		verifyMemory("456");
 	}
 
 	@Test
@@ -806,6 +807,7 @@ class SimpleCalculatorTest {
 		calculator.divide();
 
 		verify(expression("12.5", BiOperator.divide), equation(expression("100", BiOperator.divide, "8"), "12.5"));
+		verifyMemory("12.5");
 	}
 
 	@Test
@@ -821,7 +823,7 @@ class SimpleCalculatorTest {
 		// Assert
 
 		verify(equation(expression("1", BiOperator.divide, "2"), "0.5"));
-
+		verifyMemory("0.5");
 	}
 
 	@Test
@@ -833,6 +835,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 
 		verify(equation(expression("0.5", BiOperator.divide, "2"), "0.25"));
+		verifyMemory("0.25");
 	}
 
 	@Test
@@ -864,6 +867,7 @@ class SimpleCalculatorTest {
 		calculator.divide();
 
 		verify(expression("3", BiOperator.divide), equation(expression("1", BiOperator.plus, "2"), "3"));
+		verifyMemory("3");
 	}
 
 	@Test
@@ -876,7 +880,6 @@ class SimpleCalculatorTest {
 
 		// Act
 		assertThrowsExactly(IllegalStateException.class, () -> calculator.divide());
-
 	}
 
 	@Test
@@ -919,6 +922,7 @@ class SimpleCalculatorTest {
 		calculator.divide();
 
 		verify(expression("400", BiOperator.divide), equation(binary("20", BiOperator.divide, "0.05"), "400"));
+		verifyMemory("400");
 	}
 
 	/* ************************/
@@ -926,13 +930,10 @@ class SimpleCalculatorTest {
 	/* ************************/
 	@Test
 	void testInitialNegate() {
-		// Act
 		calculator.negate();
 
-		// Assert
-
 		verifyNoEquation();
-
+		verifyMemory("0");
 	}
 
 	@Test
@@ -943,6 +944,7 @@ class SimpleCalculatorTest {
 
 		// Assert
 		verify("-123");
+		verifyMemory("-123");
 	}
 
 	@Test
@@ -955,6 +957,7 @@ class SimpleCalculatorTest {
 		verifyInput("123");
 
 		verifyNoEquation();
+		verifyMemory("123");
 
 	}
 
@@ -968,7 +971,7 @@ class SimpleCalculatorTest {
 		verifyInput("0");
 
 		verifyNoEquation();
-
+		verifyMemory("0");
 	}
 
 	@Test
@@ -978,6 +981,7 @@ class SimpleCalculatorTest {
 		calculator.negate();
 
 		verify(expression(UnaryOperator.negate, "0"), equation("0", "0"));
+		verifyMemory("0");
 	}
 
 	@Test
@@ -987,6 +991,7 @@ class SimpleCalculatorTest {
 		calculator.negate();
 
 		verify(expression(UnaryOperator.negate, "5"), equation("5", "5"));
+		verifyMemory("-5");
 	}
 
 	@Test
@@ -997,6 +1002,7 @@ class SimpleCalculatorTest {
 		calculator.negate();
 
 		verify(expression(UnaryOperator.negate, unary(UnaryOperator.negate, "5")), equation("5", "5"));
+		verifyMemory("5");
 	}
 
 	@Test
@@ -1010,6 +1016,7 @@ class SimpleCalculatorTest {
 
 		verifyExpression(binary("5", BiOperator.plus, unary(UnaryOperator.negate, "5")));
 		verifyNoEquation();
+		verifyMemory("-5");
 
 	}
 
@@ -1025,7 +1032,7 @@ class SimpleCalculatorTest {
 
 		verifyExpression(binary("5", BiOperator.plus, expression(UnaryOperator.negate, unary(UnaryOperator.negate, "5"))));
 		verifyNoEquation();
-
+		verifyMemory("5");
 	}
 
 	@Test
@@ -1764,7 +1771,6 @@ class SimpleCalculatorTest {
 	/* *******************/
 	/* C related methods */
 	/* *******************/
-
 	@Test
 	void testCOnInitialState() {
 		calculator.c();
@@ -1821,6 +1827,18 @@ class SimpleCalculatorTest {
 		
 		verify(IdleExpression.of());
 	}
+	
+	
+	/* ********************/
+	/* MS related methods */
+	/* ********************/
+	
+	@Test
+	void testMsOnInput() {
+		calculator.number("123");
+		assertNull(calculator.getMemoryValue());
+	}
+	
 	
 	private void verifyExpression(String number, BiOperator operator) {
 		assertEquals(BinaryExpression.of(bd(number), operator), getExpression());
@@ -1920,6 +1938,12 @@ class SimpleCalculatorTest {
 		assertEquals(error, calculator.getState().lastResolve());
 	}
 
+	private void verifyMemory(String expected) {
+		calculator.ms();
+		assertEquals(bd(expected), calculator.getMemoryValue());
+	}
+
+	
 	// Util methods
 	private BinaryExpression expression(String number, BiOperator opreator) {
 		return BinaryExpression.of(number, opreator);
@@ -1952,4 +1976,5 @@ class SimpleCalculatorTest {
 	private Equation equation(Expression expression, ResultType type) {
 		return Equation.of(expression, Result.of(type));
 	}
+	
 }

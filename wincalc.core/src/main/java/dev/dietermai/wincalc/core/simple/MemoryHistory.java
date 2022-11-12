@@ -14,6 +14,14 @@ private final LinkedList<BigDecimal> savedValues = new LinkedList<>();
 		return List.copyOf(savedValues);
 	}
 	
+	public BigDecimal getValue() {
+		if(savedValues.isEmpty()) {
+			return null;
+		}else {
+			return savedValues.getFirst();
+		}
+	}
+	
 	public void delete(int index) {
 		if(index < savedValues.size()) {
 			savedValues.remove(index);
