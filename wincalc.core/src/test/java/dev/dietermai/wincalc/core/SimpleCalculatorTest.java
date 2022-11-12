@@ -748,22 +748,16 @@ class SimpleCalculatorTest {
 		verify(equation(expression("1", BiOperator.divide, "0"), ResultType.DIVIDE_BY_ZERO));
 	}
 
-//	@Test
-//	void testDivideOnCompletedButPendingBinaryExpression() {
-//		// Arrange
-//		calculator.number("5");
-//		calculator.plus();
-//		calculator.negate(); // TODO switch this with another unary operation
-//
-//		// Act
-//		calculator.divide();
-//		
-//		// Assert
-//		
-//		verifyExpression("0", BiOperator.divide);
-//		verify(equation(plus("5", negate("5")), "0");
-//	
-//	}
+	@Test
+	void testDivideOnCompletedButPendingBinaryExpression() {
+		calculator.number("5");
+		calculator.plus();
+		calculator.square();
+		calculator.divide();
+		
+		verify(expression("30", BiOperator.divide), equation(binary("5", BiOperator.plus, unary(UnaryOperator.square, "5")), "30"));
+		verifyMemory("30");
+	}
 
 	@Test
 	void testDivideOnCompletedBinaryWithTwoNumbers() {
@@ -1284,19 +1278,6 @@ class SimpleCalculatorTest {
 		verify(equation(unary(UnaryOperator.root, "2"), "1.414213562373095"));
 	}
 
-//	@Test
-//	void testRootOfRootWithNegativeNumber() {
-//		// Act
-//		calculator.number("5");
-//		calculator.negate();
-//		calculator.root();
-//		assertThrowsExactly(IllegalStateException.class, () -> calculator.root()); // TODO implement error state into calculator state
-//
-//		// Assert
-//		
-//		
-//		verify(equation("5", BiOperator.divide, "0", ResolveType.INVALID_INPUT);
-//	}
 
 	/* *************************/
 	/* OneDivX related methods */
