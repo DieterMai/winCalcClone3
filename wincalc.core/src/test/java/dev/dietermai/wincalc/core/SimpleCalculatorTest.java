@@ -49,7 +49,7 @@ class SimpleCalculatorTest {
 		verify("123");
 		verifyMemory("123");
 	}
-	
+
 	@Test
 	void testNumberOnEquation() {
 		calculator.number("123");
@@ -57,11 +57,10 @@ class SimpleCalculatorTest {
 		calculator.number("456");
 		calculator.resolve();
 		calculator.number("111");
-		
+
 		verify("111");
 		verifyMemory("111");
 	}
-	
 
 	@Test
 	void testResolveOfInitialNumber() {
@@ -121,8 +120,7 @@ class SimpleCalculatorTest {
 
 		calculator.plus();
 
-		verifyExpression("123", BiOperator.plus);
-		verifyNoEquation();
+		verify(expression("123", BiOperator.plus));
 		verifyMemory("123");
 	}
 
@@ -143,8 +141,7 @@ class SimpleCalculatorTest {
 
 		calculator.plus();
 
-		verifyExpression("123", BiOperator.plus);
-		verifyNoEquation();
+		verify(expression("123", BiOperator.plus));
 		verifyMemory("123");
 	}
 
@@ -163,12 +160,9 @@ class SimpleCalculatorTest {
 	void testSecondNumberOfPlus() {
 		calculator.number("123");
 		calculator.plus();
-
 		calculator.number("456");
 
-		verifyInput("456");
-		verifyExpression("123", BiOperator.plus);
-		verifyNoEquation();
+		verify("456", expression("123", BiOperator.plus));
 		verifyMemory("456");
 	}
 
@@ -248,7 +242,7 @@ class SimpleCalculatorTest {
 		calculator.negate();
 		calculator.plus();
 
-		verify(expression("0", BiOperator.plus), equation(binary("5", BiOperator.plus, negate("5")), "0"));
+		verify(expression("0", BiOperator.plus), equation(expression("5", BiOperator.plus, negate("5")), "0"));
 		verifyMemory("0");
 	}
 
@@ -260,7 +254,7 @@ class SimpleCalculatorTest {
 		calculator.percent();
 		calculator.plus();
 
-		verify(expression("21", BiOperator.plus), equation(binary("20", BiOperator.plus, "1"), "21"));
+		verify(expression("21", BiOperator.plus), equation(expression("20", BiOperator.plus, "1"), "21"));
 		verifyMemory("21");
 	}
 
@@ -309,8 +303,7 @@ class SimpleCalculatorTest {
 		calculator.plus();
 		calculator.minus();
 
-		verifyExpression("123", BiOperator.minus);
-		verifyNoEquation();
+		verify(expression("123", BiOperator.minus));
 		verifyMemory("123");
 	}
 
@@ -330,9 +323,7 @@ class SimpleCalculatorTest {
 		calculator.minus();
 		calculator.number("456");
 
-		verifyInput("456");
-		verifyExpression("123", BiOperator.minus);
-		verifyNoEquation();
+		verify("456", expression("123", BiOperator.minus));
 		verifyMemory("456");
 	}
 
@@ -409,7 +400,7 @@ class SimpleCalculatorTest {
 		calculator.negate();
 		calculator.minus();
 
-		verify(expression("0", BiOperator.minus),equation(binary("5", BiOperator.plus, negate("5")), "0"));
+		verify(expression("0", BiOperator.minus), equation(expression("5", BiOperator.plus, negate("5")), "0"));
 		verifyMemory("0");
 	}
 
@@ -421,7 +412,7 @@ class SimpleCalculatorTest {
 		calculator.percent();
 		calculator.minus();
 
-		verify(expression("19", BiOperator.minus), equation(binary("20", BiOperator.minus, "1"), "19"));
+		verify(expression("19", BiOperator.minus), equation(expression("20", BiOperator.minus, "1"), "19"));
 		verifyMemory("19");
 	}
 
@@ -432,8 +423,7 @@ class SimpleCalculatorTest {
 	void testMultiplyAfterInit() {
 		calculator.multiply();
 
-		verifyExpression("0", BiOperator.multiply);
-		verifyNoEquation();
+		verify(expression("0", BiOperator.multiply));
 		verifyMemory("0");
 	}
 
@@ -461,9 +451,7 @@ class SimpleCalculatorTest {
 		calculator.multiply();
 		calculator.multiply();
 
-
-		verifyExpression("123", BiOperator.multiply);
-		verifyNoEquation();
+		verify(expression("123", BiOperator.multiply));
 		verifyMemory("123");
 	}
 
@@ -473,8 +461,7 @@ class SimpleCalculatorTest {
 		calculator.plus();
 		calculator.multiply();
 
-		verifyExpression("123", BiOperator.multiply);
-		verifyNoEquation();
+		verify(expression("123", BiOperator.multiply));
 		verifyMemory("123");
 	}
 
@@ -494,9 +481,7 @@ class SimpleCalculatorTest {
 		calculator.multiply();
 		calculator.number("456");
 
-		verifyInput("456");
-		verifyExpression("123", BiOperator.multiply);
-		verifyNoEquation();
+		verify("456", expression("123", BiOperator.multiply));
 		verifyMemory("456");
 	}
 
@@ -584,7 +569,7 @@ class SimpleCalculatorTest {
 		calculator.percent();
 		calculator.multiply();
 
-		verify(expression("1", BiOperator.multiply), equation(binary("20", BiOperator.multiply, "0.05"), "1"));
+		verify(expression("1", BiOperator.multiply), equation(expression("20", BiOperator.multiply, "0.05"), "1"));
 		verifyMemory("1");
 	}
 
@@ -595,8 +580,7 @@ class SimpleCalculatorTest {
 	void testDivideAfterInit() {
 		calculator.divide();
 
-		verifyExpression("0", BiOperator.divide);
-		verifyNoEquation();
+		verify(expression("0", BiOperator.divide));
 		verifyMemory("0");
 	}
 
@@ -613,8 +597,7 @@ class SimpleCalculatorTest {
 		calculator.number("123");
 		calculator.divide();
 
-		verifyExpression("123", BiOperator.divide);
-		verifyNoEquation();
+		verify(expression("123", BiOperator.divide));
 		verifyMemory("123");
 	}
 
@@ -624,8 +607,7 @@ class SimpleCalculatorTest {
 		calculator.divide();
 		calculator.divide();
 
-		verifyExpression("123", BiOperator.divide);
-		verifyNoEquation();
+		verify(expression("123", BiOperator.divide));
 		verifyMemory("123");
 	}
 
@@ -655,9 +637,7 @@ class SimpleCalculatorTest {
 		calculator.divide();
 		calculator.number("456");
 
-		verifyInput("456");
-		verifyExpression("123", BiOperator.divide);
-		verifyNoEquation();
+		verify("456", expression("123", BiOperator.divide));
 		verifyMemory("456");
 	}
 
@@ -754,8 +734,8 @@ class SimpleCalculatorTest {
 		calculator.plus();
 		calculator.square();
 		calculator.divide();
-		
-		verify(expression("30", BiOperator.divide), equation(binary("5", BiOperator.plus, unary(UnaryOperator.square, "5")), "30"));
+
+		verify(expression("30", BiOperator.divide), equation(expression("5", BiOperator.plus, expression(UnaryOperator.square, "5")), "30"));
 		verifyMemory("30");
 	}
 
@@ -767,7 +747,7 @@ class SimpleCalculatorTest {
 		calculator.percent();
 		calculator.divide();
 
-		verify(expression("400", BiOperator.divide), equation(binary("20", BiOperator.divide, "0.05"), "400"));
+		verify(expression("400", BiOperator.divide), equation(expression("20", BiOperator.divide, "0.05"), "400"));
 		verifyMemory("400");
 	}
 
@@ -778,7 +758,6 @@ class SimpleCalculatorTest {
 	void testInitialNegate() {
 		calculator.negate();
 
-		verifyNoEquation();
 		verifyMemory("0");
 	}
 
@@ -795,20 +774,17 @@ class SimpleCalculatorTest {
 	void testNegateOfNegativeNumber() {
 		calculator.number("-123");
 		calculator.negate();
-		verifyInput("123");
 
-		verifyNoEquation();
+		verify("123");
 		verifyMemory("123");
-
 	}
 
 	@Test
 	void testNegateOfZero() {
 		calculator.number("0");
 		calculator.negate();
-		verifyInput("0");
 
-		verifyNoEquation();
+		verify("0");
 		verifyMemory("0");
 	}
 
@@ -839,7 +815,7 @@ class SimpleCalculatorTest {
 		calculator.negate();
 		calculator.negate();
 
-		verify(expression(UnaryOperator.negate, unary(UnaryOperator.negate, "5")), equation("5", "5"));
+		verify(expression(UnaryOperator.negate, expression(UnaryOperator.negate, "5")), equation("5", "5"));
 		verifyMemory("5");
 	}
 
@@ -849,10 +825,8 @@ class SimpleCalculatorTest {
 		calculator.plus();
 		calculator.negate();
 
-		verifyExpression(binary("5", BiOperator.plus, unary(UnaryOperator.negate, "5")));
-		verifyNoEquation();
+		verify(expression("5", BiOperator.plus, expression(UnaryOperator.negate, "5")));
 		verifyMemory("-5");
-
 	}
 
 	@Test
@@ -862,8 +836,7 @@ class SimpleCalculatorTest {
 		calculator.negate();
 		calculator.negate();
 
-		verifyExpression(binary("5", BiOperator.plus, expression(UnaryOperator.negate, unary(UnaryOperator.negate, "5"))));
-		verifyNoEquation();
+		verify(expression("5", BiOperator.plus, expression(UnaryOperator.negate, expression(UnaryOperator.negate, "5"))));
 		verifyMemory("5");
 	}
 
@@ -945,9 +918,7 @@ class SimpleCalculatorTest {
 		calculator.plus();
 		calculator.percent();
 
-		verifyExpression(binary("5", BiOperator.plus, "0.25"));
-		verifyNoEquation();
-
+		verify(expression("5", BiOperator.plus, "0.25"));
 	}
 
 	@Test
@@ -957,9 +928,7 @@ class SimpleCalculatorTest {
 		calculator.negate();
 		calculator.percent();
 
-		verifyExpression(binary("5", BiOperator.plus, "-0.25"));
-		verifyNoEquation();
-
+		verify(expression("5", BiOperator.plus, "-0.25"));
 	}
 
 	@Test
@@ -969,9 +938,7 @@ class SimpleCalculatorTest {
 		calculator.number("5");
 		calculator.percent();
 
-		verifyExpression(binary("20", BiOperator.plus, "1"));
-		verifyNoEquation();
-
+		verify(expression("20", BiOperator.plus, "1"));
 	}
 
 	@Test
@@ -981,9 +948,7 @@ class SimpleCalculatorTest {
 		calculator.number("5");
 		calculator.percent();
 
-		verifyExpression(binary("20", BiOperator.minus, "1"));
-		verifyNoEquation();
-
+		verify(expression("20", BiOperator.minus, "1"));
 	}
 
 	@Test
@@ -993,8 +958,7 @@ class SimpleCalculatorTest {
 		calculator.number("5");
 		calculator.percent();
 
-		verifyExpression(binary("20", BiOperator.multiply, "0.05"));
-		verifyNoEquation();
+		verify(expression("20", BiOperator.multiply, "0.05"));
 
 	}
 
@@ -1005,8 +969,7 @@ class SimpleCalculatorTest {
 		calculator.number("5");
 		calculator.percent();
 
-		verifyExpression(binary("20", BiOperator.divide, "0.05"));
-		verifyNoEquation();
+		verify(expression("20", BiOperator.divide, "0.05"));
 
 	}
 
@@ -1091,9 +1054,7 @@ class SimpleCalculatorTest {
 		calculator.square();
 		calculator.square();
 
-		verifyExpression(expression(UnaryOperator.square, unary(UnaryOperator.square, "5")));
-		verifyNoEquation();
-		verify(expression(UnaryOperator.square, unary(UnaryOperator.square, "5")));
+		verify(expression(UnaryOperator.square, expression(UnaryOperator.square, "5")));
 	}
 
 	@Test
@@ -1102,8 +1063,7 @@ class SimpleCalculatorTest {
 		calculator.plus();
 		calculator.square();
 
-		verifyExpression(binary("5", BiOperator.plus, unary(UnaryOperator.square, "5")));
-		verifyNoEquation();
+		verify(expression("5", BiOperator.plus, expression(UnaryOperator.square, "5")));
 	}
 
 	@Test
@@ -1113,8 +1073,7 @@ class SimpleCalculatorTest {
 		calculator.square();
 		calculator.square();
 
-		verifyExpression(binary("5", BiOperator.plus, expression(UnaryOperator.square, unary(UnaryOperator.square, "5"))));
-		verifyNoEquation();
+		verify(expression("5", BiOperator.plus, expression(UnaryOperator.square, expression(UnaryOperator.square, "5"))));
 	}
 
 	@Test
@@ -1134,7 +1093,7 @@ class SimpleCalculatorTest {
 		calculator.square();
 		calculator.resolve();
 
-		verify(equation(unary(UnaryOperator.square, "5"), "25"));
+		verify(equation(expression(UnaryOperator.square, "5"), "25"));
 	}
 
 	@Test
@@ -1144,7 +1103,7 @@ class SimpleCalculatorTest {
 		calculator.square();
 		calculator.resolve();
 
-		verify(equation(expression(UnaryOperator.square, unary(UnaryOperator.square, "5")), "625"));
+		verify(equation(expression(UnaryOperator.square, expression(UnaryOperator.square, "5")), "625"));
 	}
 
 	/* **********************/
@@ -1154,8 +1113,7 @@ class SimpleCalculatorTest {
 	void testInitialRoot() {
 		calculator.root();
 
-		verifyExpression(UnaryOperator.root, "0");
-		verifyNoEquation();
+		verify(expression(UnaryOperator.root, "0"));
 	}
 
 	@Test
@@ -1163,8 +1121,7 @@ class SimpleCalculatorTest {
 		calculator.number("123");
 		calculator.root();
 
-		verifyExpression(UnaryOperator.root, "123");
-		verifyNoEquation();
+		verify(expression(UnaryOperator.root, "123"));
 	}
 
 	@Test
@@ -1173,9 +1130,7 @@ class SimpleCalculatorTest {
 		calculator.negate();
 		calculator.root();
 
-		verifyExpression(UnaryOperator.root, "-123");
-		verifyNoEquation();
-		verifyError(ResultType.INVALID_INPUT);
+		verify(expression(UnaryOperator.root, "-123"), ResultType.INVALID_INPUT);
 	}
 
 	@Test
@@ -1183,8 +1138,7 @@ class SimpleCalculatorTest {
 		calculator.number("0");
 		calculator.root();
 
-		verifyExpression(UnaryOperator.root, "0");
-		verifyNoEquation();
+		verify(expression(UnaryOperator.root, "0"));
 	}
 
 	@Test
@@ -1193,8 +1147,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 		calculator.root();
 
-		verifyExpression(UnaryOperator.root, "0");
-		verifyNoEquation();
+		verify(expression(UnaryOperator.root, "0"));
 	}
 
 	@Test
@@ -1203,8 +1156,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 		calculator.root();
 
-		verifyExpression(UnaryOperator.root, "5");
-		verifyNoEquation();
+		verify(expression(UnaryOperator.root, "5"));
 	}
 
 	@Test
@@ -1214,8 +1166,7 @@ class SimpleCalculatorTest {
 		calculator.root();
 		calculator.root();
 
-		verifyExpression(expression(UnaryOperator.root, unary(UnaryOperator.root, "5")));
-		verifyNoEquation();
+		verify(expression(UnaryOperator.root, expression(UnaryOperator.root, "5")));
 	}
 
 	@Test
@@ -1224,8 +1175,7 @@ class SimpleCalculatorTest {
 		calculator.plus();
 		calculator.root();
 
-		verifyExpression(binary("5", BiOperator.plus, unary(UnaryOperator.root, "5")));
-		verifyNoEquation();
+		verify(expression("5", BiOperator.plus, expression(UnaryOperator.root, "5")));
 	}
 
 	@Test
@@ -1235,8 +1185,7 @@ class SimpleCalculatorTest {
 		calculator.root();
 		calculator.root();
 
-		verifyExpression(binary("5", BiOperator.plus, expression(UnaryOperator.root, unary(UnaryOperator.root, "5"))));
-		verifyNoEquation();
+		verify(expression("5", BiOperator.plus, expression(UnaryOperator.root, expression(UnaryOperator.root, "5"))));
 	}
 
 	@Test
@@ -1256,7 +1205,7 @@ class SimpleCalculatorTest {
 		calculator.root();
 		calculator.resolve();
 
-		verify(equation(unary(UnaryOperator.root, "25"), "5"));
+		verify(equation(expression(UnaryOperator.root, "25"), "5"));
 	}
 
 	@Test
@@ -1266,7 +1215,7 @@ class SimpleCalculatorTest {
 		calculator.root();
 		calculator.resolve();
 
-		verify(equation(expression(UnaryOperator.root, unary(UnaryOperator.root, "625")), "5"));
+		verify(equation(expression(UnaryOperator.root, expression(UnaryOperator.root, "625")), "5"));
 	}
 
 	@Test
@@ -1275,9 +1224,8 @@ class SimpleCalculatorTest {
 		calculator.root();
 		calculator.resolve();
 
-		verify(equation(unary(UnaryOperator.root, "2"), "1.414213562373095"));
+		verify(equation(expression(UnaryOperator.root, "2"), "1.414213562373095"));
 	}
-
 
 	/* *************************/
 	/* OneDivX related methods */
@@ -1287,8 +1235,7 @@ class SimpleCalculatorTest {
 		calculator.number("123");
 		calculator.oneDivX();
 
-		verifyExpression(UnaryOperator.oneDivX, "123");
-		verifyNoEquation();
+		verify(expression(UnaryOperator.oneDivX, "123"));
 	}
 
 	@Test
@@ -1297,8 +1244,7 @@ class SimpleCalculatorTest {
 		calculator.negate();
 		calculator.oneDivX();
 
-		verifyExpression(UnaryOperator.oneDivX, "-123");
-		verifyNoEquation();
+		verify(expression(UnaryOperator.oneDivX, "-123"));
 	}
 
 	@Test
@@ -1306,8 +1252,7 @@ class SimpleCalculatorTest {
 		calculator.number("0");
 		calculator.oneDivX();
 
-		verifyExpression(UnaryOperator.oneDivX, "0");
-		verifyNoEquation();
+		verify(expression(UnaryOperator.oneDivX, "0"), ResultType.DIVIDE_BY_ZERO);
 	}
 
 	@Test
@@ -1316,9 +1261,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 		calculator.oneDivX();
 
-		verifyExpression(UnaryOperator.oneDivX, "0");
-		verifyNoEquation();
-		verifyError(ResultType.DIVIDE_BY_ZERO);
+		verify(expression(UnaryOperator.oneDivX, "0"), ResultType.DIVIDE_BY_ZERO);
 	}
 
 	@Test
@@ -1327,8 +1270,7 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 		calculator.oneDivX();
 
-		verifyExpression(UnaryOperator.oneDivX, "5");
-		verifyNoEquation();
+		verify(expression(UnaryOperator.oneDivX, "5"));
 	}
 
 	@Test
@@ -1357,8 +1299,7 @@ class SimpleCalculatorTest {
 		calculator.oneDivX();
 		calculator.oneDivX();
 
-		verifyExpression(binary("5", BiOperator.plus, expression(UnaryOperator.oneDivX, unary(UnaryOperator.oneDivX, "5"))));
-		verifyNoEquation();
+		verify(expression("5", BiOperator.plus, expression(UnaryOperator.oneDivX, expression(UnaryOperator.oneDivX, "5"))));
 	}
 
 	@Test
@@ -1378,7 +1319,7 @@ class SimpleCalculatorTest {
 		calculator.oneDivX();
 		calculator.resolve();
 
-		verify(equation(unary(UnaryOperator.oneDivX, "25"), "0.04"));
+		verify(equation(expression(UnaryOperator.oneDivX, "25"), "0.04"));
 	}
 
 	@Test
@@ -1388,7 +1329,7 @@ class SimpleCalculatorTest {
 		calculator.oneDivX();
 		calculator.resolve();
 
-		verify(equation(expression(UnaryOperator.oneDivX, unary(UnaryOperator.oneDivX, "625")), "625"));
+		verify(equation(expression(UnaryOperator.oneDivX, expression(UnaryOperator.oneDivX, "625")), "625"));
 	}
 
 	@Test
@@ -1397,7 +1338,7 @@ class SimpleCalculatorTest {
 		calculator.oneDivX();
 		calculator.resolve();
 
-		verify(equation(unary(UnaryOperator.oneDivX, "3"), "0.3333333333333333"));
+		verify(equation(expression(UnaryOperator.oneDivX, "3"), "0.3333333333333333"));
 	}
 
 	@Test
@@ -1406,18 +1347,16 @@ class SimpleCalculatorTest {
 		calculator.oneDivX();
 		calculator.resolve();
 
-		verify(equation(unary(UnaryOperator.oneDivX, "6"), "0.1666666666666667"));
+		verify(equation(expression(UnaryOperator.oneDivX, "6"), "0.1666666666666667"));
 	}
 
 	@Test
 	void testInitialOneDivX() {
 		calculator.oneDivX();
 
-		verifyExpression(UnaryOperator.oneDivX, "0");
-		verifyNoEquation();
-		verifyError(ResultType.DIVIDE_BY_ZERO);
+		verify(expression(UnaryOperator.oneDivX, "0"), ResultType.DIVIDE_BY_ZERO);
 	}
-	
+
 	/* ********************/
 	/* CE related methods */
 	/* ********************/
@@ -1425,37 +1364,37 @@ class SimpleCalculatorTest {
 	@Test
 	void testCeOnInitialState() {
 		calculator.ce();
-		
+
 		verify(IdleExpression.of());
 	}
-	
+
 	@Test
 	void testCeOnInitialInput() {
 		calculator.number("123");
 		calculator.ce();
-		
+
 		verify(IdleExpression.of());
 	}
-	
+
 	@Test
 	void testCeOnStartedExpression() {
 		calculator.number("123");
 		calculator.plus();
 		calculator.ce();
-		
+
 		verify(expression("123", BiOperator.plus));
 	}
-	
+
 	@Test
 	void testCeOnStartedExpressionWithNumberInput() {
 		calculator.number("123");
 		calculator.plus();
 		calculator.number("456");
 		calculator.ce();
-		
+
 		verify(expression("123", BiOperator.plus));
 	}
-	
+
 	@Test
 	void testCeOnEquation() {
 		calculator.number("123");
@@ -1463,10 +1402,10 @@ class SimpleCalculatorTest {
 		calculator.number("456");
 		calculator.resolve();
 		calculator.ce();
-		
-		verify(equation(expression("123", BiOperator.plus, "456"),  "579"));
+
+		verify(equation(expression("123", BiOperator.plus, "456"), "579"));
 	}
-	
+
 	@Test
 	void testCeOnEquationWithNumberInput() {
 		calculator.number("123");
@@ -1475,47 +1414,47 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 		calculator.number("111");
 		calculator.ce();
-		
+
 		verify(IdleExpression.of());
 	}
-	
+
 	/* *******************/
 	/* C related methods */
 	/* *******************/
 	@Test
 	void testCOnInitialState() {
 		calculator.c();
-		
+
 		verify(IdleExpression.of());
 	}
-	
+
 	@Test
 	void testCOnInitialInput() {
 		calculator.number("123");
 		calculator.c();
-		
+
 		verify(IdleExpression.of());
 	}
-	
+
 	@Test
 	void testCOnStartedExpression() {
 		calculator.number("123");
 		calculator.plus();
 		calculator.c();
-		
+
 		verify(IdleExpression.of());
 	}
-	
+
 	@Test
 	void testCOnStartedExpressionWithNumberInput() {
 		calculator.number("123");
 		calculator.plus();
 		calculator.number("456");
 		calculator.c();
-		
+
 		verify(IdleExpression.of());
 	}
-	
+
 	@Test
 	void testCOnEquation() {
 		calculator.number("123");
@@ -1523,10 +1462,10 @@ class SimpleCalculatorTest {
 		calculator.number("456");
 		calculator.resolve();
 		calculator.c();
-		
+
 		verify(IdleExpression.of());
 	}
-	
+
 	@Test
 	void testCOnEquationWithNumberInput() {
 		calculator.number("123");
@@ -1535,50 +1474,21 @@ class SimpleCalculatorTest {
 		calculator.resolve();
 		calculator.number("111");
 		calculator.c();
-		
+
 		verify(IdleExpression.of());
 	}
-	
-	
+
 	/* ********************/
 	/* MS related methods */
 	/* ********************/
-	
+
 	@Test
 	void testMsOnInput() {
 		calculator.number("123");
 		assertNull(calculator.getMemoryValue());
 	}
-	
-	
-	private void verifyExpression(String number, BiOperator operator) {
-		assertEquals(BinaryExpression.of(bd(number), operator), getExpression());
-	}
 
-	private void verifyExpression(UnaryOperator operator, String number) {
-		assertEquals(UnaryExpression.of(operator, bd(number)), getExpression());
-	}
-
-	private BinaryExpression binary(String left, BiOperator operator, Expression right) {
-		return BinaryExpression.of(bd(left), operator, right);
-	}
-
-	private BinaryExpression binary(String left, BiOperator operator, String right) {
-		return BinaryExpression.of(bd(left), operator, bd(right));
-	}
-
-	private UnaryExpression unary(UnaryOperator operator, String number) {
-		return UnaryExpression.of(operator, number(number));
-	}
-
-	private BigDecimal bd(String s) {
-		return new BigDecimal(s);
-	}
-
-	private NumberExpression number(String s) {
-		return NumberExpression.of(s);
-	}
-
+	// Verify methods
 	private Expression getExpression() {
 		return calculator.getState().expression();
 	}
@@ -1591,9 +1501,6 @@ class SimpleCalculatorTest {
 		return UnaryExpression.of(UnaryOperator.negate, number);
 	}
 
-	// NEW
-
-	// Verify methods
 	private void verify(String input) {
 		verifyInput(input);
 		verifyExpression(IdleExpression.of());
@@ -1606,6 +1513,13 @@ class SimpleCalculatorTest {
 		verifyExpression(expression);
 		verifyNoEquation();
 		verifyError(ResultType.OK);
+	}
+
+	private void verify(Expression expression, ResultType error) {
+		verifyInput("");
+		verifyExpression(expression);
+		verifyNoEquation();
+		verifyError(error);
 	}
 
 	private void verify(Expression expression, Equation equation) {
@@ -1627,6 +1541,13 @@ class SimpleCalculatorTest {
 		verifyExpression(IdleExpression.of());
 		verifyEquation(equation);
 		verifyError(equation.error());
+	}
+
+	private void verify(String input, Expression expression) {
+		verifyInput(input);
+		verifyExpression(expression);
+		verifyEquation(null);
+		verifyError(ResultType.OK);
 	}
 
 	private void verifyInput(String expected) {
@@ -1654,7 +1575,6 @@ class SimpleCalculatorTest {
 		assertEquals(bd(expected), calculator.getMemoryValue());
 	}
 
-	
 	// Util methods
 	private BinaryExpression expression(String number, BiOperator opreator) {
 		return BinaryExpression.of(number, opreator);
@@ -1677,7 +1597,7 @@ class SimpleCalculatorTest {
 	}
 
 	private Equation equation(String left, String right) {
-		return Equation.of(number(left), Result.of(bd(right)));
+		return Equation.of(NumberExpression.of(left), Result.of(bd(right)));
 	}
 
 	private Equation equation(Expression expression, String value) {
@@ -1687,5 +1607,8 @@ class SimpleCalculatorTest {
 	private Equation equation(Expression expression, ResultType type) {
 		return Equation.of(expression, Result.of(type));
 	}
-	
+
+	private BigDecimal bd(String s) {
+		return new BigDecimal(s);
+	}
 }
