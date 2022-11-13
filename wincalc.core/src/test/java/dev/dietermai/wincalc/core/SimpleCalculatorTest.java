@@ -33,7 +33,7 @@ class SimpleCalculatorTest {
 	@Test
 	void testInitialState() {
 		verify(IdleExpression.of());
-		assertNull(calculator.getMemoryValue());
+		assertNull(calculator.mr());
 	}
 
 	@Test
@@ -1485,7 +1485,7 @@ class SimpleCalculatorTest {
 	@Test
 	void testMsOnInput() {
 		calculator.number("123");
-		assertNull(calculator.getMemoryValue());
+		assertNull(calculator.mr());
 	}
 
 	// Verify methods
@@ -1572,7 +1572,7 @@ class SimpleCalculatorTest {
 
 	private void verifyMemory(String expected) {
 		calculator.ms();
-		assertEquals(bd(expected), calculator.getMemoryValue());
+		assertEquals(bd(expected), calculator.mr());
 	}
 
 	// Util methods

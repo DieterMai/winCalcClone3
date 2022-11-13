@@ -111,11 +111,15 @@ public class SimpleCalculator {
 		return memory.getValues();
 	}
 	
-	public BigDecimal getMemoryValue() {
+	public BigDecimal mr() {
 		return memory.getValue();
 	}
 	
 	public void ms() {
 		memory.add(SimpleCalculatorBl.getCurrentValue(state));
+	}
+	
+	public void mc() {
+		memory.clear();
 	}
 }
