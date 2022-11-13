@@ -12,7 +12,7 @@ import dev.dietermai.wincalc.core.simple.model.SimpleCalculatorRecord;
 public class SimpleCalculator {
 	private final EquationHistory equationHistory = new EquationHistory();
 	private final MemoryHistory memory = new MemoryHistory();
-	
+
 	private SimpleCalculatorRecord state = SimpleCalculatorRecord.of();
 
 	/* **********************************/
@@ -80,53 +80,53 @@ public class SimpleCalculator {
 	public void ce() {
 		state = SimpleCalculatorBl.ce(state);
 	}
-	
+
 	public void c() {
 		state = SimpleCalculatorRecord.of();
 	}
-	
+
 	/* ****************************************/
 	/* Equation History state related methods */
 	/* ****************************************/
 	public void add(Equation newEquation) {
 		equationHistory.add(newEquation);
 	}
-	
-	public List<Equation> getEquations(){
+
+	public List<Equation> getEquations() {
 		return equationHistory.getEquations();
 	}
-	
+
 	public void deleteEquation(int index) {
 		equationHistory.delete(index);
 	}
-	
+
 	public void clearEquationHistory() {
 		equationHistory.clear();
 	}
-	
+
 	/* *************************************/
 	/* Memory related methods */
 	/* *************************************/
-	public List<BigDecimal> getAllMemoryValues(){
+	public List<BigDecimal> getAllMemoryValues() {
 		return memory.getValues();
 	}
-	
+
 	public BigDecimal mr() {
 		return memory.getValue();
 	}
-	
+
 	public void ms() {
 		memory.save(SimpleCalculatorBl.getCurrentValue(state));
 	}
-	
+
 	public void mc() {
 		memory.clear();
 	}
-	
+
 	public void mPlus() {
 		memory.addToSaved(SimpleCalculatorBl.getCurrentValue(state));
 	}
-	
+
 	public void mMinus() {
 		memory.subtractFromSaved(SimpleCalculatorBl.getCurrentValue(state));
 	}
