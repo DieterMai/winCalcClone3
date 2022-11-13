@@ -116,10 +116,18 @@ public class SimpleCalculator {
 	}
 	
 	public void ms() {
-		memory.add(SimpleCalculatorBl.getCurrentValue(state));
+		memory.save(SimpleCalculatorBl.getCurrentValue(state));
 	}
 	
 	public void mc() {
 		memory.clear();
+	}
+	
+	public void mPlus() {
+		memory.addToSaved(SimpleCalculatorBl.getCurrentValue(state));
+	}
+	
+	public void mMinus() {
+		memory.subtractFromSaved(SimpleCalculatorBl.getCurrentValue(state));
 	}
 }
