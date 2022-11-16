@@ -1,0 +1,75 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>dev.dietermai</groupId>
+		<artifactId>wincalc</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>wincalc.ui.fx</artifactId>
+
+	<properties>
+		<MODULE>dev.dietermai.wincalc.ui.fx</MODULE>
+		<MAIN>dev.dietermai.wincalc.ui.fx.App</MAIN>
+		<QUALIFIED_MAIN>${MODULE}/${MAIN}</QUALIFIED_MAIN>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>dev.dietermai</groupId>
+			<artifactId>wincalc.core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+		</dependency>
+	</dependencies>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<!-- Default configuration for running -->
+						<!-- Usage: mvn clean javafx:run -->
+						<id>default-cli</id>
+						<configuration>
+							<mainClass>${QUALIFIED_MAIN}</mainClass>
+							<workingDirectory>.</workingDirectory>
+							<skip>false</skip>
+							<!--<outputFile></outputFile>-->
+							<options></options>
+							<commandlineArgs></commandlineArgs>
+						</configuration>
+					</execution>
+					<execution>
+						<!-- Configuration for manual attach debugging -->
+						<!-- Usage: mvn clean javafx:run@debug -->
+						<id>debug</id>
+						<configuration>
+							<mainClass>${QUALIFIED_MAIN}</mainClass>
+							<options>
+								<option>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=localhost:8000</option>
+							</options>
+						</configuration>
+					</execution>
+					<execution>
+						<!-- Configuration for automatic IDE debugging -->
+						<id>ide-debug</id>
+						<configuration>
+							<mainClass>${QUALIFIED_MAIN}</mainClass>
+							<options>
+								<option>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</option>
+							</options>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
