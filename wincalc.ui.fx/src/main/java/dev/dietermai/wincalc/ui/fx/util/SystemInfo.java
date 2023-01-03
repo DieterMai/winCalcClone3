@@ -1,4 +1,4 @@
-package dev.dietermai.wincalc.ui.fx;
+package dev.dietermai.wincalc.ui.fx.util;
 
 public class SystemInfo {
 

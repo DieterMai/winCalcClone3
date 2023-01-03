@@ -1,4 +1,6 @@
 module dev.dietermai.wincalc.ui.fx {
     requires javafx.controls;
-    exports dev.dietermai.wincalc.ui.fx;
+	requires javafx.base;
+	requires javafx.graphics;
+    exports dev.dietermai.wincalc.ui.fx.app;
 }

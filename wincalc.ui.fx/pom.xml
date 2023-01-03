@@ -11,7 +11,7 @@
 
 	<properties>
 		<MODULE>dev.dietermai.wincalc.ui.fx</MODULE>
-		<MAIN>dev.dietermai.wincalc.ui.fx.App</MAIN>
+		<MAIN>dev.dietermai.wincalc.ui.fx.app.FxCalcApp</MAIN>
 		<QUALIFIED_MAIN>${MODULE}/${MAIN}</QUALIFIED_MAIN>
 	</properties>
 
