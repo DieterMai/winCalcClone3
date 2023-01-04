@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
-public class MenuBarWidget extends ParentWidget<HBox> {
+public class MenuBarWidget extends Widget<HBox> {
 	private HBox rootBox;
 	private HBox leftAligneBox;
 	private Label menuButton;
@@ -17,7 +17,7 @@ public class MenuBarWidget extends ParentWidget<HBox> {
 	
 	
 	@Override
-	protected void createNodes() {
+	protected HBox createNodes() {
 		menuButton = new Label("rootBox"); // debugging
 		calculaterType = new Label("calculaterType"); // debugging
 		onTop = new Label("onTop"); // debugging
@@ -25,8 +25,7 @@ public class MenuBarWidget extends ParentWidget<HBox> {
 		
 		leftAligneBox = new HBox();
 		
-		rootBox = new HBox(0);
-		setNode(rootBox);
+		return rootBox = new HBox(0);
 	}
 
 	@Override

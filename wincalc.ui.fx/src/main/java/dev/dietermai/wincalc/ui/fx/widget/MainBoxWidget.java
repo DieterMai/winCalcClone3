@@ -5,7 +5,7 @@ import dev.dietermai.wincalc.ui.fx.util.FxUtil;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
-public class MainBoxWidget extends ParentWidget<HBox> {
+public class MainBoxWidget extends Widget<HBox> {
 
 	private LeftBoxWidget leftBox;
 	private RightBoxWidget rightBox;
@@ -22,10 +22,8 @@ public class MainBoxWidget extends ParentWidget<HBox> {
 	}
 
 	@Override
-	protected void createNodes() {
-		rootBox = new HBox(0);
-		setNode(rootBox);
-
+	protected HBox createNodes() {
+		return rootBox = new HBox(0);
 	}
 
 	@Override

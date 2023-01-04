@@ -5,7 +5,7 @@ import static dev.dietermai.wincalc.ui.fx.util.FxUtil.randomColorBackground;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-public class RightBoxWidget extends ParentWidget<VBox>{
+public class RightBoxWidget extends Widget<VBox>{
 	private VBox root;
 	private Label labelHistory;
 	
@@ -14,11 +14,10 @@ public class RightBoxWidget extends ParentWidget<VBox>{
 	}
 	
 	@Override
-	protected void createNodes() {
+	protected VBox createNodes() {
 		labelHistory = new Label(this.getClass().getSimpleName());
 		
-		root = new VBox(0);
-		setNode(root);
+		return root = new VBox(0);
 	}
 
 	@Override
