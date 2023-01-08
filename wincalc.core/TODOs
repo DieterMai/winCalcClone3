@@ -1,5 +1,37 @@
 
-Implement FX interface
+Implement Calculator simple
+ - FX interface
+   - menu Button
+   - Title
+   - keep on top button
+   - Input fields
+   - history button
+   - Memory Buttons
+     - mc
+     - mr
+     - m+
+     - m-
+     - ms
+     - m open
+   - Calc buttons
+     - Digits
+     - Sign
+     - decimal point
+     - equals
+     - plus
+     - minus
+     - multiply
+     - divide
+     - clear entry
+     - clear
+     - delete
+     - percent
+     - one over
+     - square
+     - root
+   - History view
+   - Memory view
+   - Styling
 Implement Calculator Scientific
 Implement Calculator Graphing
 Implement Calculator Programminer
