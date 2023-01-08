@@ -36,8 +36,6 @@ public class FxUtil {
 		return background(fill(color));
 	}
 	
-	
-	
 	public static Color randomColor() {
 		Random rand = new Random(System.nanoTime());
 		return color(rand.nextDouble(), rand.nextDouble(), rand.nextDouble(), 1D);

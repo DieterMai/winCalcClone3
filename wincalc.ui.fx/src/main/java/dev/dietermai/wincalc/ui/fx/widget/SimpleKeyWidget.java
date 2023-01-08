@@ -1,14 +1,11 @@
 package dev.dietermai.wincalc.ui.fx.widget;
 
-import static dev.dietermai.wincalc.ui.fx.util.FxUtil.setDebugColors;
-
 import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class SimpleKeyWidget extends Widget<GridPane> {
+public class SimpleKeyWidget extends Widget<VBox> {
 
 	private Button mc;
 	private Button mr;
@@ -42,79 +39,71 @@ public class SimpleKeyWidget extends Widget<GridPane> {
 	private Button point;
 	private Button equals;
 
-	private GridPane rootGrid;
+	private HBox row1;
+	private HBox row2;
+	private HBox row3;
+	private HBox row4;
+	private HBox row5;
+	private HBox row6;
+	
+	private VBox rootBox;
 
 	@Override
-	protected GridPane createNodes() {
+	protected VBox createNodes() {
 		mc = new Button();
 		mr = new Button();
 		mp = new Button();
 		mm = new Button();
 		ms = new Button();
-
 		memoryBox = new HBox();
 
 		percent = new Button();
 		clearEntry = new Button();
 		clear = new Button();
 		delete = new Button();
+		row1 = new HBox();
+		
 		oneOver = new Button();
 		square = new Button();
 		root = new Button();
 		divide = new Button();
+		row2 = new HBox();
+		
 		seven = new Button();
 		eight = new Button();
 		nine = new Button();
 		mulitply = new Button();
+		row3 = new HBox();
+		
 		four = new Button();
 		five = new Button();
 		six = new Button();
 		minus = new Button();
+		row4 = new HBox();
+		
 		one = new Button();
 		two = new Button();
 		tree = new Button();
 		plus = new Button();
+		row5 = new HBox();
+		
 		plusMinus = new Button();
 		zero = new Button();
 		point = new Button();
 		equals = new Button();
+		row6 = new HBox();
 
 
-		return rootGrid = new GridPane();
+		return rootBox = new VBox();
 	}
 
 	@Override
 	protected void initializeNodes() {
-		
 		initializeMemoryRow();
-		
-		
-		
-		initializeGridButtion(percent, "%", 1, 0);
-		initializeGridButtion(clearEntry, "CE", 1, 1);
-		initializeGridButtion(clear, "C", 1, 2);
-		initializeGridButtion(delete, "<-", 1, 3);
-		initializeGridButtion(oneOver, "1/x", 2, 0);
-		initializeGridButtion(square, "x²", 2, 1);
-		initializeGridButtion(root, "root", 2, 2);
-		initializeGridButtion(divide, "/", 2, 3);
-		initializeGridButtion(seven, "7", 3, 0);
-		initializeGridButtion(eight, "8", 3, 1);
-		initializeGridButtion(nine, "9", 3, 2);
-		initializeGridButtion(mulitply, "*", 3, 3);
-		initializeGridButtion(four, "4", 4, 0);
-		initializeGridButtion(five, "5", 4, 1);
-		initializeGridButtion(six, "6", 4, 2);
-		initializeGridButtion(minus, "-", 4, 3);
-		initializeGridButtion(one, "1", 5, 0);
-		initializeGridButtion(two, "2", 5, 1);
-		initializeGridButtion(tree, "3", 5, 2);
-		initializeGridButtion(plus, "+", 5, 3);
-		initializeGridButtion(plusMinus, "+/-", 6, 0);
-		initializeGridButtion(zero, "0", 6, 1);
-		initializeGridButtion(point, ".", 6, 2);
-		initializeGridButtion(equals, "=", 6, 3);
+		initializeCalculatorButtons();
+		intializeRoot();
 	}
+	
 	
 	private void initializeMemoryRow() {
 		initializeMemoryButton(mc, "MC");
@@ -123,38 +112,103 @@ public class SimpleKeyWidget extends Widget<GridPane> {
 		initializeMemoryButton(mm, "M-");
 		initializeMemoryButton(ms, "MS");
 		
-		setDebugColors(memoryBox);
 		memoryBox.setMaxHeight(70);
+		memoryBox.setSpacing(Style.SPACING_1);
+		memoryBox.getChildren().add(mc);
+		memoryBox.getChildren().add(mr);
+		memoryBox.getChildren().add(mp);
+		memoryBox.getChildren().add(mm);
+		memoryBox.getChildren().add(ms);
 		
-		memoryBox.setSpacing(2);
-		
-		rootGrid.add(memoryBox, 0, 0, 4, 1);
-		GridPane.setHgrow(memoryBox, Priority.ALWAYS);
-		GridPane.setVgrow(memoryBox, Priority.ALWAYS);
+		HBox.setHgrow(mc, Priority.ALWAYS);
+		HBox.setHgrow(mr, Priority.ALWAYS);
+		HBox.setHgrow(mp, Priority.ALWAYS);
+		HBox.setHgrow(mm, Priority.ALWAYS);
+		HBox.setHgrow(ms, Priority.ALWAYS);
 	}
+	
 	
 	private void initializeMemoryButton(Button button, String text) {
 		button.setText(text);
 		button.setMaxHeight(Double.MAX_VALUE);
 		button.setMaxWidth(78);
-		memoryBox.getChildren().add(button);
-		HBox.setHgrow(button, Priority.ALWAYS);
+		
 	}
 	
+	private void initializeCalculatorButtons() {
+		initializeGridButtion(percent, "%");
+		initializeGridButtion(clearEntry, "CE");
+		initializeGridButtion(clear, "C");
+		initializeGridButtion(delete, "<-");
+		initializeCalculatorRow(row1, percent, clearEntry, clear, delete);
+		
+		initializeGridButtion(oneOver, "1/x");
+		initializeGridButtion(square, "x²");
+		initializeGridButtion(root, "root");
+		initializeGridButtion(divide, "/");
+		initializeCalculatorRow(row2, oneOver, square, root, divide);
+		
+		initializeGridButtion(seven, "7");
+		initializeGridButtion(eight, "8");
+		initializeGridButtion(nine, "9");
+		initializeGridButtion(mulitply, "*");
+		initializeCalculatorRow(row3, seven, eight, nine, mulitply);
+		
+		initializeGridButtion(four, "4");
+		initializeGridButtion(five, "5");
+		initializeGridButtion(six, "6");
+		initializeGridButtion(minus, "-");
+		initializeCalculatorRow(row4, four, five, six, minus);
+		
+		initializeGridButtion(one, "1");
+		initializeGridButtion(two, "2");
+		initializeGridButtion(tree, "3");
+		initializeGridButtion(plus, "+");
+		initializeCalculatorRow(row5, one, two, tree, plus);
+		
+		initializeGridButtion(plusMinus, "+/-");
+		initializeGridButtion(zero, "0");
+		initializeGridButtion(point, ".");
+		initializeGridButtion(equals, "=");
+		initializeCalculatorRow(row6, plusMinus, zero, point, equals);
+	}
 	
-	private void initializeGridButtion(Button button, String text, int col, int row) {
+	private void initializeGridButtion(Button button, String text) {
 		button.setText(text);
 		button.setMaxHeight(Double.MAX_VALUE);
 		button.setMaxWidth(Double.MAX_VALUE);
-		
-		rootGrid.setHgap(2D);
-		rootGrid.setVgap(2D);
-		rootGrid.add(button, row, col);
-		
-		GridPane.setHgrow(button, Priority.ALWAYS);
-		GridPane.setVgrow(button, Priority.ALWAYS);
-		
+		button.setPrefWidth(1);
+		button.setMinWidth(1);
 	}
+	
+	private void initializeCalculatorRow(HBox row, Button...buttons) {
+		row.setSpacing(Style.SPACING_1);
+		row.setFillHeight(true);
+		
+		for(Button b : buttons) {
+			row.getChildren().add(b);
+			HBox.setHgrow(b, Priority.ALWAYS);
+		}
+	}
+	
+	private void intializeRoot() {
+		rootBox.setFillWidth(true);
+		rootBox.getChildren().add(memoryBox);
+		rootBox.getChildren().add(row1);
+		rootBox.getChildren().add(row2);
+		rootBox.getChildren().add(row3);
+		rootBox.getChildren().add(row4);
+		rootBox.getChildren().add(row5);
+		rootBox.getChildren().add(row6);
+		VBox.setVgrow(memoryBox, Priority.ALWAYS);
+		VBox.setVgrow(row1, Priority.ALWAYS);
+		VBox.setVgrow(row2, Priority.ALWAYS);
+		VBox.setVgrow(row3, Priority.ALWAYS);
+		VBox.setVgrow(row4, Priority.ALWAYS);
+		VBox.setVgrow(row5, Priority.ALWAYS);
+		VBox.setVgrow(row6, Priority.ALWAYS);
+	}
+
 	
 	@Override
 	protected void register() {
